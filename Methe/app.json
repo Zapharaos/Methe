@@ -4,27 +4,47 @@
     "slug": "Methe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "icon": "./assets/icon/icon.png",
+    "userInterfaceStyle": "automatic",
     "assetBundlePatterns": [
       "**/*"
     ],
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "image": "./assets/splash/splash-light.png",
+      "resizeMode": "contain"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "backgroundColor": "#ffffff",
+        "image": "./assets/splash/splash-light.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#000000",
+          "image": "./assets/splash/splash-dark.png",
+          "resizeMode": "contain"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "splash": {
+        "backgroundColor": "#ffffff",
+        "image": "./assets/splash/splash-light.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#000000",
+          "image": "./assets/splash/splash-dark.png",
+          "resizeMode": "contain"
+        }
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon/favicon.png"
     }
   }
 }
