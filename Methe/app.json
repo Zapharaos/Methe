@@ -4,43 +4,23 @@
     "slug": "Methe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon/icon.png",
+    "icon": "./assets/icon/icon-dark.png",
     "userInterfaceStyle": "automatic",
     "assetBundlePatterns": [
       "**/*"
     ],
     "splash": {
-      "backgroundColor": "#ffffff",
-      "image": "./assets/splash/splash-light.png",
+      "backgroundColor": "#4D3E3E",
+      "image": "./assets/splash/splash-dark.png",
       "resizeMode": "contain"
     },
     "ios": {
-      "supportsTablet": true,
-      "splash": {
-        "backgroundColor": "#ffffff",
-        "image": "./assets/splash/splash-light.png",
-        "resizeMode": "contain",
-        "dark": {
-          "backgroundColor": "#000000",
-          "image": "./assets/splash/splash-dark.png",
-          "resizeMode": "contain"
-        }
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "splash": {
-        "backgroundColor": "#ffffff",
-        "image": "./assets/splash/splash-light.png",
-        "resizeMode": "contain",
-        "dark": {
-          "backgroundColor": "#000000",
-          "image": "./assets/splash/splash-dark.png",
-          "resizeMode": "contain"
-        }
+        "foregroundImage": "./assets/icon/adaptive-icon-dark.png",
+        "backgroundColor": "#4D3E3E"
       }
     },
     "web": {
