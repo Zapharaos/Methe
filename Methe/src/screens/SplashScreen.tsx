@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import {Button, Text, View} from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 import tw from 'twrnc';
 
@@ -9,14 +8,17 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ navigation }: SplashScreenProps) {
+
+    const onAnimationFinish = () => {
+        navigation.navigate('Home')
+    }
+
     return (
-        <View style={tw`flex-1 justify-center items-center`}>
-            <Text style={tw`text-3xl font-bold uppercase`}>Methe</Text>
-            <StatusBar style="auto" />
-            <Button
-                title="Go to Home"
-                onPress={() => navigation.navigate('Home')}
-            />
-        </View>
+        <LottieView style={tw`flex-1 justify-center items-center`}
+            autoPlay
+            loop={false}
+            onAnimationFinish={onAnimationFinish}
+            source={require('../../assets/animation/animation-light.json')}
+        />
     );
 }
