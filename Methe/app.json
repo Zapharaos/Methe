@@ -9,22 +9,43 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "splash": {
-      "backgroundColor": "#4D3E3E",
-      "image": "./assets/splash/splash-dark.png",
-      "resizeMode": "contain"
-    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "backgroundColor": "#FEECCA",
+        "image": "./assets/splash/splash-light.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#4D3E3E",
+          "image": "./assets/splash/splash-dark.png",
+          "resizeMode": "contain"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-dark.png",
         "backgroundColor": "#4D3E3E"
-      }
+      },
+      "splash": {
+        "backgroundColor": "#FEECCA",
+        "image": "./assets/splash/splash-light.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#4D3E3E",
+          "image": "./assets/splash/splash-dark.png",
+          "resizeMode": "contain"
+        }
+      },
+      "package": "com.zapharaos.Methe"
     },
     "web": {
       "favicon": "./assets/icon/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5739f82c-3e87-4898-a0b1-fdba1e60932a"
+      }
     }
   }
 }
