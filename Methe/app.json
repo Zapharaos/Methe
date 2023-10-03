@@ -4,27 +4,48 @@
     "slug": "Methe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "icon": "./assets/icon/icon-dark.png",
+    "userInterfaceStyle": "automatic",
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "backgroundColor": "#FEECCA",
+        "image": "./assets/splash/splash-light.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#4D3E3E",
+          "image": "./assets/splash/splash-dark.png",
+          "resizeMode": "contain"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/icon/adaptive-icon-dark.png",
+        "backgroundColor": "#4D3E3E"
+      },
+      "splash": {
+        "backgroundColor": "#FEECCA",
+        "image": "./assets/splash/splash-light.png",
+        "resizeMode": "contain",
+        "dark": {
+          "backgroundColor": "#4D3E3E",
+          "image": "./assets/splash/splash-dark.png",
+          "resizeMode": "contain"
+        }
+      },
+      "package": "com.zapharaos.Methe"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5739f82c-3e87-4898-a0b1-fdba1e60932a"
+      }
     }
   }
 }
