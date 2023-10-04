@@ -1,7 +1,7 @@
 import { NavigationProp } from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 
-import tw from 'twrnc';
+import tw from '../../lib/tailwind';
 
 interface SplashScreenProps {
     navigation: NavigationProp<any>;
@@ -14,7 +14,7 @@ export default function SplashScreen({ navigation }: SplashScreenProps) {
     }
 
     return (
-        <LottieView style={tw`flex-1 justify-center items-center`}
+        <LottieView style={tw`flex-1 justify-center items-center bg-palePeach dark:bg-darkGrayBrown`}
             autoPlay
             loop={false}
             onAnimationFinish={onAnimationFinish}
