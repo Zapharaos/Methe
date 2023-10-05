@@ -14,12 +14,19 @@ export default function HomeScreen() {
     const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>(
         'auto',
     );
-    const [locale, setLocale] = useState(getLocales()[0]);
+    const [locale, setLocale] = useState(getLocales()[0].languageCode);
 
     const translations: Record<string, any> = {
         en: require('../../locales/en.json'),
+        ar: require('../../locales/ar.json'),
+        es: require('../../locales/es.json'),
         fr: require('../../locales/fr.json'),
-        ar: require('../../locales/ar.json')
+        hi: require('../../locales/hi.json'),
+        it: require('../../locales/it.json'),
+        ko: require('../../locales/ko.json'),
+        ru: require('../../locales/ru.json'),
+        sw: require('../../locales/sw.json'),
+        zh: require('../../locales/zh.json'),
     };
     let localStorage = {
         theme: '',
@@ -27,9 +34,9 @@ export default function HomeScreen() {
     };
 
     const i18n = new I18n(translations);
-    i18n.locale = locale.languageCode;
+    i18n.locale = locale;
     i18n.enableFallback = true;
-    I18nManager.forceRTL(rtlDetect.isRtlLang(locale.languageCode));
+    I18nManager.forceRTL(rtlDetect.isRtlLang(locale));
 
     const themes: { key: string; value: string }[] = [
         {key: 'system', value: 'System'},
@@ -49,23 +56,21 @@ export default function HomeScreen() {
         }
     }
 
-    // TODO : use a package that has all the locales
     const languages: { key: string; value: string }[] = [];
     for (const key in translations) {
         languages.push({ key, value: translations[key].settings.language });
     }
     const changeLanguage = (key: string) => {
-        if (locale.languageCode === key) return;
-        // TODO : use another package that has all the locales
-        const localeUpdated = getLocales().find((l) => l.languageCode === key);
-        if (localeUpdated !== undefined) {
-            localStorage.locale = localeUpdated;
-            setLocale(localeUpdated);
-            if(I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
-                I18nManager.forceRTL(rtlDetect.isRtlLang(key));
-                console.log(rtlDetect.isRtlLang(key));
-                // TODO : popup + reload app
-            }
+        if (locale === key) return;
+        if (translations[key] == undefined) return;
+
+        localStorage.locale = key;
+        setLocale(key);
+
+        if(I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
+            I18nManager.forceRTL(!I18nManager.isRTL);
+            console.log(rtlDetect.isRtlLang(key))
+            // TODO : popup + reload app
         }
     }
 
