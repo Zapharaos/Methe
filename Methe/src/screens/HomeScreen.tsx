@@ -8,6 +8,7 @@ import {StatusBar, StatusBarStyle} from "expo-status-bar";
 import {useState} from "react";
 import { I18n } from 'i18n-js';
 import {getLocales} from "expo-localization";
+import * as Updates from 'expo-updates';
 
 export default function HomeScreen() {
     const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
@@ -60,17 +61,17 @@ export default function HomeScreen() {
     for (const key in translations) {
         languages.push({ key, value: translations[key].settings.language });
     }
-    const changeLanguage = (key: string) => {
+    const changeLanguage = async (key: string) => {
         if (locale === key) return;
         if (translations[key] == undefined) return;
 
         localStorage.locale = key;
         setLocale(key);
 
-        if(I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
+        if (I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
             I18nManager.forceRTL(!I18nManager.isRTL);
-            console.log(rtlDetect.isRtlLang(key))
-            // TODO : popup + reload app
+            // TODO : popup
+            await Updates.reloadAsync();
         }
     }
 
