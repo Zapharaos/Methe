@@ -12,5 +12,7 @@
       "dark": "Scuro"
     }
   },
+  "search": "Cerca",
+  "notFound": "Nessun risultato",
   "welcome": "Ciao"
 }

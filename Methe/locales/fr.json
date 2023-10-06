@@ -12,5 +12,7 @@
       "dark": "Foncé"
     }
   },
+  "search": "Rechercher",
+  "notFound": "Aucun résultat",
   "welcome": "Bonjour"
 }

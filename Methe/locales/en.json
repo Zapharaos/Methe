@@ -13,5 +13,7 @@
       "dark": "Dark"
     }
   },
+  "search": "Search",
+  "notFound": "No results",
   "welcome": "Hello"
 }

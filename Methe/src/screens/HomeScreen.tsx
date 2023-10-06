@@ -9,7 +9,9 @@ import {useEffect, useState} from "react";
 import { I18n } from 'i18n-js';
 import {getLocales} from "expo-localization";
 import * as Updates from 'expo-updates';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {asyncStorage, storeData, loadData} from '../shared/utils/asyncStorage'
+import Theme from '../shared/utils/enums/theme'
+import Utils from '../shared/utils/enums/utils'
 
 export default function HomeScreen() {
 
@@ -27,18 +29,21 @@ export default function HomeScreen() {
     };
     const [languages, setLanguages] = useState(() => {
         const languages: { key: string; value: string }[] = [
-            {key: 'system', value: ''},
+            {key: Utils.System, value: Utils.Empty},
         ];
         for (const key in locales) {
             languages.push({ key, value: locales[key].settings.locale.local });
         }
         return languages;
     });
-    const [colorSchemes, setColorSchemes] = useState([
-        {key: 'system', value: ''},
-        {key: 'light', value: ''},
-        {key: 'dark', value: ''},
-    ]);
+    const [colorSchemes, setColorSchemes] = useState(() => {
+        const colorSchemes: { key: string; value: string }[] = [
+            {key: Theme.System, value: Utils.Empty},
+            {key: Theme.Light, value: Utils.Empty},
+            {key: Theme.Dark, value: Utils.Empty},
+        ];
+        return colorSchemes;
+    });
 
     const [locale, setLocale] = useState(getLocales()[0].languageCode);
     const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
@@ -49,21 +54,21 @@ export default function HomeScreen() {
     i18n.locale = locale;
 
     useEffect(() => {
-        const getAsyncStorage = async () => {
-            let itemColorScheme:string = '';
-            let itemLocale:string = '';
+        const getAsyncStorageData = async () => {
+            let itemColorScheme:string = Utils.Empty;
+            let itemLocale:string = Utils.Empty;
             try {
-                const valueColorScheme = await AsyncStorage.getItem('@colorScheme')
-                itemColorScheme = valueColorScheme !== null ? valueColorScheme : colorSchemes[0].key;
-                const valueLocale = await AsyncStorage.getItem('@locale')
-                itemLocale = valueLocale !== null ? valueLocale : languages[0].key;
+                const valueLocale = await loadData(asyncStorage.Locale);
+                itemLocale = valueLocale === Utils.Empty ? languages[0].key : valueLocale;
+                const valueColorScheme = await loadData(asyncStorage.ColorScheme);
+                itemColorScheme = valueColorScheme === Utils.Empty ? colorSchemes[0].key : valueColorScheme;
             } catch(e) {
                 // read error
             }
             changeColorScheme(itemColorScheme);
             changeLanguage(itemLocale);
         }
-        getAsyncStorage().catch(console.error);
+        getAsyncStorageData().catch(console.error);
     }, []);
 
     const changeColorScheme = (key: string) => {
@@ -74,25 +79,20 @@ export default function HomeScreen() {
         }
 
         // reset to system colorScheme
-        if (key === 'system') {
+        if (key === Utils.System) {
             setColorScheme(Appearance.getColorScheme());
         } else if (key !== colorScheme) {
             toggleColorScheme();
         }
 
         // update the statusBar colorScheme
-        setStatusBarStyle(key === 'dark' ? 'light' : 'dark');
+        setStatusBarStyle(key === Theme.Dark ? Theme.Light : Theme.Dark);
 
         // update the async storage
-        const updateAsyncStorage = async () => {
-            // update the asyncStorage value
-            try {
-                await AsyncStorage.setItem('@colorScheme', key)
-            } catch (e) {
-                // save error
-            }
+        const storeAsyncStorageData = async () => {
+            await storeData(asyncStorage.ColorScheme, key);
         }
-        updateAsyncStorage().catch(console.error);
+        storeAsyncStorageData().catch(console.error);
     }
     const changeLanguage = (key: string) => {
         // language already set or not recognized
@@ -101,20 +101,15 @@ export default function HomeScreen() {
         }
 
         // reset to system language
-        if(key === "system") {
+        if(key === Utils.System) {
             key = getLocales()[0].languageCode;
         }
 
         // update the async storage
-        const updateAsyncStorage = async () => {
-            // update the asyncStorage value
-            try {
-                await AsyncStorage.setItem('@locale', key)
-            } catch (e) {
-                // save error
-            }
+        const storeAsyncStorageData = async () => {
+            await storeData(asyncStorage.Locale, key);
         }
-        updateAsyncStorage().catch(console.error);
+        storeAsyncStorageData().catch(console.error);
 
         // update the language
         setLocale(key);
@@ -159,7 +154,11 @@ export default function HomeScreen() {
                     <SelectList
                         setSelected={changeLanguage}
                         data={languages}
-                        save="key"
+                        placeholder={languages.find(item => item.key === locale)?.value}
+                        searchPlaceholder={i18n.t('search')}
+                        notFoundText={i18n.t('notFound')}
+                        dropdownTextStyles={tw`text-black dark:text-white`}
+                        inputStyles={tw`text-black dark:text-white`}
                     />
                 </View>
                 <View style={tw`w-full mt-5`}>
@@ -167,7 +166,11 @@ export default function HomeScreen() {
                     <SelectList
                         setSelected={changeColorScheme}
                         data={colorSchemes}
-                        save="key"
+                        placeholder={colorSchemes.find(item => item.key === colorScheme)?.value}
+                        searchPlaceholder={i18n.t('search')}
+                        notFoundText={i18n.t('notFound')}
+                        dropdownTextStyles={tw`text-black dark:text-white`}
+                        inputStyles={tw`text-black dark:text-white`}
                     />
                 </View>
             </View>
