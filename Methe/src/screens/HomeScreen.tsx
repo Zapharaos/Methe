@@ -5,19 +5,17 @@ import { useAppColorScheme } from 'twrnc';
 import {Text, SafeAreaView, View, Appearance, I18nManager} from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list'
 import {StatusBar, StatusBarStyle} from "expo-status-bar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { I18n } from 'i18n-js';
 import {getLocales} from "expo-localization";
 import * as Updates from 'expo-updates';
+import {asyncStorage, storeData, loadData} from '../shared/utils/asyncStorage'
+import Theme from '../shared/utils/enums/theme'
+import Utils from '../shared/utils/enums/utils'
 
 export default function HomeScreen() {
-    const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
-    const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>(
-        'auto',
-    );
-    const [locale, setLocale] = useState(getLocales()[0].languageCode);
 
-    const translations: Record<string, any> = {
+    const locales: Record<string, any> = {
         en: require('../../locales/en.json'),
         ar: require('../../locales/ar.json'),
         es: require('../../locales/es.json'),
@@ -29,51 +27,119 @@ export default function HomeScreen() {
         sw: require('../../locales/sw.json'),
         zh: require('../../locales/zh.json'),
     };
-    let localStorage = {
-        theme: '',
-        locale: locale
-    };
+    const [languages, setLanguages] = useState(() => {
+        const languages: { key: string; value: string }[] = [
+            {key: Utils.System, value: Utils.Empty},
+        ];
+        for (const key in locales) {
+            languages.push({ key, value: locales[key].settings.locale.local });
+        }
+        return languages;
+    });
+    const [colorSchemes, setColorSchemes] = useState(() => {
+        const colorSchemes: { key: string; value: string }[] = [
+            {key: Theme.System, value: Utils.Empty},
+            {key: Theme.Light, value: Utils.Empty},
+            {key: Theme.Dark, value: Utils.Empty},
+        ];
+        return colorSchemes;
+    });
 
-    const i18n = new I18n(translations);
-    i18n.locale = locale;
+    const [locale, setLocale] = useState(getLocales()[0].languageCode);
+    const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
+    const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>('auto');
+
+    const i18n = new I18n(locales);
     i18n.enableFallback = true;
-    I18nManager.forceRTL(rtlDetect.isRtlLang(locale));
+    i18n.locale = locale;
 
-    const themes: { key: string; value: string }[] = [
-        {key: 'system', value: 'System'},
-        {key: 'light', value: 'Light'},
-        {key: 'dark', value: 'Dark'},
-    ]
+    useEffect(() => {
+        const getAsyncStorageData = async () => {
+            let itemColorScheme:string = Utils.Empty;
+            let itemLocale:string = Utils.Empty;
+            try {
+                const valueLocale = await loadData(asyncStorage.Locale);
+                itemLocale = valueLocale === Utils.Empty ? languages[0].key : valueLocale;
+                const valueColorScheme = await loadData(asyncStorage.ColorScheme);
+                itemColorScheme = valueColorScheme === Utils.Empty ? colorSchemes[0].key : valueColorScheme;
+            } catch(e) {
+                // read error
+            }
+            changeColorScheme(itemColorScheme);
+            changeLanguage(itemLocale);
+        }
+        getAsyncStorageData().catch(console.error);
+    }, []);
+
     const changeColorScheme = (key: string) => {
-        if (localStorage.theme === key) return;
-        localStorage.theme = key;
 
-        if (localStorage.theme === 'system') {
+        // colorScheme not recognized
+        if (!colorSchemes.some(theme => theme.key === key)) {
+            return;
+        }
+
+        // reset to system colorScheme
+        if (key === Utils.System) {
             setColorScheme(Appearance.getColorScheme());
-            setStatusBarStyle(Appearance.getColorScheme() === 'dark' ? 'light' : 'dark')
-        } else if (localStorage.theme !== colorScheme) {
+        } else if (key !== colorScheme) {
             toggleColorScheme();
-            setStatusBarStyle(localStorage.theme === 'dark' ? 'light' : 'dark')
         }
-    }
 
-    const languages: { key: string; value: string }[] = [];
-    for (const key in translations) {
-        languages.push({ key, value: translations[key].settings.language });
-    }
-    const changeLanguage = async (key: string) => {
-        if (locale === key) return;
-        if (translations[key] == undefined) return;
+        // update the statusBar colorScheme
+        setStatusBarStyle(key === Theme.Dark ? Theme.Light : Theme.Dark);
 
-        localStorage.locale = key;
+        // update the async storage
+        const storeAsyncStorageData = async () => {
+            await storeData(asyncStorage.ColorScheme, key);
+        }
+        storeAsyncStorageData().catch(console.error);
+    }
+    const changeLanguage = (key: string) => {
+        // language already set or not recognized
+        if (locale === key || !languages.some(language => language.key === key)) {
+            return;
+        }
+
+        // reset to system language
+        if(key === Utils.System) {
+            key = getLocales()[0].languageCode;
+        }
+
+        // update the async storage
+        const storeAsyncStorageData = async () => {
+            await storeData(asyncStorage.Locale, key);
+        }
+        storeAsyncStorageData().catch(console.error);
+
+        // update the language
         setLocale(key);
-
-        if (I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
-            I18nManager.forceRTL(!I18nManager.isRTL);
-            // TODO : popup
-            await Updates.reloadAsync();
+        const updateI18N = async () => {
+            i18n.locale = key;
+            if (I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
+                I18nManager.forceRTL(!I18nManager.isRTL);
+                // TODO : popup
+                await Updates.reloadAsync();
+            }
         }
+        updateI18N().catch(console.error);
     }
+    useEffect(() => {
+        const updateColorSchemes = () => {
+            const updatedColorSchemes = [...colorSchemes];
+            updatedColorSchemes.forEach((colorScheme) => {
+                colorScheme.value = i18n.t('settings.colorScheme.' + colorScheme.key);
+            });
+            setColorSchemes(updatedColorSchemes);
+        }
+        updateColorSchemes();
+
+        const updateLocaleSystemLabel = () => {
+            const updatedLanguages = [...languages];
+            updatedLanguages[0].value = i18n.t('settings.locale.' + updatedLanguages[0].key);
+            setLanguages(updatedLanguages);
+        }
+        updateLocaleSystemLabel();
+    }, [locale]);
 
     return (
         <SafeAreaView style={tw`flex-1 justify-center items-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
@@ -81,22 +147,30 @@ export default function HomeScreen() {
             <View style={tw`w-11/12 flex-1 justify-center items-center`}>
                 <Text style={tw`text-black dark:text-white`}>{i18n.t('appName')}</Text>
                 <View style={tw`w-full mt-5`}>
-                    <Text style={tw`text-left text-black dark:text-white`}>{i18n.t('welcome')} {i18n.t('settings.language')}</Text>
+                    <Text style={tw`text-left text-black dark:text-white`}>{i18n.t('welcome')}</Text>
                 </View>
                 <View style={tw`w-full mt-5`}>
-                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>Language</Text>
+                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>{i18n.t('settings.locale.label')}</Text>
                     <SelectList
                         setSelected={changeLanguage}
                         data={languages}
-                        save="key"
+                        placeholder={languages.find(item => item.key === locale)?.value}
+                        searchPlaceholder={i18n.t('search')}
+                        notFoundText={i18n.t('notFound')}
+                        dropdownTextStyles={tw`text-black dark:text-white`}
+                        inputStyles={tw`text-black dark:text-white`}
                     />
                 </View>
                 <View style={tw`w-full mt-5`}>
-                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>Theme</Text>
+                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>{i18n.t('settings.colorScheme.label')}</Text>
                     <SelectList
                         setSelected={changeColorScheme}
-                        data={themes}
-                        save="key"
+                        data={colorSchemes}
+                        placeholder={colorSchemes.find(item => item.key === colorScheme)?.value}
+                        searchPlaceholder={i18n.t('search')}
+                        notFoundText={i18n.t('notFound')}
+                        dropdownTextStyles={tw`text-black dark:text-white`}
+                        inputStyles={tw`text-black dark:text-white`}
                     />
                 </View>
             </View>

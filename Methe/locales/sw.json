@@ -1,6 +1,18 @@
 {
   "settings": {
-    "language": "Kiswahili"
+    "locale": {
+      "label": "Lugha",
+      "local": "Kiswahili",
+      "system": "Mfumo"
+    },
+    "colorScheme": {
+      "label": "Mandhari",
+      "system": "Mfumo",
+      "light": "Mwanga",
+      "dark": "Giza"
+    }
   },
+  "search": "Tafuta",
+  "notFound": "Hakuna matokeo",
   "welcome": "Habari"
 }

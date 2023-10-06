@@ -1,6 +1,18 @@
 {
   "settings": {
-    "language": "الإنجليزية"
+    "locale": {
+      "label": "لغة",
+      "local": "العربية",
+      "system": "نظام"
+    },
+    "colorScheme": {
+      "label": "موضوع",
+      "system": "نظام",
+      "light": "ضوء",
+      "dark": "ظلام"
+    }
   },
+  "search": "بحث",
+  "notFound": "لا توجد نتائج",
   "welcome": "مرحباً"
 }
