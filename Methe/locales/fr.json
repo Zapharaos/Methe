@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "Français"
+    "system": "Système",
+    "locale": {
+      "label": "Langue",
+      "local": "Français"
+    },
+    "colorScheme": {
+      "label": "Thème",
+      "light": "Clair",
+      "dark": "Foncé"
+    }
   },
   "welcome": "Bonjour"
 }

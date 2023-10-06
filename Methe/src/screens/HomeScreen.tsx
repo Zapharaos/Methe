@@ -5,19 +5,20 @@ import { useAppColorScheme } from 'twrnc';
 import {Text, SafeAreaView, View, Appearance, I18nManager} from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list'
 import {StatusBar, StatusBarStyle} from "expo-status-bar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { I18n } from 'i18n-js';
 import {getLocales} from "expo-localization";
 import * as Updates from 'expo-updates';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen() {
-    const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
     const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>(
         'auto',
     );
+    const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
     const [locale, setLocale] = useState(getLocales()[0].languageCode);
 
-    const translations: Record<string, any> = {
+    const locales: Record<string, any> = {
         en: require('../../locales/en.json'),
         ar: require('../../locales/ar.json'),
         es: require('../../locales/es.json'),
@@ -29,44 +30,90 @@ export default function HomeScreen() {
         sw: require('../../locales/sw.json'),
         zh: require('../../locales/zh.json'),
     };
-    let localStorage = {
-        theme: '',
-        locale: locale
-    };
-
-    const i18n = new I18n(translations);
-    i18n.locale = locale;
-    i18n.enableFallback = true;
-    I18nManager.forceRTL(rtlDetect.isRtlLang(locale));
-
-    const themes: { key: string; value: string }[] = [
+    const languages: { key: string; value: string }[] = [
+        {key: 'system', value: 'System'},
+    ];
+    for (const key in locales) {
+        languages.push({ key, value: locales[key].settings.locale.local });
+    }
+    const colorSchemes: { key: string; value: string }[] = [
         {key: 'system', value: 'System'},
         {key: 'light', value: 'Light'},
         {key: 'dark', value: 'Dark'},
     ]
-    const changeColorScheme = (key: string) => {
-        if (localStorage.theme === key) return;
-        localStorage.theme = key;
 
-        if (localStorage.theme === 'system') {
+    useEffect(() => {
+        const getAsyncStorage = async () => {
+            let itemColorScheme:string = '';
+            let itemLocale:string = '';
+            try {
+                const valueColorScheme = await AsyncStorage.getItem('@colorScheme')
+                itemColorScheme = valueColorScheme !== null ? valueColorScheme : colorSchemes[0].key;
+                const valueLocale = await AsyncStorage.getItem('@locale')
+                itemLocale = valueLocale !== null ? valueLocale : languages[0].key;
+            } catch(e) {
+                // read error
+            }
+            await changeColorScheme(itemColorScheme);
+            await changeLanguage(itemLocale);
+        }
+        getAsyncStorage().catch(console.error);
+    }, []);
+
+    const i18n = new I18n(locales);
+    i18n.locale = locale;
+    i18n.enableFallback = true;
+    I18nManager.forceRTL(rtlDetect.isRtlLang(locale));
+
+    const changeColorScheme = async (key: string) => {
+
+        // colorScheme not recognized
+        if (!colorSchemes.some(theme => theme.key === key)) {
+            return;
+        }
+
+        // reset to system colorScheme
+        if (key === 'system') {
             setColorScheme(Appearance.getColorScheme());
-            setStatusBarStyle(Appearance.getColorScheme() === 'dark' ? 'light' : 'dark')
-        } else if (localStorage.theme !== colorScheme) {
+        } else if (key !== colorScheme) {
             toggleColorScheme();
-            setStatusBarStyle(localStorage.theme === 'dark' ? 'light' : 'dark')
+        }
+
+        // update the statusBar colorScheme
+        setStatusBarStyle(key === 'dark' ? 'light' : 'dark');
+
+        // update the asyncStorage value
+        try {
+            await AsyncStorage.setItem('@colorScheme', key)
+        } catch (e) {
+            // save error
         }
     }
-
-    const languages: { key: string; value: string }[] = [];
-    for (const key in translations) {
-        languages.push({ key, value: translations[key].settings.language });
-    }
     const changeLanguage = async (key: string) => {
-        if (locale === key) return;
-        if (translations[key] == undefined) return;
 
-        localStorage.locale = key;
+        // language already set or not recognized
+        if (locale === key || !languages.some(language => language.key === key)) {
+            return;
+        }
+
+        // reset to system language
+        if(key === "system") {
+            key = getLocales()[0].languageCode;
+        }
+
+        // update
         setLocale(key);
+        languages[0].value = i18n.t('settings.system');
+        colorSchemes[0].value = i18n.t('settings.system');
+        colorSchemes[1].value = i18n.t('settings.colorScheme.light');
+        colorSchemes[2].value = i18n.t('settings.colorScheme.dark');
+
+        // update the asyncStorage value
+        try {
+            await AsyncStorage.setItem('@locale', key)
+        } catch (e) {
+            // save error
+        }
 
         if (I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
             I18nManager.forceRTL(!I18nManager.isRTL);
@@ -81,10 +128,10 @@ export default function HomeScreen() {
             <View style={tw`w-11/12 flex-1 justify-center items-center`}>
                 <Text style={tw`text-black dark:text-white`}>{i18n.t('appName')}</Text>
                 <View style={tw`w-full mt-5`}>
-                    <Text style={tw`text-left text-black dark:text-white`}>{i18n.t('welcome')} {i18n.t('settings.language')}</Text>
+                    <Text style={tw`text-left text-black dark:text-white`}>{i18n.t('welcome')}</Text>
                 </View>
                 <View style={tw`w-full mt-5`}>
-                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>Language</Text>
+                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>{i18n.t('settings.locale.label')}</Text>
                     <SelectList
                         setSelected={changeLanguage}
                         data={languages}
@@ -92,10 +139,10 @@ export default function HomeScreen() {
                     />
                 </View>
                 <View style={tw`w-full mt-5`}>
-                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>Theme</Text>
+                    <Text style={tw`text-left mb-1 text-black dark:text-white`}>{i18n.t('settings.colorScheme.label')}</Text>
                     <SelectList
                         setSelected={changeColorScheme}
-                        data={themes}
+                        data={colorSchemes}
                         save="key"
                     />
                 </View>

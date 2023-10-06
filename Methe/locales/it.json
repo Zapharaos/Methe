@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "Italiano"
+    "system": "Sistema",
+    "locale": {
+      "label": "Lingua",
+      "local": "Italiano"
+    },
+    "colorScheme": {
+      "label": "Tema",
+      "light": "Chiaro",
+      "dark": "Scuro"
+    }
   },
   "welcome": "Ciao"
 }

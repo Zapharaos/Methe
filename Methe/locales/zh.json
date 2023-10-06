@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "中文"
+    "system": "系统",
+    "locale": {
+      "label": "语言",
+      "local": "中文"
+    },
+    "colorScheme": {
+      "label": "主题",
+      "light": "亮",
+      "dark": "暗"
+    }
   },
   "welcome": "你好"
 }

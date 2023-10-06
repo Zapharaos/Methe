@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "Русский"
+    "system": "Система",
+    "locale": {
+      "label": "Язык",
+      "local": "Русский"
+    },
+    "colorScheme": {
+      "label": "Тема",
+      "light": "Светлый",
+      "dark": "Темный"
+    }
   },
   "welcome": "Здравствуйте"
 }

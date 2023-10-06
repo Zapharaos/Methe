@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "हिन्दी"
+    "system": "प्रणाली",
+    "locale": {
+      "label": "भाषा",
+      "local": "हिन्दी"
+    },
+    "colorScheme": {
+      "label": "विषय",
+      "light": "प्रकाश",
+      "dark": "अंधेरा"
+    }
   },
   "welcome": "नमस्ते"
 }

@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "한국어"
+    "system": "시스템",
+    "locale": {
+      "label": "언어",
+      "local": "한국어"
+    },
+    "colorScheme": {
+      "label": "테마",
+      "light": "밝은",
+      "dark": "어두운"
+    }
   },
   "welcome": "안녕하세요"
 }

@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "Kiswahili"
+    "system": "Mfumo",
+    "locale": {
+      "label": "Lugha",
+      "local": "Kiswahili"
+    },
+    "colorScheme": {
+      "label": "Mandhari",
+      "light": "Mwanga",
+      "dark": "Giza"
+    }
   },
   "welcome": "Habari"
 }

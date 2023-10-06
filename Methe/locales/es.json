@@ -1,6 +1,15 @@
 {
   "settings": {
-    "language": "Español"
+    "system": "Sistema",
+    "locale": {
+      "label": "Idioma",
+      "local": "Español"
+    },
+    "colorScheme": {
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
   },
   "welcome": "Hola"
 }
