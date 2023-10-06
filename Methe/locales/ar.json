@@ -1,12 +1,13 @@
 {
   "settings": {
-    "system": "نظام",
     "locale": {
       "label": "لغة",
-      "local": "العربية"
+      "local": "العربية",
+      "system": "نظام"
     },
     "colorScheme": {
       "label": "موضوع",
+      "system": "نظام",
       "light": "ضوء",
       "dark": "ظلام"
     }

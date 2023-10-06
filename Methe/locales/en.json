@@ -1,13 +1,14 @@
 {
   "appName": "Methe",
   "settings": {
-    "system": "System",
     "locale": {
       "label": "Language",
-      "local": "English"
+      "local": "English",
+      "system": "System"
     },
     "colorScheme": {
       "label": "Theme",
+      "system": "System",
       "light": "Light",
       "dark": "Dark"
     }

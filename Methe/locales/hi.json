@@ -1,12 +1,13 @@
 {
   "settings": {
-    "system": "प्रणाली",
     "locale": {
       "label": "भाषा",
-      "local": "हिन्दी"
+      "local": "हिन्दी",
+      "system": "प्रणाली"
     },
     "colorScheme": {
       "label": "विषय",
+      "system": "प्रणाली",
       "light": "प्रकाश",
       "dark": "अंधेरा"
     }

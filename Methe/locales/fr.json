@@ -1,12 +1,13 @@
 {
   "settings": {
-    "system": "Système",
     "locale": {
       "label": "Langue",
-      "local": "Français"
+      "local": "Français",
+      "system": "Système"
     },
     "colorScheme": {
       "label": "Thème",
+      "system": "Système",
       "light": "Clair",
       "dark": "Foncé"
     }

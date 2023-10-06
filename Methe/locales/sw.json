@@ -1,12 +1,13 @@
 {
   "settings": {
-    "system": "Mfumo",
     "locale": {
       "label": "Lugha",
-      "local": "Kiswahili"
+      "local": "Kiswahili",
+      "system": "Mfumo"
     },
     "colorScheme": {
       "label": "Mandhari",
+      "system": "Mfumo",
       "light": "Mwanga",
       "dark": "Giza"
     }

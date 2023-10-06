@@ -1,12 +1,13 @@
 {
   "settings": {
-    "system": "Система",
     "locale": {
       "label": "Язык",
-      "local": "Русский"
+      "local": "Русский",
+      "system": "Система"
     },
     "colorScheme": {
       "label": "Тема",
+      "system": "Система",
       "light": "Светлый",
       "dark": "Темный"
     }
