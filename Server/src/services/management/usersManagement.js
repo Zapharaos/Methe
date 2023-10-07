@@ -1,17 +1,19 @@
-import { getDataBase } from '../../database/database.js';
+/*
+ * This file regroup all methods use to interact with the users table
+ */
 
-export async function createUser(userLogin, userPassword){
-    return await getDataBase().execute(`INSERT INTO users (userLogin, userPassword) VALUES (?, ?);`,
-    [userLogin, userPassword],
-    function (err, results, fields) {
-        console.log(err);
-        console.log(results);
-        console.log(fields);
-    });
+import connectDB from '../../database/database.js';
+
+// SQL queries
+const INSERT_USER = `INSERT INTO users (email, password, userName) VALUES (?, ?, ?);`;
+
+// Method to create a user
+export async function createUser(email, password, userName){
+    return await connectDB.execute(INSERT_USER, [email, password, userName]);
 }
 
+// Method to get all users
 export async function getUsers() {
-    const results =  await getDataBase().query(`SELECT userLogin FROM users;`);
-    console.log(results);
+    const results =  await connectDB.query(`SELECT userId, email, userName FROM users;`);
     return results[0];
 }

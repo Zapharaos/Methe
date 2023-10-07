@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import express from 'express';
-import { usersRouter } from './routes/users.js';
+import { usersRouter } from './routes/usersController.js';
 import dotenv from 'dotenv';
 
 dotenv.config();

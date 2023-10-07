@@ -5,8 +5,9 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users
 (
   userId BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  userLogin varchar(100) NOT NULL,
-  userPassword varchar(100) DEFAULT NULL,
+  email varchar(250) NOT NULL,
+  password varchar(250) NOT NULL,
+  userName varchar(100) NOT NULL,
   PRIMARY KEY (userId),
-  CONSTRAINT UQ_users_login UNIQUE (userLogin)
+  CONSTRAINT UQ_users_login UNIQUE (userName)
 ) Auto_INCREMENT = 1;
