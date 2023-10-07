@@ -1,0 +1,46 @@
+services:
+  metheDB:
+    container_name: metheDB-container
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+    ports: 
+      - 3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_DATABASE: metheDB
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: methe_database
+      MYSQL_ROOT_PASSWORD: methe_database
+      SERVICE_TAGS: prod
+    networks:
+      - internalnet
+  
+  node-api:
+    container_name: node-api-container
+    build: .
+    image: node-api:v1
+    ports: 
+      - 3000:3000
+    expose:
+      - 3000
+    depends_on:
+      - metheDB
+    environment:
+      DB_HOST: metheDB 
+      DB_USER: admin
+      DB_PASSWORD: methe_database
+      DB_DATABASE: metheDB
+      DB_PORT: 3306
+      SERVER_PORT: 3000
+      SERVICE_TAGS: prod
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
