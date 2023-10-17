@@ -2,17 +2,17 @@ import tw from '../../lib/tailwind';
 
 import {Text, View} from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list'
-import {usePreferencesContext} from "../contexts/preferences";
+import {usePreferencesContext} from "../contexts/preferences/preferences";
 import BaseComponent from "../components/base";
 
 export default function HomeScreen() {
 
     const {
         languages,
-        colorSchemes,
+        changeLocale,
         i18n,
+        colorSchemes,
         colorScheme,
-        changeLanguage,
         changeColorScheme
     } = usePreferencesContext();
 
@@ -25,7 +25,7 @@ export default function HomeScreen() {
             <View style={tw`w-full mt-5`}>
                 <Text style={tw`text-left mb-1 text-black dark:text-white`}>{i18n.t('settings.locale.label')}</Text>
                 <SelectList
-                    setSelected={changeLanguage}
+                    setSelected={changeLocale}
                     data={languages}
                     placeholder={languages.find(item => item.key === i18n.locale)?.value}
                     searchPlaceholder={i18n.t('search')}

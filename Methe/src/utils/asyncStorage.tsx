@@ -20,7 +20,7 @@ export const loadData = async (key:string) => {
         return data || '';
     }
     catch (e) {
-        console.log("Error storing data", e)
+        console.log("Error loading data", e)
         return '';
     }
 }

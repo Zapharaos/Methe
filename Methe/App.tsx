@@ -1,4 +1,4 @@
-import {PreferencesContextProvider} from "./src/contexts/preferences";
+import {PreferencesContextProvider} from "./src/contexts/preferences/preferences";
 import Navigation from "./src/navigation/navigation";
 import {useDeviceContext} from "twrnc";
 import tw from "./lib/tailwind";
