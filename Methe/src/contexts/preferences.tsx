@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {RnColorScheme, useAppColorScheme, useDeviceContext} from "twrnc";
+import {RnColorScheme, useAppColorScheme} from "twrnc";
 import Utils from "../utils/enums/utils";
 import Theme from "../utils/enums/theme";
 import {getLocales} from "expo-localization";
