@@ -4,7 +4,13 @@
     "locale": {
       "label": "Language",
       "local": "English",
-      "system": "System"
+      "system": "System",
+      "alert": {
+        "title": "Restart required",
+        "message": "Changing to the chosen language requires a restart. Do you want to proceed?",
+        "cancel": "Cancel",
+        "confirm": "Restart"
+      }
     },
     "colorScheme": {
       "label": "Theme",
