@@ -1,36 +1,35 @@
-import {useEffect, useState} from 'react';
-import {useAppColorScheme} from "twrnc";
-import Utils from "../../utils/enums/utils";
-import Theme from "../../utils/enums/theme";
-import tw from "../../../lib/tailwind";
-import {StatusBarStyle} from "expo-status-bar";
-import {asyncStorage, loadData, storeData} from "../../utils/asyncStorage";
-import {Appearance} from "react-native";
+import { useEffect, useState } from 'react';
+import { useAppColorScheme } from 'twrnc';
+import { StatusBarStyle } from 'expo-status-bar';
+import { asyncStorage, loadData, storeData } from '@/src/utils/asyncStorage';
+import { Appearance } from 'react-native';
+
+import Utils from '../../utils/enums/utils';
+import Theme from '../../utils/enums/theme';
+import tw from '../../../lib/tailwind';
+
+const initialColorSchemes = [
+    { key: Theme.System, value: Utils.Empty },
+    { key: Theme.Light, value: Utils.Empty },
+    { key: Theme.Dark, value: Utils.Empty },
+];
 
 export function useColorSchemes() {
 
-    const [colorSchemes, setColorSchemes] = useState(() => {
-        const colorSchemes: { key: string; value: string }[] = [
-            {key: Theme.System, value: Utils.Empty},
-            {key: Theme.Light, value: Utils.Empty},
-            {key: Theme.Dark, value: Utils.Empty},
-        ];
-        return colorSchemes;
-    });
+    const [colorSchemes, setColorSchemes] = useState(initialColorSchemes);
     const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
     const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>('auto');
 
     useEffect(() => {
         const getAsyncStorageData = async () => {
-            let itemColorScheme:string = Utils.Empty;
             try {
                 const valueColorScheme = await loadData(asyncStorage.ColorScheme);
-                itemColorScheme = valueColorScheme === Utils.Empty ? colorSchemes[0].key : valueColorScheme;
-            } catch(e) {
-                // read error
+                const itemColorScheme = valueColorScheme === Utils.Empty ? colorSchemes[0].key : valueColorScheme;
+                changeColorScheme(itemColorScheme);
+            } catch (e) {
+                console.error(e);
             }
-            changeColorScheme(itemColorScheme);
-        }
+        };
         getAsyncStorageData().catch(console.error);
     }, []);
 

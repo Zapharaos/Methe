@@ -1,6 +1,7 @@
 import React from 'react';
-import tw from '../../lib/tailwind';
 import { SafeAreaView, View, I18nManager } from 'react-native';
+
+import tw from '@/lib/tailwind';
 
 const BaseComponent = ({ children }: { children: React.ReactNode }) => {
     return (

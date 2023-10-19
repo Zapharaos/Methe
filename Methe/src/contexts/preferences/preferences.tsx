@@ -35,7 +35,7 @@ export function PreferencesContextProvider({ children }: { children: React.React
     useEffect(() => {
         const updateColorSchemes = () => {
             const updatedColorSchemes = [...colorSchemes];
-            updatedColorSchemes.forEach((colorScheme) => {
+            updatedColorSchemes.forEach((colorScheme: { key: string; value: string }) => {
                 colorScheme.value = i18n.t('settings.colorScheme.' + colorScheme.key);
             });
             setColorSchemes(updatedColorSchemes);

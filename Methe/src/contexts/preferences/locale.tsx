@@ -4,22 +4,22 @@ import { I18nManager } from 'react-native';
 import * as Updates from 'expo-updates';
 import {I18n} from "i18n-js";
 
-import Utils from '../../utils/enums/utils';
-import { asyncStorage, loadData, storeData } from '../../utils/asyncStorage';
-import { showCancelOkAlert } from '../../utils/alert';
-import rtlDetect from '../../../lib/rtl-detect';
+import rtlDetect from '@/lib/rtl-detect';
+import Utils from '@/src/utils/enums/utils';
+import { asyncStorage, loadData, storeData } from '@/src/utils/asyncStorage';
+import { showCancelOkAlert } from '@/src/utils/alert';
 
 const locales: Record<string, any> = {
-    en: require('../../../locales/en.json'),
-    ar: require('../../../locales/ar.json'),
-    es: require('../../../locales/es.json'),
-    fr: require('../../../locales/fr.json'),
-    hi: require('../../../locales/hi.json'),
-    it: require('../../../locales/it.json'),
-    ko: require('../../../locales/ko.json'),
-    ru: require('../../../locales/ru.json'),
-    sw: require('../../../locales/sw.json'),
-    zh: require('../../../locales/zh.json'),
+    en: require('@/locales/en.json'),
+    ar: require('@/locales/ar.json'),
+    es: require('@/locales/es.json'),
+    fr: require('@/locales/fr.json'),
+    hi: require('@/locales/hi.json'),
+    it: require('@/locales/it.json'),
+    ko: require('@/locales/ko.json'),
+    ru: require('@/locales/ru.json'),
+    sw: require('@/locales/sw.json'),
+    zh: require('@/locales/zh.json'),
 };
 
 export function useLocale() {

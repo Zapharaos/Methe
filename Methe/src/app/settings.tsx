@@ -4,6 +4,7 @@ import {Text, View} from 'react-native';
 import {SelectList} from 'react-native-dropdown-select-list'
 import {usePreferencesContext} from "../contexts/preferences/preferences";
 import BaseComponent from "../components/base";
+import {Link} from "expo-router";
 
 export default function SettingsScreen() {
 
@@ -18,6 +19,7 @@ export default function SettingsScreen() {
 
     return (
         <BaseComponent>
+            <Link href="/(modal)/locale">Present modal</Link>
             <View style={tw`w-full mt-5`}>
                 <Text style={tw`text-left mb-1 text-black dark:text-white`}>{i18n.t('settings.locale.label')}</Text>
                 <SelectList
