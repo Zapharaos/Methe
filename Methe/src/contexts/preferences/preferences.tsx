@@ -27,7 +27,10 @@ export function usePreferencesContext() {
     return context;
 }
 
-export function PreferencesContextProvider({ children }: { children: React.ReactNode }) {
+export function PreferencesContextProvider({ children, render }: {
+        children?: React.ReactNode | ((preferences: Preferences) => React.ReactNode);
+        render?: (preferences: Preferences) => React.ReactNode
+    }) {
 
     const { languages, setLanguages, locale, changeLocale, i18n } = useLocale();
     const { colorSchemes, setColorSchemes, colorScheme, changeColorScheme, statusBarStyle } = useColorSchemes();
@@ -63,7 +66,7 @@ export function PreferencesContextProvider({ children }: { children: React.React
     return (
         <PreferencesContext.Provider value={preferences}>
             <StatusBar style={statusBarStyle} />
-            {children}
+            {render ? render(preferences) : (children ? (typeof children === 'function' ? (children as (preferences: Preferences) => React.ReactNode)(preferences) : children) : null)}
         </PreferencesContext.Provider>
     );
 }
