@@ -2,6 +2,7 @@
   "expo": {
     "name": "Methe",
     "slug": "Methe",
+    "scheme": "methe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon/icon-dark.png",
@@ -50,7 +51,12 @@
     },
     "plugins": [
       "expo-localization",
-      "expo-updates"
-    ]
+      "expo-updates",
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    }
   }
 }

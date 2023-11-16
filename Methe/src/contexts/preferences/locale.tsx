@@ -1,36 +1,39 @@
-import {useEffect, useState} from 'react';
-import Utils from "../../utils/enums/utils";
-import {getLocales} from "expo-localization";
+import { useEffect, useState } from 'react';
+import { getLocales } from 'expo-localization';
+import { I18nManager } from 'react-native';
+import * as Updates from 'expo-updates';
 import {I18n} from "i18n-js";
-import {asyncStorage, loadData, storeData} from "../../utils/asyncStorage";
-import {I18nManager} from "react-native";
-import rtlDetect from "../../../lib/rtl-detect";
-import * as Updates from "expo-updates";
+
+import rtlDetect from '@/lib/rtl-detect';
+import Utils from '@/src/utils/enums/utils';
+import { asyncStorage, loadData, storeData } from '@/src/utils/asyncStorage';
+import { showCancelOkAlert } from '@/src/utils/alert';
+
+const locales: Record<string, any> = {
+    en: require('@/locales/en.json'),
+    ar: require('@/locales/ar.json'),
+    es: require('@/locales/es.json'),
+    fr: require('@/locales/fr.json'),
+    hi: require('@/locales/hi.json'),
+    it: require('@/locales/it.json'),
+    ko: require('@/locales/ko.json'),
+    ru: require('@/locales/ru.json'),
+    sw: require('@/locales/sw.json'),
+    zh: require('@/locales/zh.json'),
+};
 
 export function useLocale() {
 
-    const locales: Record<string, any> = {
-        en: require('../../../locales/en.json'),
-        ar: require('../../../locales/ar.json'),
-        es: require('../../../locales/es.json'),
-        fr: require('../../../locales/fr.json'),
-        hi: require('../../../locales/hi.json'),
-        it: require('../../../locales/it.json'),
-        ko: require('../../../locales/ko.json'),
-        ru: require('../../../locales/ru.json'),
-        sw: require('../../../locales/sw.json'),
-        zh: require('../../../locales/zh.json'),
-    };
-    const [languages, setLanguages] = useState(() => {
-        const languages: { key: string; value: string }[] = [
-            {key: Utils.System, value: Utils.Empty},
-        ];
-        for (const key in locales) {
-            languages.push({ key, value: locales[key].settings.locale.local });
-        }
-        return languages;
-    });
+    const defaultLanguages = [
+        { key: Utils.System, value: Utils.Empty },
+        ...Object.keys(locales).map((key) => ({
+            key,
+            value: locales[key].settings.locale.local,
+        })),
+    ];
+    const [languages, setLanguages] = useState(defaultLanguages);
     const [locale, setLocale] = useState(getLocales()[0].languageCode);
+    const [localeKey, setLocaleKey] = useState(languages[0].key);
 
     const i18n = new I18n(locales);
     i18n.enableFallback = true;
@@ -38,48 +41,64 @@ export function useLocale() {
 
     useEffect(() => {
         const getAsyncStorageData = async () => {
-            let itemLocale:string = Utils.Empty;
             try {
                 const valueLocale = await loadData(asyncStorage.Locale);
-                itemLocale = valueLocale === Utils.Empty ? languages[0].key : valueLocale;
-            } catch(e) {
-                // read error
+                const itemLocale = valueLocale === Utils.Empty ? languages[0].key : valueLocale;
+                await changeLocale(itemLocale);
+            } catch (e) {
+                console.error(e);
             }
-            changeLocale(itemLocale);
-        }
-        getAsyncStorageData().catch(console.error);
+        };
+        getAsyncStorageData().then();
     }, []);
 
-    const changeLocale = (key: string) => {
+    const changeLocale = async (key: string) => {
         // language already set or not recognized
-        if (locale === key || !languages.some(language => language.key === key)) {
+        if ((locale === localeKey && locale === key) || !languages.some(language => language.key === key)) {
             return;
         }
 
+        const keySave = key;
+
         // reset to system language
-        if(key === Utils.System) {
+        if (key === Utils.System) {
             key = getLocales()[0].languageCode;
         }
 
-        // update the async storage
-        const storeAsyncStorageData = async () => {
-            await storeData(asyncStorage.Locale, key);
-        }
-        storeAsyncStorageData().catch(console.error);
+        const reload = I18nManager.isRTL !== rtlDetect.isRtlLang(key);
 
-        // update the language
-        setLocale(key);
-        const updateI18N = async () => {
-            i18n.locale = key;
-            if (I18nManager.isRTL !== rtlDetect.isRtlLang(key)) {
-                I18nManager.forceRTL(!I18nManager.isRTL);
-                // TODO : popup
-                await Updates.reloadAsync();
+        // check if reload is needed
+        if (reload) {
+
+            const confirm = await showCancelOkAlert(
+                i18n.t('settings.locale.alert.title'),
+                i18n.t('settings.locale.alert.message'),
+                i18n.t('settings.locale.alert.cancel'),
+                i18n.t('settings.locale.alert.confirm'),
+                );
+
+            if (!confirm) {
+                return; // User canceled the action
             }
         }
-        updateI18N().catch(console.error);
+
+        // update the async storage
+        try {
+            await storeData(asyncStorage.Locale, key);
+            if (reload) {
+                I18nManager.forceRTL(!I18nManager.isRTL);
+                await Updates.reloadAsync();
+            } else {
+                setLocale(key);
+                setLocaleKey(keySave);
+                i18n.locale = key;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
     };
 
-    return { languages, setLanguages, locale, changeLocale, i18n };
+    return { languages, setLanguages, locale, localeKey, changeLocale, i18n };
 }
 
