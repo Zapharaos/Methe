@@ -1,39 +1,22 @@
-import {Switch, Text, View} from 'react-native';
-import { Link, router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import tw from "@/lib/tailwind";
-import {useState} from "react";
+import React from "react";
+import {ScrollView} from "react-native-gesture-handler";
+import ModalComponent from "@/src/components/modal";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
-import BaseComponent from "@/src/components/base";
-export default function Modal() {
+import Selection from "@/src/components/selection";
 
+export default function Modal() {
     const {
         i18n,
+        colorSchemes,
+        colorSchemeKey,
+        changeColorScheme
     } = usePreferencesContext();
 
-    // If the page was reloaded or navigated to directly, then the modal should be presented as
-    // a full screen page. You may need to change the UI to account for this.
-    const isPresented = router.canGoBack();
-
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
     return (
-        <BaseComponent>
-            {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
-            {!isPresented && <Link href="../">Dismiss</Link>}
-            {/* Native modals have dark backgrounds on iOS, set the status bar to light content. */}
-            <StatusBar style="light" />
-            <View style={tw`w-full mt-5 flex-row justify-between`}>
-
-                <Text style={tw`text-left mb-1 font-semibold text-black dark:text-white`}>{i18n.t('settings.colorScheme.label')}</Text>
-                <View style={tw`flex-row`}>
-                    <Switch
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
-                    />
-                </View>
-            </View>
-        </BaseComponent>
+        <ModalComponent>
+            <ScrollView>
+                <Selection list={colorSchemes} current={colorSchemeKey} change={changeColorScheme} />
+            </ScrollView>
+        </ModalComponent>
     );
 }

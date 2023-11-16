@@ -5,8 +5,8 @@ import tw from '@/lib/tailwind';
 
 const BaseComponent = ({ children }: { children: React.ReactNode }) => {
     return (
-        <SafeAreaView style={tw`flex-1 justify-center items-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
-            <View style={tw`w-11/12 flex-1 justify-center items-center`}>
+        <SafeAreaView style={tw`flex-1 items-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
+            <View style={tw`w-11/12 flex-1 items-center`}>
                 {children}
             </View>
         </SafeAreaView>

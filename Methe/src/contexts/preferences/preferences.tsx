@@ -1,17 +1,19 @@
 import React, {createContext, useContext, useEffect} from 'react';
 import {RnColorScheme} from "twrnc";
-import {StatusBar} from "expo-status-bar";
 import {I18n} from "i18n-js";
 import {useColorSchemes} from "./colorScheme";
 import {useLocale} from "./locale";
+import {StatusBar} from "expo-status-bar";
 
 export interface Preferences {
     languages: { key: string; value: string }[];
     locale: string;
+    localeKey: string;
     changeLocale: (key: string) => void;
     i18n: I18n;
     colorSchemes: { key: string; value: string }[];
     colorScheme: RnColorScheme;
+    colorSchemeKey: string;
     changeColorScheme: (key: string) => void;
 }
 
@@ -29,8 +31,8 @@ export function usePreferencesContext() {
 
 export function PreferencesContextProvider({ children }: { children: React.ReactNode }) {
 
-    const { languages, setLanguages, locale, changeLocale, i18n } = useLocale();
-    const { colorSchemes, setColorSchemes, colorScheme, changeColorScheme, statusBarStyle } = useColorSchemes();
+    const { languages, setLanguages, locale, localeKey, changeLocale, i18n } = useLocale();
+    const { colorSchemes, setColorSchemes, colorScheme, colorSchemeKey, changeColorScheme, statusBarStyle } = useColorSchemes();
 
     useEffect(() => {
         const updateColorSchemes = () => {
@@ -53,16 +55,18 @@ export function PreferencesContextProvider({ children }: { children: React.React
     const preferences: Preferences = {
         languages,
         locale,
+        localeKey,
         changeLocale,
         i18n,
         colorSchemes,
         colorScheme,
+        colorSchemeKey,
         changeColorScheme
     };
 
     return (
         <PreferencesContext.Provider value={preferences}>
-            <StatusBar style={statusBarStyle} />
+            <StatusBar style='dark' />
             {children}
         </PreferencesContext.Provider>
     );

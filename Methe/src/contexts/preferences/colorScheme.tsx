@@ -18,6 +18,7 @@ export function useColorSchemes() {
 
     const [colorSchemes, setColorSchemes] = useState(initialColorSchemes);
     const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
+    const [colorSchemeKey, setColorSchemeKey] = useState<string>(initialColorSchemes[0].key);
     const [statusBarStyle, setStatusBarStyle] = useState<StatusBarStyle>('auto');
 
     useEffect(() => {
@@ -49,6 +50,7 @@ export function useColorSchemes() {
 
         // update the statusBar colorScheme
         setStatusBarStyle(key === Theme.Dark ? Theme.Light : Theme.Dark);
+        setColorSchemeKey(key);
 
         // update the async storage
         const storeAsyncStorageData = async () => {
@@ -57,6 +59,6 @@ export function useColorSchemes() {
         storeAsyncStorageData().catch(console.error);
     };
 
-    return { colorSchemes, setColorSchemes, colorScheme, changeColorScheme, statusBarStyle };
+    return { colorSchemes, setColorSchemes, colorScheme, colorSchemeKey, changeColorScheme, statusBarStyle };
 }
 

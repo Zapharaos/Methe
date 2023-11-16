@@ -1,6 +1,10 @@
 {
   "appName": "Methe",
+  "pages": {
+    "home": "Home"
+  },
   "settings": {
+    "title": "Settings",
     "locale": {
       "label": "Language",
       "local": "English",

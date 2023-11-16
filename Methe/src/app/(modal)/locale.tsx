@@ -1,16 +1,22 @@
-import { View } from 'react-native';
-import { Link, router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import React from "react";
+import {ScrollView} from "react-native-gesture-handler";
+import ModalComponent from "@/src/components/modal";
+import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+import Selection from "@/src/components/selection";
+
 export default function Modal() {
-    // If the page was reloaded or navigated to directly, then the modal should be presented as
-    // a full screen page. You may need to change the UI to account for this.
-    const isPresented = router.canGoBack();
+    const {
+        i18n,
+        languages,
+        localeKey,
+        changeLocale
+    } = usePreferencesContext();
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
-            {!isPresented && <Link href="../">Dismiss</Link>}
-            {/* Native modals have dark backgrounds on iOS, set the status bar to light content. */}
-            <StatusBar style="light" />
-        </View>
+        <ModalComponent>
+            <ScrollView>
+                <Selection list={languages} current={localeKey} change={changeLocale} />
+            </ScrollView>
+        </ModalComponent>
     );
 }

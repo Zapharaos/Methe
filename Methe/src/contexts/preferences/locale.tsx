@@ -33,6 +33,7 @@ export function useLocale() {
     ];
     const [languages, setLanguages] = useState(defaultLanguages);
     const [locale, setLocale] = useState(getLocales()[0].languageCode);
+    const [localeKey, setLocaleKey] = useState(languages[0].key);
 
     const i18n = new I18n(locales);
     i18n.enableFallback = true;
@@ -53,9 +54,11 @@ export function useLocale() {
 
     const changeLocale = async (key: string) => {
         // language already set or not recognized
-        if (locale === key || !languages.some(language => language.key === key)) {
+        if ((locale === localeKey && locale === key) || !languages.some(language => language.key === key)) {
             return;
         }
+
+        const keySave = key;
 
         // reset to system language
         if (key === Utils.System) {
@@ -87,6 +90,7 @@ export function useLocale() {
                 await Updates.reloadAsync();
             } else {
                 setLocale(key);
+                setLocaleKey(keySave);
                 i18n.locale = key;
             }
         } catch (error) {
@@ -95,6 +99,6 @@ export function useLocale() {
 
     };
 
-    return { languages, setLanguages, locale, changeLocale, i18n };
+    return { languages, setLanguages, locale, localeKey, changeLocale, i18n };
 }
 
