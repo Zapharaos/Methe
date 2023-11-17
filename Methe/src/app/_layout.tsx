@@ -7,6 +7,13 @@ import {
 import {TouchableOpacity} from "react-native";
 import { Feather } from '@expo/vector-icons';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as solidHeart  } from '@fortawesome/free-solid-svg-icons';
+
+library.add(regularHeart);
+library.add(solidHeart);
+
 export default function Layout() {
     useDeviceContext(tw);
 
