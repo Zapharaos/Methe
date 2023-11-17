@@ -7,7 +7,7 @@ Install the Expo package : \
 `npm install expo`
 
 Login to your Expo account : \
-`npm expo login`
+`npx expo login`
 
 Run the application : \
 `npx run start`
