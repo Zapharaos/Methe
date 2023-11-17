@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 
 interface CocktailCardsProps {
-    navigation: NavigationProp<any>;
     addIntoLikedList: (cocktailId: bigint) => void;
     cocktailId: bigint;
     cocktailNames: string;
@@ -16,7 +15,7 @@ interface CocktailCardsProps {
     isCocktailLiked: boolean;
 }
 
-export default function CocktailCards({ navigation, addIntoLikedList, cocktailId, cocktailNames, cocktailImage, isCocktailLiked }: CocktailCardsProps) {
+export default function CocktailCards({ addIntoLikedList, cocktailId, cocktailNames, cocktailImage, isCocktailLiked }: CocktailCardsProps) {
 
     //Local state
     const [isLiked, switchLike] = useState<boolean>(isCocktailLiked);
@@ -25,7 +24,7 @@ export default function CocktailCards({ navigation, addIntoLikedList, cocktailId
      * Navigate to the specific cocktail
      */
     const openCocktailDetail = () => {
-        navigation.navigate('CocktailPage', {cocktailId: cocktailId })
+        //navigation.navigate('CocktailPage', {cocktailId: cocktailId })
     }
 
     /**
