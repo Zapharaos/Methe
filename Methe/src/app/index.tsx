@@ -1,22 +1,16 @@
+import {useEffect, useState} from "react";
 import {Button} from "react-native";
-import {usePreferencesContext} from "../contexts/preferences/preferences";
-import BaseComponent from "../components/base";
 import {Link} from "expo-router";
-import tw from "../../lib/tailwind";
-import CocktailCards from "@/src/components/cards/CocktailCards";
-import CocktailService from "@/src/utils/services/cocktailService";
 import {lastValueFrom} from "rxjs";
 import {take} from "rxjs/operators";
-import {useEffect, useState} from "react";
+import tw from "../../lib/tailwind";
 
-/**
- * Cocktail type use for cards
- */
-interface Cocktail {
-    cocktailId: bigint;
-    cocktailNames: string;
-    cocktailImage: string;
-}
+import {usePreferencesContext} from "../contexts/preferences/preferences";
+import BaseComponent from "../components/base";
+
+import CocktailCards from "@/src/components/cards/CocktailCards";
+import CocktailService from "@/src/utils/services/cocktailService";
+import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 
 /**
  * Return type of the Api call
