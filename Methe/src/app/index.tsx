@@ -1,41 +1,34 @@
+import {useEffect, useState} from "react";
 import {Button} from "react-native";
-import {usePreferencesContext} from "../contexts/preferences/preferences";
-import BaseComponent from "../components/base";
 import {Link} from "expo-router";
-import tw from "../../lib/tailwind";
-import CocktailCards from "@/src/components/cards/CocktailCards";
-import CocktailService from "@/src/utils/services/cocktailService";
 import {lastValueFrom} from "rxjs";
 import {take} from "rxjs/operators";
-import {useEffect, useState} from "react";
+import tw from "../../lib/tailwind";
 
-/**
- * Cocktail type use for cards
- */
-interface Cocktail {
-    cocktailId: bigint;
-    cocktailNames: string;
-    cocktailImage: string;
-}
+import {usePreferencesContext} from "../contexts/preferences/preferences";
+import BaseComponent from "../components/base";
+
+import CocktailService from "@/src/utils/services/cocktailService";
+import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+import ContainerCards from "@/src/components/cards/ContainerCards";
 
 /**
  * Return type of the Api call
  */
 interface ApiCocktailResponse  {
-    idDrink: bigint;
     drinks: []
 }
 export default function Index() {
     const { i18n} = usePreferencesContext();
     const likedList: bigint[] = [];
+    //const cocktailList: Cocktail[] = [];
 
-    // API
-    const [randomCocktail, setRandomCocktail] = useState<Cocktail | undefined>();
+    const [cocktailList, setCocktailList] = useState<Cocktail[]>([])
 
     /**
      *  Use the Cocktail service to call the API
      */
-    const getRandomCocktailDate = async (): Promise<ApiCocktailResponse | unknown> => {
+    const getRandomCocktailDate = async (): Promise<ApiCocktailResponse | any> => {
         const cocktailService : CocktailService = new CocktailService();
         try {
             return await lastValueFrom(cocktailService.getRandomCocktails().pipe(take(1)));
@@ -55,25 +48,42 @@ export default function Index() {
     }
 
     useEffect(() => {
-        getRandomCocktailDate().then((result: any) => setRandomCocktail({
-            cocktailId: result.idDrink,
-            cocktailNames: result.drinks[0].strDrink,
-            cocktailImage: result.drinks[0].strDrinkThumb
-        }));
+        getRandomCocktailDate().then((result) => {
+            const newCocktail: Cocktail = {
+                cocktailId: result.drinks[0].idDrink,
+                cocktailNames: result.drinks[0].strDrink,
+                cocktailImage: result.drinks[0].strDrinkThumb,
+            };
+            setCocktailList((prevList) => [...prevList, newCocktail]);
+        });
+        getRandomCocktailDate().then((result) => {
+            const newCocktail: Cocktail = {
+                cocktailId: result.drinks[0].idDrink,
+                cocktailNames: result.drinks[0].strDrink,
+                cocktailImage: result.drinks[0].strDrinkThumb,
+            };
+            setCocktailList((prevList) => [...prevList, newCocktail]);
+        });
+        getRandomCocktailDate().then((result) => {
+            const newCocktail: Cocktail = {
+                cocktailId: result.drinks[0].idDrink,
+                cocktailNames: result.drinks[0].strDrink,
+                cocktailImage: result.drinks[0].strDrinkThumb,
+            };
+            setCocktailList((prevList) => [...prevList, newCocktail]);
+        });
     }, []);
 
     return (
         <BaseComponent>
-            <Link href={'/settings'} asChild>
+            <Link href={'/cocktailDetail'} asChild>
                 <Button title="exemple de lien a delete"/>
             </Link>
-            {randomCocktail && <CocktailCards
+            <ContainerCards
                 addIntoLikedList={addIntoLikedList}
-                cocktailId={randomCocktail.cocktailId}
-                cocktailNames={randomCocktail.cocktailNames}
-                cocktailImage={randomCocktail.cocktailImage}
-                isCocktailLiked={likedList.some((cocktailId: bigint) => cocktailId === randomCocktail.cocktailId)}
-            ></CocktailCards>}
+                cocktailList={cocktailList}
+                likedList={likedList}
+            />
         </BaseComponent>
     );
 }

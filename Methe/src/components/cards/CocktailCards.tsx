@@ -3,10 +3,12 @@ import tw from '../../../lib/tailwind';
 import React, {useState} from "react";
 import { Text, Image, TouchableOpacity, View} from 'react-native';
 
-import {NavigationProp} from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons';
+import { router } from "expo-router";
 
-
+/**
+ * The porps of the CocktailCards
+ */
 interface CocktailCardsProps {
     addIntoLikedList: (cocktailId: bigint) => void;
     cocktailId: bigint;
@@ -17,14 +19,16 @@ interface CocktailCardsProps {
 
 export default function CocktailCards({ addIntoLikedList, cocktailId, cocktailNames, cocktailImage, isCocktailLiked }: CocktailCardsProps) {
 
-    //Local state
+    /**
+     * A state to define if this cocktail is liked by the user
+     */
     const [isLiked, switchLike] = useState<boolean>(isCocktailLiked);
 
     /**
      * Navigate to the specific cocktail
      */
     const openCocktailDetail = () => {
-        //navigation.navigate('CocktailPage', {cocktailId: cocktailId })
+        router.push({pathname: '/cocktailDetail', params: { cocktailId: cocktailId.toString() }});
     }
 
     /**
