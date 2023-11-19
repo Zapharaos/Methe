@@ -3,8 +3,8 @@ import tw from '../../../lib/tailwind';
 import React, {useState} from "react";
 import { Text, Image, TouchableOpacity, View} from 'react-native';
 
-import {NavigationProp} from "@react-navigation/native";
 import { MaterialIcons } from '@expo/vector-icons';
+import {router} from "expo-router";
 
 
 interface CocktailCardsProps {
@@ -24,7 +24,7 @@ export default function CocktailCards({ addIntoLikedList, cocktailId, cocktailNa
      * Navigate to the specific cocktail
      */
     const openCocktailDetail = () => {
-        //navigation.navigate('CocktailPage', {cocktailId: cocktailId })
+        router.push('/cocktailDetail');
     }
 
     /**

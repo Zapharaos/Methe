@@ -85,6 +85,21 @@ function Navigation() {
                     },
                 }}
             />
+            <Stack.Screen
+                name="cocktailDetail"
+                options={{
+                    title: 'test',
+                    headerBackTitle: i18n.t('pages.home'),
+                    headerStyle: {
+                        backgroundColor: backgroundColor,
+                    },
+                    headerShadowVisible: false,
+                    headerTintColor: textColor,
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+            />
         </Stack>
     )
 }
