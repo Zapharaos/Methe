@@ -4,9 +4,11 @@ import React, {useState} from "react";
 import { Text, Image, TouchableOpacity, View} from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import {router} from "expo-router";
+import { router } from "expo-router";
 
-
+/**
+ * The porps of the CocktailCards
+ */
 interface CocktailCardsProps {
     addIntoLikedList: (cocktailId: bigint) => void;
     cocktailId: bigint;
@@ -17,14 +19,16 @@ interface CocktailCardsProps {
 
 export default function CocktailCards({ addIntoLikedList, cocktailId, cocktailNames, cocktailImage, isCocktailLiked }: CocktailCardsProps) {
 
-    //Local state
+    /**
+     * A state to define if this cocktail is liked by the user
+     */
     const [isLiked, switchLike] = useState<boolean>(isCocktailLiked);
 
     /**
      * Navigate to the specific cocktail
      */
     const openCocktailDetail = () => {
-        router.push('/cocktailDetail');
+        router.push({pathname: '/cocktailDetail', params: { cocktailId: cocktailId.toString() }});
     }
 
     /**

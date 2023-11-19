@@ -7,6 +7,9 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 import CocktailCards from "@/src/components/cards/CocktailCards";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 
+/**
+ * The props of the ContainerCards
+ */
 interface ContainerCardsProps {
     addIntoLikedList: (cocktailId: bigint) => void;
     cocktailList: Cocktail[];
@@ -14,13 +17,6 @@ interface ContainerCardsProps {
 }
 
 export default function ContainerCards({ addIntoLikedList, cocktailList, likedList }: ContainerCardsProps) {
-
-    /**
-     * Navigate to the specific cocktail
-     */
-    const openCocktailDetail = () => {
-        //navigation.navigate('CocktailPage', {cocktailId: cocktailId })
-    }
 
     return (
         <Carousel

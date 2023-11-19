@@ -8,7 +8,6 @@ import tw from "../../lib/tailwind";
 import {usePreferencesContext} from "../contexts/preferences/preferences";
 import BaseComponent from "../components/base";
 
-import CocktailCards from "@/src/components/cards/CocktailCards";
 import CocktailService from "@/src/utils/services/cocktailService";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 import ContainerCards from "@/src/components/cards/ContainerCards";
