@@ -1,6 +1,4 @@
-import tw from '../../../lib/tailwind';
-
-import React, {useState} from "react";
+import React from "react";
 import Carousel from 'react-native-snap-carousel';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
