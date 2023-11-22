@@ -21,17 +21,16 @@ interface ApiCocktailResponse  {
 export default function Index() {
     const { i18n} = usePreferencesContext();
     const likedList: bigint[] = [];
-    //const cocktailList: Cocktail[] = [];
 
     const [cocktailList, setCocktailList] = useState<Cocktail[]>([])
 
     /**
      *  Use the Cocktail service to call the API
      */
-    const getRandomCocktailDate = async (): Promise<ApiCocktailResponse | any> => {
+    const getRandomCocktailData = async (): Promise<ApiCocktailResponse | any> => {
         const cocktailService : CocktailService = new CocktailService();
         try {
-            return await lastValueFrom(cocktailService.getRandomCocktails().pipe(take(1)));
+            return await lastValueFrom(cocktailService.getRandomCocktail().pipe(take(1)));
         } catch (err) {
             console.error(err);
         }
@@ -48,7 +47,7 @@ export default function Index() {
     }
 
     useEffect(() => {
-        getRandomCocktailDate().then((result) => {
+        getRandomCocktailData().then((result) => {
             const newCocktail: Cocktail = {
                 cocktailId: result.drinks[0].idDrink,
                 cocktailNames: result.drinks[0].strDrink,
@@ -56,7 +55,7 @@ export default function Index() {
             };
             setCocktailList((prevList) => [...prevList, newCocktail]);
         });
-        getRandomCocktailDate().then((result) => {
+        getRandomCocktailData().then((result) => {
             const newCocktail: Cocktail = {
                 cocktailId: result.drinks[0].idDrink,
                 cocktailNames: result.drinks[0].strDrink,
@@ -64,7 +63,7 @@ export default function Index() {
             };
             setCocktailList((prevList) => [...prevList, newCocktail]);
         });
-        getRandomCocktailDate().then((result) => {
+        getRandomCocktailData().then((result) => {
             const newCocktail: Cocktail = {
                 cocktailId: result.drinks[0].idDrink,
                 cocktailNames: result.drinks[0].strDrink,

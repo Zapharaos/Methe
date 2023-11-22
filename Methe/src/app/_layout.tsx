@@ -88,7 +88,7 @@ function Navigation() {
             <Stack.Screen
                 name="cocktailDetail"
                 options={{
-                    title: 'test',
+                    title: '',
                     headerBackTitle: i18n.t('pages.home'),
                     headerStyle: {
                         backgroundColor: backgroundColor,
