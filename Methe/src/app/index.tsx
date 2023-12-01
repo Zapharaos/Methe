@@ -10,7 +10,7 @@ import BaseComponent from "../components/base";
 
 import CocktailService from "@/src/utils/services/cocktailService";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
-import ContainerCards from "@/src/components/cards/ContainerCards";
+import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCards";
 
 /**
  * Return type of the Api call
@@ -78,7 +78,7 @@ export default function Index() {
             <Link href={'/cocktailDetail'} asChild>
                 <Button title="exemple de lien a delete"/>
             </Link>
-            <ContainerCards
+            <CocktailsContainerCards
                 addIntoLikedList={addIntoLikedList}
                 cocktailList={cocktailList}
                 likedList={likedList}

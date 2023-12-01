@@ -14,7 +14,7 @@ interface ContainerCardsProps {
     likedList: bigint[];
 }
 
-export default function ContainerCards({ addIntoLikedList, cocktailList, likedList }: ContainerCardsProps) {
+export default function CocktailsContainerCards({ addIntoLikedList, cocktailList, likedList }: ContainerCardsProps) {
 
     return (
         <Carousel
