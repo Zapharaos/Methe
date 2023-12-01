@@ -37,5 +37,5 @@ export interface InstructionsByLanguage{
 export interface Ingredient{
     ingredientName: string;
     ingredientImage: string;
-    ingredientMeasure: string;
+    ingredientMeasure: string[];
 }

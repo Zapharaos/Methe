@@ -1,6 +1,6 @@
 import { ajax } from 'rxjs/ajax';
 import { StringUtils } from "@/src/utils/utils";
-import CocktailDbImageSize from "@/src/utils/enums/CocktailDbImageSize";
+import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 
 /**
  * Service class to get cocktails by the API
@@ -17,7 +17,7 @@ class CocktailService {
      * The base URL use to get an image from the cocktailAPI
      * @private
      */
-    private readonly baseImageAPIUrl: string = 'https:www.thecocktaildb.com/images/ingredients/{0}{1}.png';
+    private readonly baseImageAPIUrl: string = 'https://www.thecocktaildb.com/images/ingredients/{0}{1}.png';
 
     /**
      * In the cocktailAPI, there are only 15 ingredient maximum

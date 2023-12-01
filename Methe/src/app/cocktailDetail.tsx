@@ -1,7 +1,7 @@
 import tw from '../../lib/tailwind';
 
 import React, { useEffect, useState } from "react";
-import {Image,Text, SafeAreaView, TouchableOpacity, View} from 'react-native';
+import {Image,Text, SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
@@ -13,18 +13,20 @@ import BaseComponent from "../components/base";
 
 import { CocktailDetail } from "@/src/utils/interface/CocktailInterface";
 import CocktailService from "@/src/utils/services/cocktailService";
-import CocktailDbImageSize from "@/src/utils/enums/CocktailDbImageSize";
-import { StatusBar } from "expo-status-bar";
-import {AntDesign, MaterialIcons} from "@expo/vector-icons";
+import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 
+import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
+import {IncrementDecrementNumber, LikeCocktail} from "@/src/components/utils/utils";
 
+/**
+ * ApiCocktailResponse type use for the api call
+ */
 interface ApiCocktailResponse  {
     drinks: []
 }
 
 export default function CocktailDetailScreen() {
 
-    const router = useRouter();
     const {
         languages,
         localeKey,
@@ -33,9 +35,20 @@ export default function CocktailDetailScreen() {
         colorSchemeKey
     } = usePreferencesContext();
 
+    /**
+     * The cocktailId of the cocktail
+     */
     const params = useLocalSearchParams();
+
+    /**
+     * The cocktail to present
+     */
     const [cocktail, setCocktail] = useState<CocktailDetail>();
-    const [size, setSize] = useState<string>('small');
+
+    /**
+     * The number of person for the ingredients measures
+     */
+    const [numberPerson, setNumberPerson] = useState<number>(1);
 
     /**
      * A state to define if this cocktail is liked by the user
@@ -73,16 +86,18 @@ export default function CocktailDetailScreen() {
 
             let hasOtherIngredient : boolean = true;
             const size : number = CocktailService.maxNumberOfIngredient;
-            for(let counter = 1; hasOtherIngredient && counter <= size; counter++){
+            for(let counter: number = 1; hasOtherIngredient && counter <= size; counter++){
 
-                const ingredient: string = result.drinks[`strIngredient${counter}`];
-                const measure: string = result.drinks[`strMeasure${counter}`];
+                const ingredient: string = result.drinks[0][`strIngredient${counter}`];
+                const measure: string = result.drinks[0][`strMeasure${counter}`];
 
                 if(ingredient){
+                    const ingredientMeasure: string[] = measure ? measure.split(' ') : [];
+
                     cocktailDetail.ingredientList.push({
                         ingredientName: ingredient,
                         ingredientImage: cocktailService.getImageByIngredientName(ingredient,CocktailDbImageSize.Small),
-                        ingredientMeasure: measure ? measure : ''
+                        ingredientMeasure: ingredientMeasure
                     });
                 }
                 else {
@@ -105,73 +120,71 @@ export default function CocktailDetailScreen() {
     return (
         <BaseComponent>
             { cocktail &&
-                <View style={ tw `flex-1`}>
-                    <StatusBar style="light" />
-                    <Image
-                        source={{ uri: cocktail.cocktailImage }}
-                        style={{width: wp(100), height: hp(33), borderBottomLeftRadius: 30,
-                            borderBottomRightRadius: 30}}
+                <SafeAreaView>
+                    <ScrollView
+                        horizontal={false}
+                        showsVerticalScrollIndicator={false}>
+                        <Image
+                            source={{ uri: cocktail.cocktailImage }}
+                            style={{width: wp(90), height: hp(33), borderBottomLeftRadius: 30,
+                                borderBottomRightRadius: 30}}
                         />
-                    <TouchableOpacity onPress={clickOnLike} style={tw `absolute top-0 right-0 m-1 p-2 w-10 h-10 bg-white rounded-full items-center justify-center`}>
-                        {!isLiked && <MaterialIcons name="favorite-outline" size={24} color="black" />}
-                        {isLiked && <MaterialIcons name="favorite" size={24} color="black" />}
-                    </TouchableOpacity>
+                        {/* Like Cocktail */}
+                        <LikeCocktail
+                            isLiked={isLiked}
+                            clickOnLike={clickOnLike}/>
 
-                    <SafeAreaView style={ tw `m-5 flex-1`}>
-                        <View style={ tw `flex-row justify-between items-center`}>
-                            <Text style={ tw `text-white text-3xl font-semibold`}>
-                                {cocktail.cocktailNames}
-                            </Text>
-                        </View>
-                        <View style={ tw `mt-2`}>
-                            <Text style={ tw `text-white text-lg font-bold`}>Coffee size</Text>
-                            <View style={ tw `flex-row justify-between`}>
-                                <TouchableOpacity
-                                    onPress={()=> setSize('small')}
-                                    style={{backgroundColor: size=='small'? '#4D3E3E': 'rgba(0,0,0,0.07)', ...tw `p-3 px-8 rounded-full`}}>
-                                    <Text style={{color: size=='small'? "#fff": "#222"}}>Small</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={()=> setSize('medium')}
-                                    style={{backgroundColor: size=='medium'? '#4D3E3E': 'rgba(0,0,0,0.07)', ...tw `p-3 px-8 rounded-full`}}>
-                                    <Text style={{color: size=='medium'? "#fff": "#222"}}>Medium</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={()=> setSize('large')}
-                                    style={{backgroundColor: size=='large'? '#4D3E3E': 'rgba(0,0,0,0.07)', ...tw `p-3 px-8 rounded-full`}}>
-                                    <Text style={{color: size=='large'? "#fff": "#222"}}>Large</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                        <View style={ tw `mt-2`}>
-                            <Text style={{color: '#fff', ...tw `text-lg font-bold`}}>About</Text>
-                            <Text style={ tw `mt-2 text-black`}>
-                                {cocktail.strInstructions}
-                            </Text>
-                        </View>
-
-                    </SafeAreaView>
-                    <View style={ tw `m-5`}>
-                        <View style={ tw `flex-row justify-between items-center`}>
-                            <View style={ tw `flex-row items-center space-x-1`}>
-                                <Text style={ tw `text-base text-white font-semibold opacity-60`}>
-                                    Le nombre de personne
+                        <View style={ tw `flex-1`}>
+                            <View style={ tw `mx-5 mt-2 flex-row justify-between items-center`}>
+                                <Text style={ tw `text-white text-3xl font-semibold`}>
+                                    {cocktail.cocktailNames}
                                 </Text>
                             </View>
-                            <View
-                                style={tw `flex-row items-center mx-4 border-gray-500 border rounded-full p-1 px-4`}>
-                                <TouchableOpacity>
-                                    <AntDesign name="minus" size={20} color={'#fff'} />
-                                </TouchableOpacity>
-                                <Text style={{color: '#fff', ...tw `font-extrabold text-lg mx-1`}}>2</Text>
-                                <TouchableOpacity>
-                                    <AntDesign name="plus" size={20} color={'#fff'} />
-                                </TouchableOpacity>
+                            {/* Quick information about the cocktail */}
+                            <View style={ tw `mt-3 flex-row justify-between`}>
+                                <View
+                                    style={ tw `p-3 rounded-full bg-stone-800 max-w-1/3`}>
+                                    <Text style={tw `text-white`}> {cocktail.strAlcoholic} </Text>
+                                </View>
+                                <View
+                                    style={ tw `p-3 rounded-full bg-stone-800 max-w-1/3`}>
+                                    <Text style={tw `text-white`}> {cocktail.strCategory} </Text>
+                                </View>
+                                <View
+                                    style={ tw `p-3 rounded-full bg-stone-800 max-w-1/3`}>
+                                    <Text style={tw `text-white`}> {cocktail.strGlass} </Text>
+                                </View>
+                            </View>
+
+                            <View style={ tw `mx-5 mt-2`}>
+                                <Text style={tw `text-white text-lg font-bold`}>About</Text>
+                                <Text style={tw `text-white mt-2`}>
+                                    {cocktail.strInstructions}
+                                </Text>
+                            </View>
+
+                            <View>
+                                <View style={ tw `m-5`}>
+                                    <Text style={tw `text-white text-lg font-bold`}>Les Ingrédients</Text>
+
+                                    <View style={ tw `ml-5 flex-row justify-between items-center`}>
+                                        <View style={ tw `flex-row items-center`}>
+                                            <Text style={ tw `text-base text-white font-semibold opacity-60`}>
+                                                Le nombre de personne
+                                            </Text>
+                                        </View>
+
+                                        {/* PlusMoinsNombre */}
+                                        <IncrementDecrementNumber
+                                            numberPerson={numberPerson}
+                                            setNumberPerson={setNumberPerson}/>
+                                    </View>
+                                </View>
+                                <IngredientsContainerCards ingredientList={cocktail.ingredientList} numberPerson={numberPerson}/>
                             </View>
                         </View>
-                    </View>
-                </View>
+                    </ScrollView>
+                </SafeAreaView>
             }
         </BaseComponent>
     );
