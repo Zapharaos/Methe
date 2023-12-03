@@ -19,7 +19,7 @@ export default function IngredientCards({ ingredientName, ingredientImage, ingre
             <Image  style={tw `h-40 w-40 rounded-t-3xl`} source={{ uri: ingredientImage }} />
             <View style={tw `px-3 pb-4`} >
                 <Text style={tw `text-lg font-bold pt-2`}>{ingredientName}</Text>
-                <Text style={tw `text-lg font-bold pt-2`}>{ingredientMeasure}</Text>
+                <Text style={tw `text-lg font-bold`}>{ingredientMeasure}</Text>
             </View>
         </View>
     );

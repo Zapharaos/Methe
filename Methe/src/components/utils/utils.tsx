@@ -49,7 +49,7 @@ interface LikeCocktailProps {
 export function LikeCocktail ({ isLiked, clickOnLike  }: LikeCocktailProps) {
 
     return (
-        <TouchableOpacity onPress={clickOnLike} style={tw `absolute top-0 right-0 m-1 p-2 w-10 h-10 bg-white rounded-full items-center justify-center`}>
+        <TouchableOpacity onPress={clickOnLike} style={tw `absolute top-0 right-0 m-1 mr-3 p-2 w-10 h-10 bg-white rounded-full items-center justify-center`}>
             {!isLiked && <MaterialIcons name="favorite-outline" size={24} color="black" />}
             {isLiked && <MaterialIcons name="favorite" size={24} color="black" />}
         </TouchableOpacity>
