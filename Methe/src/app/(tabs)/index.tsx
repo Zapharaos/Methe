@@ -1,12 +1,9 @@
 import {useEffect, useState} from "react";
-import {Button} from "react-native";
-import {Link} from "expo-router";
 import {lastValueFrom} from "rxjs";
 import {take} from "rxjs/operators";
-import tw from "../../lib/tailwind";
 
-import {usePreferencesContext} from "../contexts/preferences/preferences";
-import BaseComponent from "../components/base";
+import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+import BaseComponent from "@/src/components/base";
 
 import CocktailService from "@/src/utils/services/cocktailService";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
@@ -75,9 +72,6 @@ export default function Index() {
 
     return (
         <BaseComponent>
-            <Link href={'/cocktailDetail'} asChild>
-                <Button title="exemple de lien a delete"/>
-            </Link>
             <CocktailsContainerCards
                 addIntoLikedList={addIntoLikedList}
                 cocktailList={cocktailList}

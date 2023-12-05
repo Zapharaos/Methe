@@ -1,4 +1,4 @@
-import tw from '../../../lib/tailwind';
+import tw from '@/lib/tailwind';
 
 import React, {useState} from "react";
 import { Text, Image, TouchableOpacity, View} from 'react-native';

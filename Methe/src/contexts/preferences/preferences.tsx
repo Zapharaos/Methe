@@ -3,7 +3,8 @@ import {RnColorScheme} from "twrnc";
 import {I18n} from "i18n-js";
 import {useColorSchemes} from "./colorScheme";
 import {useLocale} from "./locale";
-import {StatusBar} from "expo-status-bar";
+import {setStatusBarStyle, StatusBarStyle} from "expo-status-bar";
+import {Platform} from "react-native";
 
 export interface Preferences {
     languages: { key: string; value: string }[];
@@ -15,6 +16,7 @@ export interface Preferences {
     colorScheme: RnColorScheme;
     colorSchemeKey: string;
     changeColorScheme: (key: string) => void;
+    statusBarStyle: StatusBarStyle;
 }
 
 const PreferencesContext = createContext<Preferences | undefined>(undefined);
@@ -52,6 +54,10 @@ export function PreferencesContextProvider({ children }: { children: React.React
         updateLocaleSystemLabel();
     }, [locale]);
 
+    useEffect(() => {
+        setStatusBarStyle(statusBarStyle)
+    }, [statusBarStyle]);
+
     const preferences: Preferences = {
         languages,
         locale,
@@ -61,12 +67,12 @@ export function PreferencesContextProvider({ children }: { children: React.React
         colorSchemes,
         colorScheme,
         colorSchemeKey,
-        changeColorScheme
+        changeColorScheme,
+        statusBarStyle
     };
 
     return (
         <PreferencesContext.Provider value={preferences}>
-            <StatusBar style='dark' />
             {children}
         </PreferencesContext.Provider>
     );

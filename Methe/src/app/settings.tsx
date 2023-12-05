@@ -1,15 +1,15 @@
-import tw from '../../lib/tailwind';
+import tw from '@/lib/tailwind';
 
 import {Text, TouchableOpacity, View} from 'react-native';
-import {usePreferencesContext} from "../contexts/preferences/preferences";
-import BaseComponent from "../components/base";
+import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+import BaseComponent from "@/src/components/base";
 import {useRouter} from "expo-router";
 
-import {AntDesign, Feather} from '@expo/vector-icons';
+import {AntDesign} from '@expo/vector-icons';
 import {findValueByKey} from "@/src/utils/utils";
 import React from "react";
 
-export default function SettingsScreen() {
+export default function Settings() {
 
     const router = useRouter();
     const {
