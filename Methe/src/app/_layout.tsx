@@ -1,9 +1,11 @@
-import {Stack} from 'expo-router';
+import {router, Stack} from 'expo-router';
 import {useDeviceContext} from "twrnc";
 import tw from "@/lib/tailwind";
 import {
     PreferencesContextProvider, usePreferencesContext
 } from "@/src/contexts/preferences/preferences";
+import {TouchableOpacity} from "react-native";
+import {Ionicons} from "@expo/vector-icons";
 export default function Layout() {
     useDeviceContext(tw);
 
@@ -38,22 +40,30 @@ function Navigation() {
             <Stack.Screen name="(modal)/locale" options={{
                     title: i18n.t('settings.locale.label'),
                     presentation: 'modal',
-                    statusBarStyle: 'light',
                     headerTransparent: true,
                     headerTintColor: textColor,
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => router.back()}>
+                            <Ionicons name="close-outline" color={textColor} size={24} />
+                        </TouchableOpacity>
+                    ),
                 }}/>
             <Stack.Screen name="(modal)/colorScheme" options={{
                     title: i18n.t('settings.colorScheme.label'),
                     presentation: 'modal',
-                    statusBarStyle: 'light',
                     headerTransparent: true,
                     headerTintColor: textColor,
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => router.back()}>
+                            <Ionicons name="close-outline" color={textColor} size={24} />
+                        </TouchableOpacity>
+                    ),
                 }}/>
         </Stack>
     )
