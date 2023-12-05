@@ -1,7 +1,5 @@
-import {Button} from "react-native";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import BaseComponent from "@/src/components/base";
-import {Link} from "expo-router";
 import CocktailCards from "@/src/components/cards/CocktailCards";
 import CocktailService from "@/src/utils/services/cocktailService";
 import {lastValueFrom} from "rxjs";
@@ -63,9 +61,6 @@ export default function Index() {
 
     return (
         <BaseComponent>
-            <Link href={'/settings'} asChild>
-                <Button title="exemple de lien a delete"/>
-            </Link>
             {randomCocktail && <CocktailCards
                 addIntoLikedList={addIntoLikedList}
                 cocktailId={randomCocktail.cocktailId}

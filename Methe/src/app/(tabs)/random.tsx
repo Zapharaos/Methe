@@ -1,12 +1,12 @@
 import {Text} from "react-native";
 import BaseComponent from "@/src/components/base";
 
-const Favourites = () => {
+const Random = () => {
     return (
         <BaseComponent>
-            <Text>Favourites</Text>
+            <Text>Random</Text>
         </BaseComponent>
     )
 }
 
-export default Favourites;
+export default Random;

@@ -3,6 +3,7 @@
   "pages": {
     "home": "Home",
     "favourites": "Favourites",
+    "random": "Random",
     "settings": "Settings"
   },
   "settings": {

@@ -3,7 +3,7 @@ import {
     usePreferencesContext
 } from "@/src/contexts/preferences/preferences";
 import {TouchableOpacity} from "react-native";
-import { Feather, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
 import Theme from "@/src/utils/enums/theme";
 const Colors = require('@/src/constants/colors');
@@ -12,19 +12,26 @@ const Layout = () => {
 
     const {i18n, colorScheme} = usePreferencesContext();
 
-    const backgroundColor = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
+    const primary = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
+    const secondary = colorScheme === Theme.Dark ? Colors.darkGrayBrownSecond : Colors.palePeachSecond;
+    const reversed = colorScheme === Theme.Dark ? Colors.palePeach : Colors.darkGrayBrown;
     const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
 
     return (
         <Tabs screenOptions={{
-            tabBarActiveTintColor: backgroundColor,
+            tabBarShowLabel: false,
+            tabBarActiveTintColor: reversed,
+            tabBarInactiveTintColor: Colors.midGray,
+            tabBarStyle: {
+                backgroundColor: secondary,
+                borderColor: secondary
+            },
         }}>
             <Tabs.Screen name="index" options={{
                 title: i18n.t('appName'),
-                tabBarLabel: i18n.t('pages.home'),
                 tabBarIcon: ({color, size}) => <AntDesign name="home" color={color} size={size}/>,
                 headerStyle: {
-                    backgroundColor: backgroundColor,
+                    backgroundColor: primary,
                 },
                 headerShadowVisible: false,
                 headerTintColor: textColor,
@@ -37,11 +44,23 @@ const Layout = () => {
                     </TouchableOpacity>
                 ),
             }}/>
+            <Tabs.Screen name="random" options={{
+                title: i18n.t('pages.random'),
+                tabBarIcon: ({color, size}) => <MaterialCommunityIcons name="dice-6-outline" color={color} size={size}/>,
+                headerStyle: {
+                    backgroundColor: primary,
+                },
+                headerShadowVisible: false,
+                headerTintColor: textColor,
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            }}/>
             <Tabs.Screen name="favourites" options={{
                 title: i18n.t('pages.favourites'),
                 tabBarIcon: ({color, size}) => <MaterialIcons name="favorite-border" color={color} size={size}/>,
                 headerStyle: {
-                    backgroundColor: backgroundColor,
+                    backgroundColor: primary,
                 },
                 headerShadowVisible: false,
                 headerTintColor: textColor,
