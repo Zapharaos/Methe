@@ -6,6 +6,8 @@ import {
 } from "@/src/contexts/preferences/preferences";
 import {TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
+import Theme from "@/src/utils/enums/theme";
+const Colors = require('@/src/constants/colors');
 export default function Layout() {
     useDeviceContext(tw);
 
@@ -19,8 +21,8 @@ export default function Layout() {
 function Navigation() {
     const {i18n, colorScheme} = usePreferencesContext();
 
-    const backgroundColor = colorScheme === 'dark' ? '#4D3E3E' : '#FEECCA';
-    const textColor = colorScheme === 'dark' ? '#fff' : '#000';
+    const backgroundColor = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
+    const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
 
     return (
         <Stack>

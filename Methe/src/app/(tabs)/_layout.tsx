@@ -5,13 +5,15 @@ import {
 import {TouchableOpacity} from "react-native";
 import { Feather, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
+import Theme from "@/src/utils/enums/theme";
+const Colors = require('@/src/constants/colors');
 
 const Layout = () => {
 
     const {i18n, colorScheme} = usePreferencesContext();
 
-    const backgroundColor = colorScheme === 'dark' ? '#4D3E3E' : '#FEECCA';
-    const textColor = colorScheme === 'dark' ? '#fff' : '#000';
+    const backgroundColor = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
+    const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
 
     return (
         <Tabs screenOptions={{
