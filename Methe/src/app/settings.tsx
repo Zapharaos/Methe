@@ -9,7 +9,7 @@ import {AntDesign, Feather} from '@expo/vector-icons';
 import {findValueByKey} from "@/src/utils/utils";
 import React from "react";
 
-export default function SettingsScreen() {
+export default function Settings() {
 
     const router = useRouter();
     const {

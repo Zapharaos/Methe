@@ -1,12 +1,9 @@
-import {router, Stack} from 'expo-router';
+import {Stack} from 'expo-router';
 import {useDeviceContext} from "twrnc";
 import tw from "../../lib/tailwind";
 import {
     PreferencesContextProvider, usePreferencesContext
 } from "../contexts/preferences/preferences";
-import {TouchableOpacity} from "react-native";
-import { Feather } from '@expo/vector-icons';
-
 export default function Layout() {
     useDeviceContext(tw);
 
@@ -25,28 +22,8 @@ function Navigation() {
 
     return (
         <Stack>
-            <Stack.Screen
-                name="index"
-                options={{
-                    title: i18n.t('appName'),
-                    headerStyle: {
-                        backgroundColor: backgroundColor,
-                    },
-                    headerShadowVisible: false,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                    headerRight: () => (
-                        <TouchableOpacity onPress={() => router.push("/settings")}>
-                            <Feather name="settings" size={24} color="white" />
-                        </TouchableOpacity>
-                    ),
-                }}
-            />
-            <Stack.Screen
-                name="settings"
-                options={{
+            <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+            <Stack.Screen name="settings" options={{
                     title: i18n.t('settings.title'),
                     headerBackTitle: i18n.t('pages.home'),
                     headerStyle: {
@@ -57,11 +34,8 @@ function Navigation() {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
-                }}
-            />
-            <Stack.Screen
-                name="(modal)/locale"
-                options={{
+                }}/>
+            <Stack.Screen name="(modal)/locale" options={{
                     title: i18n.t('settings.locale.label'),
                     presentation: 'modal',
                     statusBarStyle: 'light',
@@ -70,11 +44,8 @@ function Navigation() {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
-                }}
-            />
-            <Stack.Screen
-                name="(modal)/colorScheme"
-                options={{
+                }}/>
+            <Stack.Screen name="(modal)/colorScheme" options={{
                     title: i18n.t('settings.colorScheme.label'),
                     presentation: 'modal',
                     statusBarStyle: 'light',
@@ -83,8 +54,7 @@ function Navigation() {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
-                }}
-            />
+                }}/>
         </Stack>
     )
 }
