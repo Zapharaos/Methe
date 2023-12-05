@@ -1,41 +1,33 @@
-import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
-import BaseComponent from "@/src/components/base";
-import CocktailCards from "@/src/components/cards/CocktailCards";
-import CocktailService from "@/src/utils/services/cocktailService";
+import {useEffect, useState} from "react";
 import {lastValueFrom} from "rxjs";
 import {take} from "rxjs/operators";
-import {useEffect, useState} from "react";
 
-/**
- * Cocktail type use for cards
- */
-interface Cocktail {
-    cocktailId: bigint;
-    cocktailNames: string;
-    cocktailImage: string;
-}
+import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+import BaseComponent from "@/src/components/base";
+
+import CocktailService from "@/src/utils/services/cocktailService";
+import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCards";
 
 /**
  * Return type of the Api call
  */
 interface ApiCocktailResponse  {
-    idDrink: bigint;
     drinks: []
 }
 export default function Index() {
     const { i18n} = usePreferencesContext();
     const likedList: bigint[] = [];
 
-    // API
-    const [randomCocktail, setRandomCocktail] = useState<Cocktail | undefined>();
+    const [cocktailList, setCocktailList] = useState<Cocktail[]>([])
 
     /**
      *  Use the Cocktail service to call the API
      */
-    const getRandomCocktailDate = async (): Promise<ApiCocktailResponse | unknown> => {
+    const getRandomCocktailData = async (): Promise<ApiCocktailResponse | any> => {
         const cocktailService : CocktailService = new CocktailService();
         try {
-            return await lastValueFrom(cocktailService.getRandomCocktails().pipe(take(1)));
+            return await lastValueFrom(cocktailService.getRandomCocktail().pipe(take(1)));
         } catch (err) {
             console.error(err);
         }
@@ -52,22 +44,39 @@ export default function Index() {
     }
 
     useEffect(() => {
-        getRandomCocktailDate().then((result: any) => setRandomCocktail({
-            cocktailId: result.idDrink,
-            cocktailNames: result.drinks[0].strDrink,
-            cocktailImage: result.drinks[0].strDrinkThumb
-        }));
+        getRandomCocktailData().then((result) => {
+            const newCocktail: Cocktail = {
+                cocktailId: result.drinks[0].idDrink,
+                cocktailNames: result.drinks[0].strDrink,
+                cocktailImage: result.drinks[0].strDrinkThumb,
+            };
+            setCocktailList((prevList) => [...prevList, newCocktail]);
+        });
+        getRandomCocktailData().then((result) => {
+            const newCocktail: Cocktail = {
+                cocktailId: result.drinks[0].idDrink,
+                cocktailNames: result.drinks[0].strDrink,
+                cocktailImage: result.drinks[0].strDrinkThumb,
+            };
+            setCocktailList((prevList) => [...prevList, newCocktail]);
+        });
+        getRandomCocktailData().then((result) => {
+            const newCocktail: Cocktail = {
+                cocktailId: result.drinks[0].idDrink,
+                cocktailNames: result.drinks[0].strDrink,
+                cocktailImage: result.drinks[0].strDrinkThumb,
+            };
+            setCocktailList((prevList) => [...prevList, newCocktail]);
+        });
     }, []);
 
     return (
         <BaseComponent>
-            {randomCocktail && <CocktailCards
+            <CocktailsContainerCards
                 addIntoLikedList={addIntoLikedList}
-                cocktailId={randomCocktail.cocktailId}
-                cocktailNames={randomCocktail.cocktailNames}
-                cocktailImage={randomCocktail.cocktailImage}
-                isCocktailLiked={likedList.some((cocktailId: bigint) => cocktailId === randomCocktail.cocktailId)}
-            ></CocktailCards>}
+                cocktailList={cocktailList}
+                likedList={likedList}
+            />
         </BaseComponent>
     );
 }

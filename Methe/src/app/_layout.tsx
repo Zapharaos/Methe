@@ -66,7 +66,23 @@ function Navigation() {
                             <Ionicons name="close-outline" color={textColor} size={24} />
                         </TouchableOpacity>
                     ),
-                }}/>
+                }}
+            />
+            <Stack.Screen
+                name="cocktailDetail"
+                options={{
+                    title: '',
+                    headerBackTitle: i18n.t('pages.home'),
+                    headerStyle: {
+                        backgroundColor: backgroundColor,
+                    },
+                    headerShadowVisible: false,
+                    headerTintColor: textColor,
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+            />
         </Stack>
     )
 }
