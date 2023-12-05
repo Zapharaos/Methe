@@ -1,7 +1,9 @@
 {
   "appName": "Methe",
   "pages": {
-    "home": "Home"
+    "home": "Home",
+    "favourites": "Favourites",
+    "settings": "Settings"
   },
   "settings": {
     "title": "Settings",

@@ -1,9 +1,9 @@
 import {Stack} from 'expo-router';
 import {useDeviceContext} from "twrnc";
-import tw from "../../lib/tailwind";
+import tw from "@/lib/tailwind";
 import {
     PreferencesContextProvider, usePreferencesContext
-} from "../contexts/preferences/preferences";
+} from "@/src/contexts/preferences/preferences";
 export default function Layout() {
     useDeviceContext(tw);
 

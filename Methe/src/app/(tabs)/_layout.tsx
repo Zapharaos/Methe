@@ -1,7 +1,7 @@
 import {router, Tabs} from "expo-router";
 import {
     usePreferencesContext
-} from "../../contexts/preferences/preferences";
+} from "@/src/contexts/preferences/preferences";
 import {TouchableOpacity} from "react-native";
 import { Feather } from '@expo/vector-icons';
 
@@ -16,6 +16,7 @@ const Layout = () => {
         <Tabs>
             <Tabs.Screen name="index" options={{
                 title: i18n.t('appName'),
+                tabBarLabel: i18n.t('pages.home'),
                 headerStyle: {
                     backgroundColor: backgroundColor,
                 },
@@ -31,7 +32,7 @@ const Layout = () => {
                 ),
             }}/>
             <Tabs.Screen name="favourites" options={{
-                title: '',
+                title: i18n.t('pages.favourites'),
                 headerStyle: {
                     backgroundColor: backgroundColor,
                 },
