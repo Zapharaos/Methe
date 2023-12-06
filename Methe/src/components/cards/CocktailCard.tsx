@@ -3,7 +3,7 @@ import tw from '@/lib/tailwind';
 import React from "react";
 import { Text, Image, TouchableOpacity, View} from 'react-native';
 
-import { router } from "expo-router";
+import { Link } from 'expo-router';
 import { CocktailFavoriteStatus } from "@/src/components/utils/utils";
 import {useFavoritesContext} from "@/src/contexts/favorites";
 
@@ -23,28 +23,23 @@ export default function CocktailCard({ cocktailId, cocktailName, cocktailImage }
         toggleFavorite
     } = useFavoritesContext()
 
-    /**
-     * Navigate to the specific cocktail
-     */
-    const openCocktailDetail = () => {
-        router.push({pathname: '/cocktailDetail', params: { cocktailId: cocktailId }});
-    }
-
     return (
-        <TouchableOpacity onPress={openCocktailDetail} style={tw `h-60 w-60 rounded-3xl`}>
-            <View style={tw `bg-white rounded-3xl shadow-lg`}>
-                <Image  style={tw `h-60 w-60 rounded-t-3xl`} source={{ uri: cocktailImage }} />
+        <Link href={`/listing/${cocktailId}`} asChild>
+            <TouchableOpacity style={tw `h-60 w-60 rounded-3xl`}>
+                <View style={tw `bg-white rounded-3xl shadow-lg`}>
+                    <Image  style={tw `h-60 w-60 rounded-t-3xl`} source={{ uri: cocktailImage }} />
 
-                {/* Like Cocktail */}
-                <CocktailFavoriteStatus
-                    isFavorite={isFavorite(cocktailId)}
-                    toggleFavorite={ () => toggleFavorite(cocktailId)}
-                />
+                    {/* Like Cocktail */}
+                    <CocktailFavoriteStatus
+                        isFavorite={isFavorite(cocktailId)}
+                        toggleFavorite={ () => toggleFavorite(cocktailId)}
+                    />
 
-                <View style={tw `px-3 pb-4`} >
-                    <Text style={tw `text-lg font-bold pt-2`}>{cocktailName}</Text>
+                    <View style={tw `px-3 pb-4`} >
+                        <Text style={tw `text-lg font-bold pt-2`}>{cocktailName}</Text>
+                    </View>
                 </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </Link>
     );
 }

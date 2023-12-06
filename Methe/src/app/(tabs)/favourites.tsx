@@ -9,7 +9,7 @@ export default function FavouritesTab() {
 
     return (
         <BaseComponent>
-            {favorites.map((item, index) => (
+            {favorites !== null && favorites.map((item, index) => (
                 <Text key={index}>{item}</Text>
             ))}
         </BaseComponent>

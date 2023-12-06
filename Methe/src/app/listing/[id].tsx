@@ -1,4 +1,4 @@
-import tw from '../../lib/tailwind';
+import tw from '../../../lib/tailwind';
 
 import React, { useEffect, useState } from "react";
 import {Image,Text, SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
@@ -8,8 +8,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
 
-import { usePreferencesContext } from "../contexts/preferences/preferences";
-import BaseComponent from "../components/base";
+import { usePreferencesContext } from "../../contexts/preferences/preferences";
+import BaseComponent from "../../components/base";
 
 import { CocktailDetail } from "@/src/utils/interface/CocktailInterface";
 import CocktailService from "@/src/utils/services/cocktailService";
@@ -44,7 +44,7 @@ export default function CocktailDetailScreen() {
     /**
      * The cocktailId of the cocktail
      */
-    const params = useLocalSearchParams();
+    const {id} = useLocalSearchParams();
 
     /**
      * The cocktail to present
@@ -62,7 +62,7 @@ export default function CocktailDetailScreen() {
     const getCocktailData = async (): Promise<ApiCocktailResponse | any> => {
         const cocktailService : CocktailService = new CocktailService();
         try {
-            return await lastValueFrom(cocktailService.getCocktailById(params.cocktailId.toString()).pipe(take(1)));
+            return await lastValueFrom(cocktailService.getCocktailById(id.toString()).pipe(take(1)));
         } catch (err) {
             console.error(err);
         }

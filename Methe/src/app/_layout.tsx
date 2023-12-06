@@ -70,11 +70,8 @@ function NavigationLayout() {
                             <Ionicons name="close-outline" color={textColor} size={24} />
                         </TouchableOpacity>
                     ),
-                }}
-            />
-            <Stack.Screen
-                name="cocktailDetail"
-                options={{
+                }}/>
+            <Stack.Screen name="listing/[id]" options={{
                     title: '',
                     headerBackTitle: i18n.t('pages.home'),
                     headerStyle: {
@@ -85,8 +82,7 @@ function NavigationLayout() {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },
-                }}
-            />
+                }}/>
         </Stack>
     )
 }

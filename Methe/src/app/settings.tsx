@@ -20,9 +20,9 @@ export default function SettingsScreen() {
         colorSchemeKey
     } = usePreferencesContext();
 
-    const renderSettingItem = (label:string, value:string, onPress: () => void) => (
+    const renderSettingItem = (label:string, value:string, onPress: () => void, isLast: boolean) => (
         <TouchableOpacity
-            style={tw`ml-3 pr-3 pt-2 pb-2 flex-row justify-between border-midGray border-b`}
+            style={tw`ml-3 pr-3 pt-2 pb-2 flex-row justify-between border-midGray ${isLast ? '' : 'border-b'}`}
             onPress={onPress}
         >
             <Text style={tw`mb-1 text-left text-base text-black dark:text-white`}>{label}</Text>
@@ -39,12 +39,14 @@ export default function SettingsScreen() {
                 {renderSettingItem(
                     i18n.t('settings.locale.label'),
                     findValueByKey(languages, localeKey),
-                    () => router.push("/(modal)/locale")
+                    () => router.push("/(modal)/locale"),
+                    false
                 )}
                 {renderSettingItem(
                     i18n.t('settings.colorScheme.label'),
                     findValueByKey(colorSchemes, colorSchemeKey),
-                    () => router.push("/(modal)/colorScheme")
+                    () => router.push("/(modal)/colorScheme"),
+                    true
                 )}
             </View>
         </BaseComponent>
