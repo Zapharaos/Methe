@@ -3,12 +3,12 @@ import {
     usePreferencesContext
 } from "@/src/contexts/preferences/preferences";
 import {TouchableOpacity} from "react-native";
-import { Feather, AntDesign, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, AntDesign, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
 import Theme from "@/src/utils/enums/theme";
 const Colors = require('@/src/constants/colors');
 
-const Layout = () => {
+export default function TabsLayout() {
 
     const {i18n, colorScheme} = usePreferencesContext();
 
@@ -46,7 +46,8 @@ const Layout = () => {
             }}/>
             <Tabs.Screen name="random" options={{
                 title: i18n.t('pages.random'),
-                tabBarIcon: ({color, size}) => <MaterialCommunityIcons name="dice-6-outline" color={color} size={size}/>,
+                unmountOnBlur: true,
+                tabBarIcon: ({color, size}) => <FontAwesome5 name="dice" color={color} size={size} />,
                 headerStyle: {
                     backgroundColor: primary,
                 },
@@ -71,5 +72,3 @@ const Layout = () => {
         </Tabs>
     )
 }
-
-export default Layout;

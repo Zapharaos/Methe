@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {asyncStorage, loadData, loadDataJson} from "@/src/utils/asyncStorage";
-import Utils from "@/src/utils/enums/utils";
+
+import {asyncStorage, loadDataJson} from "@/src/utils/asyncStorage";
 
 export interface Favorites {
     favorites: string[];
@@ -36,7 +36,7 @@ export function FavoritesContextProvider({ children }: { children: React.ReactNo
     }, []);
 
     const isFavorite = (itemId: string) => {
-        return favorites.includes(itemId);
+        return favorites && favorites.includes(itemId);
     };
 
     const toggleFavorite = async (itemId: string) => {

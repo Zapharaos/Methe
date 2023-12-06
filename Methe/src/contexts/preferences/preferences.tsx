@@ -1,10 +1,10 @@
 import React, {createContext, useContext, useEffect} from 'react';
 import {RnColorScheme} from "twrnc";
 import {I18n} from "i18n-js";
+import {setStatusBarStyle, StatusBarStyle} from "expo-status-bar";
+
 import {useColorSchemes} from "./colorScheme";
 import {useLocale} from "./locale";
-import {setStatusBarStyle, StatusBarStyle} from "expo-status-bar";
-import {Platform} from "react-native";
 
 export interface Preferences {
     languages: { key: string; value: string }[];
