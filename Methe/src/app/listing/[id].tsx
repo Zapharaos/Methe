@@ -18,23 +18,13 @@ import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
 import {CocktailFavoriteStatus, IncrementDecrementNumber} from "@/src/components/utils/utils";
 import {useFavoritesContext} from "@/src/contexts/favorites";
+import {getCocktailDetailsById, getRandomCocktailObject} from "@/src/utils/cocktail";
 
-/**
- * ApiCocktailResponse type use for the api call
- */
-interface ApiCocktailResponse  {
-    drinks: []
+interface CocktailDetailScreenProps {
+    cocktailId: string;
 }
 
-export default function CocktailDetailScreen() {
-
-    const {
-        languages,
-        localeKey,
-        i18n,
-        colorSchemes,
-        colorSchemeKey
-    } = usePreferencesContext();
+const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId }) => {
 
     const {
         isFavorite,
@@ -56,58 +46,12 @@ export default function CocktailDetailScreen() {
      */
     const [numberPerson, setNumberPerson] = useState<number>(1);
 
-    /**
-     *  Use the Cocktail service to call the API
-     */
-    const getCocktailData = async (): Promise<ApiCocktailResponse | any> => {
-        const cocktailService : CocktailService = new CocktailService();
-        try {
-            return await lastValueFrom(cocktailService.getCocktailById(id.toString()).pipe(take(1)));
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
     useEffect(() => {
-        getCocktailData().then((result) => {
-            const cocktailDetail: CocktailDetail = {
-                cocktailId: result.drinks[0].idDrink,
-                    cocktailName: result.drinks[0].strDrink,
-                    cocktailImage: result.drinks[0].strDrinkThumb,
-                    strAlcoholic: result.drinks[0].strAlcoholic,
-                    strCategory: result.drinks[0].strCategory,
-                    strGlass: result.drinks[0].strGlass,
-                    strIBA: result.drinks[0].strIBA,
-                    strInstructions: result.drinks[0].strInstructions,
-                    ingredientList: [],
-                    instructionsByLanguageList: [],
-            }
-
-            const cocktailService : CocktailService = new CocktailService();
-
-            let hasOtherIngredient : boolean = true;
-            const size : number = CocktailService.maxNumberOfIngredient;
-            for(let counter: number = 1; hasOtherIngredient && counter <= size; counter++){
-
-                const ingredient: string = result.drinks[0][`strIngredient${counter}`];
-                const measure: string = result.drinks[0][`strMeasure${counter}`];
-
-                if(ingredient){
-                    const ingredientMeasure: string[] = measure ? measure.split(' ') : [];
-
-                    cocktailDetail.ingredientList.push({
-                        ingredientName: ingredient,
-                        ingredientImage: cocktailService.getImageByIngredientName(ingredient,CocktailDbImageSize.Small),
-                        ingredientMeasure: ingredientMeasure
-                    });
-                }
-                else {
-                    hasOtherIngredient = !hasOtherIngredient;
-                }
-            }
-
-            setCocktail(cocktailDetail);
-        });
+        const fetchCocktail = async () => {
+            const cocktail = await getCocktailDetailsById(id?.toString() ?? cocktailId);
+            setCocktail(cocktail);
+        };
+        fetchCocktail();
     }, []);
 
     return (
@@ -183,4 +127,6 @@ export default function CocktailDetailScreen() {
         </BaseComponent>
     );
 }
+
+export default CocktailDetailScreen;
 
