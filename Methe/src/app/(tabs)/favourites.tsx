@@ -8,9 +8,9 @@ const Favourites = () => {
 
     return (
         <BaseComponent>
-            <Text>
-                {favorites}
-            </Text>
+            {favorites.map((item, index) => (
+                <Text key={index}>{item}</Text>
+            ))}
         </BaseComponent>
     )
 }
