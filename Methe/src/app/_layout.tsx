@@ -4,6 +4,9 @@ import tw from "@/lib/tailwind";
 import {
     PreferencesContextProvider, usePreferencesContext
 } from "@/src/contexts/preferences/preferences";
+import {
+    FavoritesContextProvider
+} from "@/src/contexts/favorites";
 import {TouchableOpacity} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import Theme from "@/src/utils/enums/theme";
@@ -13,7 +16,9 @@ export default function Layout() {
 
     return (
             <PreferencesContextProvider>
-                <Navigation/>
+                <FavoritesContextProvider>
+                    <Navigation/>
+                </FavoritesContextProvider>
             </PreferencesContextProvider>
     );
 }
