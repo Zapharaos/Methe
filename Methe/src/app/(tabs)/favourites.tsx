@@ -1,8 +1,9 @@
-import BaseComponent from "@/src/components/base";
-import {useFavoritesContext} from "@/src/contexts/favorites";
 import {Text} from "react-native";
 
-const Favourites = () => {
+import BaseComponent from "@/src/components/base";
+import {useFavoritesContext} from "@/src/contexts/favorites";
+
+export default function FavouritesTab() {
 
     const {favorites} = useFavoritesContext();
 
@@ -14,5 +15,3 @@ const Favourites = () => {
         </BaseComponent>
     )
 }
-
-export default Favourites;

@@ -3,11 +3,11 @@ import {lastValueFrom} from "rxjs";
 import {take} from "rxjs/operators";
 
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
-import BaseComponent from "@/src/components/base";
 
 import CocktailService from "@/src/utils/services/cocktailService";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCards";
+import BaseComponent from "@/src/components/base";
 
 /**
  * Return type of the Api call
@@ -15,7 +15,7 @@ import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCa
 interface ApiCocktailResponse  {
     drinks: []
 }
-export default function Index() {
+export default function HomeTab() {
     const { i18n} = usePreferencesContext();
 
     const [cocktailList, setCocktailList] = useState<Cocktail[]>([])

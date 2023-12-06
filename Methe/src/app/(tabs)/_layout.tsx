@@ -8,7 +8,7 @@ import tw from "@/lib/tailwind";
 import Theme from "@/src/utils/enums/theme";
 const Colors = require('@/src/constants/colors');
 
-const Layout = () => {
+export default function TabsLayout() {
 
     const {i18n, colorScheme} = usePreferencesContext();
 
@@ -71,5 +71,3 @@ const Layout = () => {
         </Tabs>
     )
 }
-
-export default Layout;

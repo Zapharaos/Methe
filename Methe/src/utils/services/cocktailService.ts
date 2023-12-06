@@ -1,4 +1,5 @@
 import { ajax } from 'rxjs/ajax';
+
 import { StringUtils } from "@/src/utils/utils";
 import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 
