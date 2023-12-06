@@ -16,7 +16,8 @@ import CocktailService from "@/src/utils/services/cocktailService";
 import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 
 import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
-import {IncrementDecrementNumber, LikeCocktail} from "@/src/components/utils/utils";
+import {CocktailFavoriteStatus, IncrementDecrementNumber} from "@/src/components/utils/utils";
+import {useFavoritesContext} from "@/src/contexts/favorites";
 
 /**
  * ApiCocktailResponse type use for the api call
@@ -35,6 +36,11 @@ export default function CocktailDetailScreen() {
         colorSchemeKey
     } = usePreferencesContext();
 
+    const {
+        isFavorite,
+        toggleFavorite
+    } = useFavoritesContext();
+
     /**
      * The cocktailId of the cocktail
      */
@@ -49,11 +55,6 @@ export default function CocktailDetailScreen() {
      * The number of person for the ingredients measures
      */
     const [numberPerson, setNumberPerson] = useState<number>(1);
-
-    /**
-     * A state to define if this cocktail is liked by the user
-     */
-    const [isLiked, switchLike] = useState<boolean>(false);
 
     /**
      *  Use the Cocktail service to call the API
@@ -71,7 +72,7 @@ export default function CocktailDetailScreen() {
         getCocktailData().then((result) => {
             const cocktailDetail: CocktailDetail = {
                 cocktailId: result.drinks[0].idDrink,
-                    cocktailNames: result.drinks[0].strDrink,
+                    cocktailName: result.drinks[0].strDrink,
                     cocktailImage: result.drinks[0].strDrinkThumb,
                     strAlcoholic: result.drinks[0].strAlcoholic,
                     strCategory: result.drinks[0].strCategory,
@@ -109,14 +110,6 @@ export default function CocktailDetailScreen() {
         });
     }, []);
 
-    /**
-     * Add this cocktail in like list and change the icon
-     */
-    const clickOnLike = () => {
-        switchLike(!isLiked);
-        //addIntoLikedList(cocktail.cocktailId);
-    }
-
     return (
         <BaseComponent>
             { cocktail &&
@@ -129,15 +122,16 @@ export default function CocktailDetailScreen() {
                             style={{width: wp(90), height: hp(33), borderBottomLeftRadius: 30,
                                 borderBottomRightRadius: 30}}
                         />
-                        {/* Like Cocktail */}
-                        <LikeCocktail
-                            isLiked={isLiked}
-                            clickOnLike={clickOnLike}/>
+                        {/* Cocktail Favorite Status */}
+                        <CocktailFavoriteStatus
+                            isFavorite={isFavorite(cocktail.cocktailId.toString())}
+                            toggleFavorite={() => toggleFavorite(cocktail.cocktailId.toString())}
+                        />
 
                         <View style={ tw `flex-1`}>
                             <View style={ tw `mx-5 mt-2 flex-row justify-between items-center`}>
                                 <Text style={ tw `text-white text-3xl font-semibold`}>
-                                    {cocktail.cocktailNames}
+                                    {cocktail.cocktailName}
                                 </Text>
                             </View>
                             {/* Quick information about the cocktail */}

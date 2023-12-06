@@ -3,7 +3,7 @@
  */
 export interface Cocktail{
     cocktailId: bigint;
-    cocktailNames: string;
+    cocktailName: string;
     cocktailImage: string;
 }
 
@@ -12,7 +12,7 @@ export interface Cocktail{
  */
 export interface CocktailDetail{
     cocktailId: bigint;
-    cocktailNames: string;
+    cocktailName: string;
     cocktailImage: string;
     strCategory: string;
     strIBA: string;

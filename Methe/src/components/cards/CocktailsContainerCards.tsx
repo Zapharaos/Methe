@@ -2,19 +2,17 @@ import React from "react";
 import Carousel from 'react-native-snap-carousel';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
-import CocktailCards from "@/src/components/cards/CocktailCards";
+import CocktailCard from "@/src/components/cards/CocktailCard";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 
 /**
  * The props of the ContainerCards
  */
 interface ContainerCardsProps {
-    addIntoLikedList: (cocktailId: bigint) => void;
     cocktailList: Cocktail[];
-    likedList: bigint[];
 }
 
-export default function CocktailsContainerCards({ addIntoLikedList, cocktailList, likedList }: ContainerCardsProps) {
+export default function CocktailsContainerCards({ cocktailList }: ContainerCardsProps) {
 
     return (
         <Carousel
@@ -28,12 +26,10 @@ export default function CocktailsContainerCards({ addIntoLikedList, cocktailList
 
             data={cocktailList}
             renderItem={({ item }) => (
-                <CocktailCards
-                    addIntoLikedList={addIntoLikedList}
+                <CocktailCard
                     cocktailId={item.cocktailId}
-                    cocktailNames={item.cocktailNames}
+                    cocktailName={item.cocktailName}
                     cocktailImage={item.cocktailImage}
-                    isCocktailLiked={likedList.some((cocktailId: bigint) => cocktailId === item.cocktailId)}
                 />
             )}
         />

@@ -17,7 +17,6 @@ interface ApiCocktailResponse  {
 }
 export default function Index() {
     const { i18n} = usePreferencesContext();
-    const likedList: bigint[] = [];
 
     const [cocktailList, setCocktailList] = useState<Cocktail[]>([])
 
@@ -33,21 +32,11 @@ export default function Index() {
         }
     };
 
-    /**
-     * Add a cocktail identifier into the cocktail list
-     * ToDo : Matthieu il me faut la liste dans la mémoire du téléphone
-     */
-    const addIntoLikedList = (cocktailId: bigint) => {
-        if (!(likedList.some((cocktailId: bigint) => cocktailId === cocktailId))){
-            likedList.push(cocktailId);
-        }
-    }
-
     useEffect(() => {
         getRandomCocktailData().then((result) => {
             const newCocktail: Cocktail = {
                 cocktailId: result.drinks[0].idDrink,
-                cocktailNames: result.drinks[0].strDrink,
+                cocktailName: result.drinks[0].strDrink,
                 cocktailImage: result.drinks[0].strDrinkThumb,
             };
             setCocktailList((prevList) => [...prevList, newCocktail]);
@@ -55,7 +44,7 @@ export default function Index() {
         getRandomCocktailData().then((result) => {
             const newCocktail: Cocktail = {
                 cocktailId: result.drinks[0].idDrink,
-                cocktailNames: result.drinks[0].strDrink,
+                cocktailName: result.drinks[0].strDrink,
                 cocktailImage: result.drinks[0].strDrinkThumb,
             };
             setCocktailList((prevList) => [...prevList, newCocktail]);
@@ -63,7 +52,7 @@ export default function Index() {
         getRandomCocktailData().then((result) => {
             const newCocktail: Cocktail = {
                 cocktailId: result.drinks[0].idDrink,
-                cocktailNames: result.drinks[0].strDrink,
+                cocktailName: result.drinks[0].strDrink,
                 cocktailImage: result.drinks[0].strDrinkThumb,
             };
             setCocktailList((prevList) => [...prevList, newCocktail]);
@@ -72,11 +61,7 @@ export default function Index() {
 
     return (
         <BaseComponent>
-            <CocktailsContainerCards
-                addIntoLikedList={addIntoLikedList}
-                cocktailList={cocktailList}
-                likedList={likedList}
-            />
+            <CocktailsContainerCards cocktailList={cocktailList}/>
         </BaseComponent>
     );
 }
