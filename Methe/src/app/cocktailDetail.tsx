@@ -124,8 +124,8 @@ export default function CocktailDetailScreen() {
                         />
                         {/* Cocktail Favorite Status */}
                         <CocktailFavoriteStatus
-                            isFavorite={isFavorite(cocktail.cocktailId.toString())}
-                            toggleFavorite={() => toggleFavorite(cocktail.cocktailId.toString())}
+                            isFavorite={isFavorite(cocktail.cocktailId)}
+                            toggleFavorite={() => toggleFavorite(cocktail.cocktailId)}
                         />
 
                         <View style={ tw `flex-1`}>

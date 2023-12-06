@@ -11,7 +11,7 @@ import {useFavoritesContext} from "@/src/contexts/favorites";
  * The porps of the CocktailCards
  */
 interface CocktailCardProps {
-    cocktailId: bigint;
+    cocktailId: string;
     cocktailName: string;
     cocktailImage: string;
 }
@@ -27,7 +27,7 @@ export default function CocktailCard({ cocktailId, cocktailName, cocktailImage }
      * Navigate to the specific cocktail
      */
     const openCocktailDetail = () => {
-        router.push({pathname: '/cocktailDetail', params: { cocktailId: cocktailId.toString() }});
+        router.push({pathname: '/cocktailDetail', params: { cocktailId: cocktailId }});
     }
 
     return (
@@ -37,8 +37,8 @@ export default function CocktailCard({ cocktailId, cocktailName, cocktailImage }
 
                 {/* Like Cocktail */}
                 <CocktailFavoriteStatus
-                    isFavorite={isFavorite(cocktailId.toString())}
-                    toggleFavorite={ () => toggleFavorite(cocktailId.toString())}
+                    isFavorite={isFavorite(cocktailId)}
+                    toggleFavorite={ () => toggleFavorite(cocktailId)}
                 />
 
                 <View style={tw `px-3 pb-4`} >
