@@ -1,4 +1,4 @@
-import tw from '../../lib/tailwind';
+import tw from '../../../lib/tailwind';
 
 import React, { useEffect, useState } from "react";
 import {Image,Text, SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
@@ -8,37 +8,33 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
 
-import { usePreferencesContext } from "../contexts/preferences/preferences";
-import BaseComponent from "../components/base";
+import { usePreferencesContext } from "../../contexts/preferences/preferences";
+import BaseComponent from "../../components/base";
 
 import { CocktailDetail } from "@/src/utils/interface/CocktailInterface";
 import CocktailService from "@/src/utils/services/cocktailService";
 import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 
 import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
-import {IncrementDecrementNumber, LikeCocktail} from "@/src/components/utils/utils";
+import {CocktailFavoriteStatus, IncrementDecrementNumber} from "@/src/components/utils/utils";
+import {useFavoritesContext} from "@/src/contexts/favorites";
+import {getCocktailDetailsById, getRandomCocktailObject} from "@/src/utils/cocktail";
 
-/**
- * ApiCocktailResponse type use for the api call
- */
-interface ApiCocktailResponse  {
-    drinks: []
+interface CocktailDetailScreenProps {
+    cocktailId: string;
 }
 
-export default function CocktailDetailScreen() {
+const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId }) => {
 
     const {
-        languages,
-        localeKey,
-        i18n,
-        colorSchemes,
-        colorSchemeKey
-    } = usePreferencesContext();
+        isFavorite,
+        toggleFavorite
+    } = useFavoritesContext();
 
     /**
      * The cocktailId of the cocktail
      */
-    const params = useLocalSearchParams();
+    const {id} = useLocalSearchParams();
 
     /**
      * The cocktail to present
@@ -50,72 +46,13 @@ export default function CocktailDetailScreen() {
      */
     const [numberPerson, setNumberPerson] = useState<number>(1);
 
-    /**
-     * A state to define if this cocktail is liked by the user
-     */
-    const [isLiked, switchLike] = useState<boolean>(false);
-
-    /**
-     *  Use the Cocktail service to call the API
-     */
-    const getCocktailData = async (): Promise<ApiCocktailResponse | any> => {
-        const cocktailService : CocktailService = new CocktailService();
-        try {
-            return await lastValueFrom(cocktailService.getCocktailById(params.cocktailId.toString()).pipe(take(1)));
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
     useEffect(() => {
-        getCocktailData().then((result) => {
-            const cocktailDetail: CocktailDetail = {
-                cocktailId: result.drinks[0].idDrink,
-                    cocktailNames: result.drinks[0].strDrink,
-                    cocktailImage: result.drinks[0].strDrinkThumb,
-                    strAlcoholic: result.drinks[0].strAlcoholic,
-                    strCategory: result.drinks[0].strCategory,
-                    strGlass: result.drinks[0].strGlass,
-                    strIBA: result.drinks[0].strIBA,
-                    strInstructions: result.drinks[0].strInstructions,
-                    ingredientList: [],
-                    instructionsByLanguageList: [],
-            }
-
-            const cocktailService : CocktailService = new CocktailService();
-
-            let hasOtherIngredient : boolean = true;
-            const size : number = CocktailService.maxNumberOfIngredient;
-            for(let counter: number = 1; hasOtherIngredient && counter <= size; counter++){
-
-                const ingredient: string = result.drinks[0][`strIngredient${counter}`];
-                const measure: string = result.drinks[0][`strMeasure${counter}`];
-
-                if(ingredient){
-                    const ingredientMeasure: string[] = measure ? measure.split(' ') : [];
-
-                    cocktailDetail.ingredientList.push({
-                        ingredientName: ingredient,
-                        ingredientImage: cocktailService.getImageByIngredientName(ingredient,CocktailDbImageSize.Small),
-                        ingredientMeasure: ingredientMeasure
-                    });
-                }
-                else {
-                    hasOtherIngredient = !hasOtherIngredient;
-                }
-            }
-
-            setCocktail(cocktailDetail);
-        });
+        const fetchCocktail = async () => {
+            const cocktail = await getCocktailDetailsById(id?.toString() ?? cocktailId);
+            setCocktail(cocktail);
+        };
+        fetchCocktail();
     }, []);
-
-    /**
-     * Add this cocktail in like list and change the icon
-     */
-    const clickOnLike = () => {
-        switchLike(!isLiked);
-        //addIntoLikedList(cocktail.cocktailId);
-    }
 
     return (
         <BaseComponent>
@@ -129,15 +66,16 @@ export default function CocktailDetailScreen() {
                             style={{width: wp(90), height: hp(33), borderBottomLeftRadius: 30,
                                 borderBottomRightRadius: 30}}
                         />
-                        {/* Like Cocktail */}
-                        <LikeCocktail
-                            isLiked={isLiked}
-                            clickOnLike={clickOnLike}/>
+                        {/* Cocktail Favorite Status */}
+                        <CocktailFavoriteStatus
+                            isFavorite={isFavorite(cocktail.cocktailId)}
+                            toggleFavorite={() => toggleFavorite(cocktail.cocktailId)}
+                        />
 
                         <View style={ tw `flex-1`}>
                             <View style={ tw `mx-5 mt-2 flex-row justify-between items-center`}>
                                 <Text style={ tw `text-white text-3xl font-semibold`}>
-                                    {cocktail.cocktailNames}
+                                    {cocktail.cocktailName}
                                 </Text>
                             </View>
                             {/* Quick information about the cocktail */}
@@ -189,4 +127,6 @@ export default function CocktailDetailScreen() {
         </BaseComponent>
     );
 }
+
+export default CocktailDetailScreen;
 

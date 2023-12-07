@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useAppColorScheme } from 'twrnc';
 import { StatusBarStyle } from 'expo-status-bar';
-import { asyncStorage, loadData, storeData } from '@/src/utils/asyncStorage';
 import { Appearance } from 'react-native';
+import tw from '@/lib/tailwind';
 
-import Utils from '../../utils/enums/utils';
-import Theme from '../../utils/enums/theme';
-import tw from '../../../lib/tailwind';
+import { asyncStorage, loadData, storeData } from '@/src/utils/asyncStorage';
+import Utils from '@/src/utils/enums/utils';
+import Theme from '@/src/utils/enums/theme';
 
 const initialColorSchemes = [
     { key: Theme.System, value: Utils.Empty },

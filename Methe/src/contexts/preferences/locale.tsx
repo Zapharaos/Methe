@@ -3,8 +3,8 @@ import { getLocales } from 'expo-localization';
 import { I18nManager } from 'react-native';
 import * as Updates from 'expo-updates';
 import {I18n} from "i18n-js";
-
 import rtlDetect from '@/lib/rtl-detect';
+
 import Utils from '@/src/utils/enums/utils';
 import { asyncStorage, loadData, storeData } from '@/src/utils/asyncStorage';
 import { showCancelOkAlert } from '@/src/utils/alert';
