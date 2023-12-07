@@ -73,15 +73,7 @@ function NavigationLayout() {
                 }}/>
             <Stack.Screen name="listing/[id]" options={{
                     title: '',
-                    headerBackTitle: i18n.t('pages.home'),
-                    headerStyle: {
-                        backgroundColor: backgroundColor,
-                    },
-                    headerShadowVisible: false,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
+                    headerTransparent: true,
                 }}/>
         </Stack>
     )

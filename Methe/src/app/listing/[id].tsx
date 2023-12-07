@@ -1,9 +1,9 @@
 import tw from '../../../lib/tailwind';
 
-import React, { useEffect, useState } from "react";
-import {Image,Text, SafeAreaView, ScrollView, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useLayoutEffect, useState} from "react";
+import {Image,Text, SafeAreaView, ScrollView, TouchableOpacity, View, Share} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import {router, useLocalSearchParams, useRouter} from "expo-router";
 
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
@@ -18,7 +18,10 @@ import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
 import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
 import {CocktailFavoriteStatus, IncrementDecrementNumber} from "@/src/components/utils/utils";
 import {useFavoritesContext} from "@/src/contexts/favorites";
-import {getCocktailDetailsById, getRandomCocktailObject} from "@/src/utils/cocktail";
+import {extractUrlFromCocktail, getCocktailDetailsById, getRandomCocktailObject} from "@/src/utils/cocktail";
+
+import { useNavigation, useRootNavigation } from "expo-router";
+import {Feather, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
 interface CocktailDetailScreenProps {
     cocktailId: string;
@@ -46,6 +49,9 @@ const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId 
      */
     const [numberPerson, setNumberPerson] = useState<number>(1);
 
+    const router = useRouter();
+    const navigation = useNavigation();
+
     useEffect(() => {
         const fetchCocktail = async () => {
             const cocktail = await getCocktailDetailsById(id?.toString() ?? cocktailId);
@@ -53,6 +59,42 @@ const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId 
         };
         fetchCocktail();
     }, []);
+
+    const share = async () => {
+        if(cocktail) {
+            try {
+                await Share.share({
+                    message: "Hey ! Check this drink out !",
+                    url: extractUrlFromCocktail(cocktail),
+                })
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <View style={tw`flex-row items-center justify-center gap-5`}>
+                    <TouchableOpacity onPress={share} style={tw`w-10 h-10 rounded-full bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}>
+                        <Feather name="share" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
+                    </TouchableOpacity>
+                    { cocktail && <TouchableOpacity onPress={() => toggleFavorite(cocktail.cocktailId)} style={tw`w-10 h-10 rounded-full bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}>
+                        {!isFavorite(cocktail.cocktailId) && <MaterialIcons name="favorite-outline" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />}
+                        {isFavorite(cocktail.cocktailId) && <MaterialIcons name="favorite" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />}
+                    </TouchableOpacity>}
+                </View>
+            ),
+            headerLeft: () => (
+                <View>
+                    { id && <TouchableOpacity onPress={router.back} style={tw`w-10 h-10 rounded-full bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}>
+                        <Ionicons name="chevron-back" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
+                    </TouchableOpacity>}
+                </View>
+            )
+        })
+    }, [cocktail]);
 
     return (
         <BaseComponent>
@@ -67,10 +109,10 @@ const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId 
                                 borderBottomRightRadius: 30}}
                         />
                         {/* Cocktail Favorite Status */}
-                        <CocktailFavoriteStatus
+                        {/*<CocktailFavoriteStatus
                             isFavorite={isFavorite(cocktail.cocktailId)}
                             toggleFavorite={() => toggleFavorite(cocktail.cocktailId)}
-                        />
+                        />*/}
 
                         <View style={ tw `flex-1`}>
                             <View style={ tw `mx-5 mt-2 flex-row justify-between items-center`}>
