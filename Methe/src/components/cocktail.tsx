@@ -85,7 +85,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                         {headerPushBack && (
                             <TouchableOpacity
                                 onPress={router.back}
-                                style={tw`w-10 h-10 rounded-full bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
                             >
                                 <Ionicons name="chevron-back" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
                             </TouchableOpacity>
@@ -95,14 +95,14 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                     <View style={tw`p-2 flex-row items-center justify-center gap-5`}>
                         <TouchableOpacity
                             onPress={share}
-                            style={tw`w-10 h-10 rounded-full bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
                         >
                             <Feather name="share" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
                         </TouchableOpacity>
                         {cocktail && (
                             <TouchableOpacity
                                 onPress={() => toggleFavorite(cocktail.cocktailId)}
-                                style={tw`w-10 h-10 rounded-full bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
                             >
                                 {!isFavorite(cocktail.cocktailId) && (
                                     <MaterialIcons
