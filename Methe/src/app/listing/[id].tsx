@@ -1,27 +1,16 @@
-import tw from '../../../lib/tailwind';
-
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {Image,Text, SafeAreaView, ScrollView, TouchableOpacity, View, Share} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
-import {router, useLocalSearchParams, useRouter} from "expo-router";
-
-import { lastValueFrom } from "rxjs";
-import { take } from "rxjs/operators";
-
-import { usePreferencesContext } from "../../contexts/preferences/preferences";
-import BaseComponent from "../../components/base";
-
-import { CocktailDetail } from "@/src/utils/interface/CocktailInterface";
-import CocktailService from "@/src/utils/services/cocktailService";
-import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
-
-import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
-import {CocktailFavoriteStatus, IncrementDecrementNumber} from "@/src/components/utils/utils";
-import {useFavoritesContext} from "@/src/contexts/favorites";
-import {extractUrlFromCocktail, getCocktailDetailsById, getRandomCocktailObject} from "@/src/utils/cocktail";
-
-import { useNavigation, useRootNavigation } from "expo-router";
+import {useLocalSearchParams, useRouter, useNavigation} from "expo-router";
 import {Feather, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import tw from '@/lib/tailwind';
+
+import BaseComponent from "@/src/components/base";
+import { CocktailDetail } from "@/src/utils/interface/CocktailInterface";
+import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
+import {IncrementDecrementNumber} from "@/src/components/utils/utils";
+import {useFavoritesContext} from "@/src/contexts/favorites";
+import {extractUrlFromCocktail, getCocktailDetailsById} from "@/src/utils/cocktail";
 
 interface CocktailDetailScreenProps {
     cocktailId: string;
@@ -30,6 +19,7 @@ interface CocktailDetailScreenProps {
 const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId }) => {
 
     const {
+        favorites,
         isFavorite,
         toggleFavorite
     } = useFavoritesContext();
@@ -94,7 +84,7 @@ const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId 
                 </View>
             )
         })
-    }, [cocktail]);
+    }, [cocktail, favorites]);
 
     return (
         <BaseComponent>
@@ -108,11 +98,6 @@ const CocktailDetailScreen: React.FC<CocktailDetailScreenProps> = ({ cocktailId 
                             style={{width: wp(90), height: hp(33), borderBottomLeftRadius: 30,
                                 borderBottomRightRadius: 30}}
                         />
-                        {/* Cocktail Favorite Status */}
-                        {/*<CocktailFavoriteStatus
-                            isFavorite={isFavorite(cocktail.cocktailId)}
-                            toggleFavorite={() => toggleFavorite(cocktail.cocktailId)}
-                        />*/}
 
                         <View style={ tw `flex-1`}>
                             <View style={ tw `mx-5 mt-2 flex-row justify-between items-center`}>

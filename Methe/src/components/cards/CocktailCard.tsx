@@ -30,10 +30,10 @@ export default function CocktailCard({ cocktailId, cocktailName, cocktailImage }
                     <Image  style={tw `h-60 w-60 rounded-t-3xl`} source={{ uri: cocktailImage }} />
 
                     {/* Like Cocktail */}
-                    <CocktailFavoriteStatus
+                    {/*<CocktailFavoriteStatus
                         isFavorite={isFavorite(cocktailId)}
                         toggleFavorite={ () => toggleFavorite(cocktailId)}
-                    />
+                    />*/}
 
                     <View style={tw `px-3 pb-4`} >
                         <Text style={tw `text-lg font-bold pt-2`}>{cocktailName}</Text>
