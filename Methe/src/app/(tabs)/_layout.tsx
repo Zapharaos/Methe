@@ -45,17 +45,8 @@ export default function TabsLayout() {
                 ),
             }}/>
             <Tabs.Screen name="random" options={{
-                title: i18n.t('pages.random'),
                 unmountOnBlur: true,
                 tabBarIcon: ({color, size}) => <FontAwesome5 name="dice" color={color} size={size} />,
-                headerStyle: {
-                    backgroundColor: primary,
-                },
-                headerShadowVisible: false,
-                headerTintColor: textColor,
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
             }}/>
             <Tabs.Screen name="favourites" options={{
                 title: i18n.t('pages.favourites'),

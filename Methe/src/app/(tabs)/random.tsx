@@ -1,10 +1,9 @@
+import React, {useEffect, useState} from "react";
 import {Text} from "react-native";
 
-import BaseComponent from "@/src/components/base";
 import {getRandomCocktailObject} from "@/src/utils/cocktail";
-import {useEffect, useState} from "react";
 import {Cocktail} from "@/src/utils/interface/CocktailInterface";
-import CocktailDetailScreen from "@/src/app/listing/[id]";
+import CocktailComponent from "@/src/components/cocktail";
 
 export default function RandomTab() {
 
@@ -19,12 +18,13 @@ export default function RandomTab() {
     }, []);
 
     return (
-        <BaseComponent>
+        /*<CocktailComponent id={'12091'} headerPushBack={true}/>*/
+        <>
             {cocktail ? (
-                <CocktailDetailScreen cocktailId={cocktail.cocktailId ?? ''} />
+                <CocktailComponent id={cocktail.cocktailId ?? ''}/>
             ) : (
                 <Text>Loading...</Text>
             )}
-        </BaseComponent>
+        </>
     );
 }
