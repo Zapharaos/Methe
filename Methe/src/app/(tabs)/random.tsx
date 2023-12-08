@@ -18,7 +18,6 @@ export default function RandomTab() {
     }, []);
 
     return (
-        /*<CocktailComponent id={'12091'} headerPushBack={true}/>*/
         <>
             {cocktail ? (
                 <CocktailComponent id={cocktail.cocktailId ?? ''}/>

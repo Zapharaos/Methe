@@ -4,3 +4,8 @@ enum Utils {
 }
 
 export default Utils;
+
+export enum Display {
+    Grid = 'grid',
+    List = 'list'
+}

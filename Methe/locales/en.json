@@ -2,9 +2,7 @@
   "appName": "Methe",
   "pages": {
     "home": "Home",
-    "favourites": "Favourites",
-    "random": "Random",
-    "settings": "Settings"
+    "favourites": "Favourites"
   },
   "settings": {
     "title": "Settings",
@@ -25,6 +23,11 @@
       "light": "Light",
       "dark": "Dark"
     }
+  },
+  "cocktail": {
+    "about": "About",
+    "ingredients": "Ingredients",
+    "units": "units"
   },
   "search": "Search",
   "notFound": "No results",
