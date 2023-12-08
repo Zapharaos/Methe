@@ -167,19 +167,19 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                             </Text>
 
                             {/* Categories */}
-                            <View style={tw`mt-5 flex-row justify-between`}>
-                                <View style={tw`p-3 rounded-full bg-stone-800 max-w-1/3`}>
-                                    <Text style={tw`text-black dark:text-white`}>
+                            <View style={tw`mt-5 flex-row justify-around items-stretch`}>
+                                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
                                         {cocktail.strAlcoholic}
                                     </Text>
                                 </View>
-                                <View style={tw`p-3 rounded-full bg-stone-800 max-w-1/3`}>
-                                    <Text style={tw`text-black dark:text-white`}>
+                                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
                                         {cocktail.strCategory}
                                     </Text>
                                 </View>
-                                <View style={tw`p-3 rounded-full bg-stone-800 max-w-1/3`}>
-                                    <Text style={tw`text-black dark:text-white`}>
+                                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
                                         {cocktail.strGlass}
                                     </Text>
                                 </View>
@@ -233,7 +233,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                                         {cocktail.ingredientList.map((ingredient, index) => (
                                             <View key={index} style={tw`m-3 py-2 rounded-xl shadow-lg bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                                                 <Image style={tw`h-36 w-36 rounded-3xl`} source={{ uri: ingredient.ingredientImage }} />
-                                                <View style={tw`w-36 mt-2 items-center`}>
+                                                <View style={tw`w-36 mt-2 px-2 items-center`}>
                                                     <Text style={tw`font-black text-center text-base text-black dark:text-white`}>
                                                         {getIngredientMeasure(ingredient.ingredientMeasure, units)}
                                                     </Text>
@@ -249,7 +249,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                                         {cocktail.ingredientList.map((ingredient, index) => (
                                             <View key={index} style={tw`flex-row`}>
                                                 <Text style={tw`mr-2 font-black text-justify text-base text-darkGrayBrown dark:text-palePeach`}>
-                                                    {`\u25CF`}
+                                                    {`\u2022`}
                                                 </Text>
                                                 <Text style={tw`text-justify text-base text-black dark:text-white`}>
                                                     <Text style={tw`font-black`}>
