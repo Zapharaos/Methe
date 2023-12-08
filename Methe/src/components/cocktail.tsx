@@ -84,6 +84,10 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
         }
     }
 
+    const changeIngredientsDisplay = (display: Display) => {
+        setIngredientsDisplay(display);
+    };
+
     const Header = () => {
         return (
             <>
@@ -139,148 +143,154 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
         );
     }
 
-    const changeIngredientsDisplay = (display: Display) => {
-        setIngredientsDisplay(display);
-    };
+    const Base = ({ children }: { children: React.ReactNode }) => {
+        return (
+            <View style={tw`flex-1 bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
+                <Stack.Screen
+                    options={{
+                        headerTitle: '',
+                        headerTransparent: true,
+                        header: () => <Header/>,
+                    }}
+                />
+                <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
+                    {children}
+                </Animated.ScrollView>
+            </View>
+        )
+    }
 
     if(loading) {
         return (
-            <Loader/>
+            <Base>
+                <Loader/>
+            </Base>
+        )
+    }
+
+    if(!cocktail) {
+        return (
+            <Base>
+                <Text>
+                    {i18n.t("noCocktail")}
+                </Text>
+            </Base>
         )
     }
 
     return (
-        <View style={tw`flex-1 bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
-            <Stack.Screen
-                options={{
-                    headerTitle: '',
-                    headerTransparent: true,
-                    header: () => <Header/>,
-                }}
+        <Base>
+            {/* Image */}
+            <Animated.Image
+                source={{ uri: cocktail.cocktailImage }}
+                style={[{width: width, height: IMAGE_HEIGHT}, imageAnimatedStyle]}
+                resizeMode="cover"
             />
-            <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-                {cocktail ? (
-                    <View>
-                        {/* Image */}
-                        <Animated.Image
-                            source={{ uri: cocktail.cocktailImage }}
-                            style={[{width: width, height: IMAGE_HEIGHT}, imageAnimatedStyle]}
-                            resizeMode="cover"
-                        />
-                        {/* Details */}
-                        <View style={tw`p-5 bg-palePeach dark:bg-darkGrayBrown`}>
+            {/* Details */}
+            <View style={tw`p-5 bg-palePeach dark:bg-darkGrayBrown`}>
 
-                            {/* Title */}
-                            <Text style={tw`text-3xl font-semibold text-black dark:text-white`}>
-                                {cocktail.cocktailName}
-                            </Text>
+                {/* Title */}
+                <Text style={tw`text-3xl font-semibold text-black dark:text-white`}>
+                    {cocktail.cocktailName}
+                </Text>
 
-                            {/* Categories */}
-                            <View style={tw`mt-5 flex-row justify-around items-stretch`}>
-                                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
-                                        {cocktail.strAlcoholic}
-                                    </Text>
-                                </View>
-                                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
-                                        {cocktail.strCategory}
-                                    </Text>
-                                </View>
-                                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
-                                        {cocktail.strGlass}
-                                    </Text>
-                                </View>
-                            </View>
-
-                            {/* Instructions */}
-                            <View style={tw`mt-5`}>
-                                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
-                                    {i18n.t('cocktail.instructions')}
-                                </Text>
-                                <Text style={tw`mt-2 text-justify text-base text-black dark:text-white`}>
-                                    {cocktail.strInstructions}
-                                </Text>
-                            </View>
-
-                            {/* Ingredients */}
-                            <View style={tw`mt-5`}>
-
-                                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
-                                    {i18n.t('cocktail.ingredients')}
-                                </Text>
-
-                                {/* Properties */}
-                                <View style={tw`mt-2 flex-row justify-between items-center`}>
-
-                                    {/* Units */}
-                                    <View style={tw`p-1 px-4 flex-row items-center rounded-xl bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                                        <TouchableOpacity onPress={() => setUnits(prevState => {return prevState > 1 ? prevState - 1 : prevState})}>
-                                            <AntDesign name="minus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                                        </TouchableOpacity>
-                                        <Text style={tw`mx-5 font-extrabold text-lg text-darkGrayBrown dark:text-palePeach`}>{units} {i18n.t('cocktail.units')}</Text>
-                                        <TouchableOpacity onPress={() => setUnits(prevState => {return prevState + 1})}>
-                                            <AntDesign name="plus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                                        </TouchableOpacity>
-                                    </View>
-
-                                    {/* Display */}
-                                    <View style={tw`flex-row gap-3`}>
-                                        <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.Grid)}>
-                                            <Entypo name="grid" size={32} style={tw`${ingredientsDisplay === Display.Grid ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.List)}>
-                                            <Entypo name="list" size={32} style={tw`${ingredientsDisplay === Display.List ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-
-                                {/* Listing */}
-                                {ingredientsDisplay === Display.Grid ? (
-                                    <View style={tw`mt-5 flex-row flex-wrap justify-around items-stretch`}>
-                                        {cocktail.ingredientList.map((ingredient, index) => (
-                                            <View key={index} style={tw`m-3 py-2 rounded-xl shadow-lg bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                                                <Image style={tw`h-36 w-36 rounded-3xl`} source={{ uri: ingredient.ingredientImage }} />
-                                                <View style={tw`w-36 mt-2 px-2 items-center`}>
-                                                    <Text style={tw`font-black text-center text-base text-black dark:text-white`}>
-                                                        {getIngredientMeasure(ingredient.ingredientMeasure, units)}
-                                                    </Text>
-                                                    <Text style={tw`text-center text-base text-black dark:text-white`}>
-                                                        {ingredient.ingredientName}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                        ))}
-                                    </View>
-                                ) : (
-                                    <View style={tw`mt-5`}>
-                                        {cocktail.ingredientList.map((ingredient, index) => (
-                                            <View key={index} style={tw`flex-row`}>
-                                                <Text style={tw`mr-2 font-black text-justify text-base text-darkGrayBrown dark:text-palePeach`}>
-                                                    {`\u2022`}
-                                                </Text>
-                                                <Text style={tw`text-justify text-base text-black dark:text-white`}>
-                                                    <Text style={tw`font-black`}>
-                                                        {getIngredientMeasure(ingredient.ingredientMeasure, units)}{' '}
-                                                    </Text>
-                                                    {ingredient.ingredientName}
-                                                </Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                )}
-                            </View>
-                        </View>
-                    </View>
-                    ) : (
-                    <View>
-                        <Text>
-                            {i18n.t("noCocktail")}
+                {/* Categories */}
+                <View style={tw`mt-5 flex-row justify-around items-stretch`}>
+                    <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                        <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
+                            {cocktail.strAlcoholic}
                         </Text>
                     </View>
-                )}
-            </Animated.ScrollView>
-        </View>
+                    <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                        <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
+                            {cocktail.strCategory}
+                        </Text>
+                    </View>
+                    <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                        <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
+                            {cocktail.strGlass}
+                        </Text>
+                    </View>
+                </View>
+
+                {/* Instructions */}
+                <View style={tw`mt-5`}>
+                    <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                        {i18n.t('cocktail.instructions')}
+                    </Text>
+                    <Text style={tw`mt-2 text-justify text-base text-black dark:text-white`}>
+                        {cocktail.strInstructions}
+                    </Text>
+                </View>
+
+                {/* Ingredients */}
+                <View style={tw`mt-5`}>
+
+                    <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                        {i18n.t('cocktail.ingredients')}
+                    </Text>
+
+                    {/* Properties */}
+                    <View style={tw`mt-2 flex-row justify-between items-center`}>
+
+                        {/* Units */}
+                        <View style={tw`p-1 px-4 flex-row items-center rounded-xl bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                            <TouchableOpacity onPress={() => setUnits(prevState => {return prevState > 1 ? prevState - 1 : prevState})}>
+                                <AntDesign name="minus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                            </TouchableOpacity>
+                            <Text style={tw`mx-5 font-extrabold text-lg text-darkGrayBrown dark:text-palePeach`}>{units} {i18n.t('cocktail.units')}</Text>
+                            <TouchableOpacity onPress={() => setUnits(prevState => {return prevState + 1})}>
+                                <AntDesign name="plus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Display */}
+                        <View style={tw`flex-row gap-3`}>
+                            <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.Grid)}>
+                                <Entypo name="grid" size={32} style={tw`${ingredientsDisplay === Display.Grid ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.List)}>
+                                <Entypo name="list" size={32} style={tw`${ingredientsDisplay === Display.List ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    {/* Listing */}
+                    {ingredientsDisplay === Display.Grid ? (
+                        <View style={tw`mt-5 flex-row flex-wrap justify-around items-stretch`}>
+                            {cocktail.ingredientList.map((ingredient, index) => (
+                                <View key={index} style={tw`m-3 py-2 rounded-xl shadow-lg bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                    <Image style={tw`h-36 w-36 rounded-3xl`} source={{ uri: ingredient.ingredientImage }} />
+                                    <View style={tw`w-36 mt-2 px-2 items-center`}>
+                                        <Text style={tw`font-black text-center text-base text-black dark:text-white`}>
+                                            {getIngredientMeasure(ingredient.ingredientMeasure, units)}
+                                        </Text>
+                                        <Text style={tw`text-center text-base text-black dark:text-white`}>
+                                            {ingredient.ingredientName}
+                                        </Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    ) : (
+                        <View style={tw`mt-5`}>
+                            {cocktail.ingredientList.map((ingredient, index) => (
+                                <View key={index} style={tw`flex-row`}>
+                                    <Text style={tw`mr-2 font-black text-justify text-base text-darkGrayBrown dark:text-palePeach`}>
+                                        {`\u2022`}
+                                    </Text>
+                                    <Text style={tw`text-justify text-base text-black dark:text-white`}>
+                                        <Text style={tw`font-black`}>
+                                            {getIngredientMeasure(ingredient.ingredientMeasure, units)}{' '}
+                                        </Text>
+                                        {ingredient.ingredientName}
+                                    </Text>
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                </View>
+            </View>
+        </Base>
     );
 };
