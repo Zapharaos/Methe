@@ -19,25 +19,26 @@ export default function TabsLayout() {
 
     return (
         <Tabs screenOptions={{
+            unmountOnBlur: true,
+            headerStyle: {
+                backgroundColor: secondary,
+            },
+            headerShadowVisible: false,
+            headerTintColor: textColor,
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
             tabBarShowLabel: false,
             tabBarActiveTintColor: reversed,
             tabBarInactiveTintColor: Colors.midGray,
             tabBarStyle: {
                 backgroundColor: secondary,
-                borderColor: secondary
+                borderTopColor: primary,
             },
         }}>
             <Tabs.Screen name="index" options={{
                 title: i18n.t('appName'),
                 tabBarIcon: ({color, size}) => <AntDesign name="home" color={color} size={size}/>,
-                headerStyle: {
-                    backgroundColor: primary,
-                },
-                headerShadowVisible: false,
-                headerTintColor: textColor,
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
                 headerRight: () => (
                     <TouchableOpacity style={tw`mr-5`} onPress={() => router.push("/settings")}>
                         <Feather name="settings" size={20} color={textColor} />
@@ -45,22 +46,13 @@ export default function TabsLayout() {
                 ),
             }}/>
             <Tabs.Screen name="random" options={{
-                unmountOnBlur: true,
+                headerTitle: '',
                 headerTransparent: true,
                 tabBarIcon: ({color, size}) => <FontAwesome5 name="dice" color={color} size={size} />,
             }}/>
             <Tabs.Screen name="favourites" options={{
-                unmountOnBlur: true,
                 title: i18n.t('pages.favourites'),
                 tabBarIcon: ({color, size}) => <MaterialIcons name="favorite-border" color={color} size={size}/>,
-                headerStyle: {
-                    backgroundColor: primary,
-                },
-                headerShadowVisible: false,
-                headerTintColor: textColor,
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
             }}/>
         </Tabs>
     )

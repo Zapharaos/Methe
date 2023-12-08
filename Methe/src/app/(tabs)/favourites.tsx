@@ -1,11 +1,8 @@
-import {Text} from "react-native";
-
 import BaseComponent from "@/src/components/base";
 import {useFavoritesContext} from "@/src/contexts/favorites";
 import {useEffect, useState} from "react";
 import {Cocktail} from "@/src/utils/interface/CocktailInterface";
-import {INDEX_RANDOM_COCKTAILS} from "@/src/constants/config";
-import {getCocktailInfoById, getRandomCocktailObject} from "@/src/utils/cocktail";
+import {getCocktailInfoById} from "@/src/utils/cocktail";
 import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCards";
 import {ScrollView} from "react-native-gesture-handler";
 import Loader from "@/src/components/loader";

@@ -25,7 +25,8 @@ export default function AppLayout() {
 function NavigationLayout() {
     const {i18n, colorScheme} = usePreferencesContext();
 
-    const backgroundColor = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
+    const primary = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
+    const secondary = colorScheme === Theme.Dark ? Colors.darkGrayBrownSecond : Colors.palePeachSecond;
     const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
 
     return (
@@ -36,7 +37,7 @@ function NavigationLayout() {
                     title: i18n.t('settings.title'),
                     headerBackTitle: i18n.t('pages.home'),
                     headerStyle: {
-                        backgroundColor: backgroundColor,
+                        backgroundColor: secondary,
                     },
                     headerShadowVisible: false,
                     headerTintColor: textColor,
