@@ -34,5 +34,5 @@
   "welcome": "Hello",
   "share": "Hey ! Check this drink out !",
   "noCocktail": "The cocktail was not found.",
-  "noFavorites": "No favorites to display."
+  "noCocktails": "No cocktails to display."
 }

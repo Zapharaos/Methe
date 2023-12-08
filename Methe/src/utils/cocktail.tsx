@@ -34,6 +34,13 @@ export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | a
     try {
         const result = await getRandomCocktailData();
 
+        // Check if 'drinks' array exists and has at least one item
+        if (!result || !result.drinks || result.drinks.length <= 0) {
+            console.warn('Invalid or empty response:', result);
+            // Return null or handle the situation as appropriate
+            return null;
+        }
+
         const cocktail: Cocktail = {
             cocktailId: result.drinks[0].idDrink,
             cocktailName: result.drinks[0].strDrink,
@@ -52,6 +59,13 @@ export const getCocktailInfoById = async (id: string): Promise<ApiCocktailRespon
     try {
         const result = await getCocktailDataById(id);
 
+        // Check if 'drinks' array exists and has at least one item
+        if (!result || !result.drinks || result.drinks.length <= 0) {
+            console.warn('Invalid or empty response:', result);
+            // Return null or handle the situation as appropriate
+            return null;
+        }
+
         const cocktail: Cocktail = {
             cocktailId: result.drinks[0].idDrink,
             cocktailName: result.drinks[0].strDrink,
@@ -69,6 +83,13 @@ export const getCocktailInfoById = async (id: string): Promise<ApiCocktailRespon
 export const getCocktailDetailsById = async (id: string): Promise<any> => {
     try {
         const result = await getCocktailDataById(id);
+
+        // Check if 'drinks' array exists and has at least one item
+        if (!result || !result.drinks || result.drinks.length <= 0) {
+            console.warn('Invalid or empty response:', result);
+            // Return null or handle the situation as appropriate
+            return null;
+        }
 
         const cocktail: CocktailDetail = {
             cocktailId: result.drinks[0].idDrink,

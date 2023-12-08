@@ -35,7 +35,7 @@ export default function CocktailsContainerCards({ cocktails }: ContainerCardsPro
                 ))
             ) : (
                 <Text style={tw`text-base text-midLight dark:text-midDark`}>
-                    {i18n.t('noFavorites')}
+                    {i18n.t('noCocktails')}
                 </Text>
             )}
         </View>
