@@ -48,6 +48,24 @@ export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | a
     }
 };
 
+export const getCocktailInfoById = async (id: string): Promise<ApiCocktailResponse | any> => {
+    try {
+        const result = await getCocktailDataById(id);
+
+        const cocktail: Cocktail = {
+            cocktailId: result.drinks[0].idDrink,
+            cocktailName: result.drinks[0].strDrink,
+            cocktailImage: result.drinks[0].strDrinkThumb,
+        };
+
+        return cocktail;
+    } catch (err) {
+        console.error(err);
+        // Handle the error or return a default value if needed
+        return null;
+    }
+};
+
 export const getCocktailDetailsById = async (id: string): Promise<any> => {
     try {
         const result = await getCocktailDataById(id);

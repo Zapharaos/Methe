@@ -19,11 +19,6 @@ interface CocktailCardProps {
 
 export default function  CocktailCard({ id, name, image }: CocktailCardProps) {
 
-    const {
-        isFavorite,
-        toggleFavorite
-    } = useFavoritesContext()
-
     return (
         <Link href={`/listing/${id}`} asChild>
             <TouchableOpacity style={tw`w-36 my-3 rounded-xl bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
@@ -37,21 +32,4 @@ export default function  CocktailCard({ id, name, image }: CocktailCardProps) {
         </Link>
     );
 }
-
-/*
-<TouchableOpacity style={tw `h-60 w-60 rounded-3xl`}>
-    <View style={tw `bg-white rounded-3xl shadow-lg`}>
-        <Image  style={tw `h-60 w-60 rounded-t-3xl`} source={{ uri: image }} />
-
-        {/!* Like Cocktail *!/}
-        {/!*<CocktailFavoriteStatus
-                        isFavorite={isFavorite(cocktailId)}
-                        toggleFavorite={ () => toggleFavorite(cocktailId)}
-                    />*!/}
-
-        <View style={tw `px-3 pb-4`} >
-            <Text style={tw `text-lg font-bold pt-2`}>{name}</Text>
-        </View>
-    </View>
-</TouchableOpacity>*/
 
