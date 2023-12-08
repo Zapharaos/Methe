@@ -7,6 +7,7 @@ import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 import tw from "@/lib/tailwind";
 import {Image, Text, View} from "react-native";
 import {getIngredientMeasure} from "@/src/utils/cocktail";
+import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 
 /**
  * The props of the ContainerCards
@@ -17,16 +18,26 @@ interface ContainerCardsProps {
 
 export default function CocktailsContainerCards({ cocktails }: ContainerCardsProps) {
 
+    const {
+        i18n
+    } = usePreferencesContext();
+
     return (
         <View style={tw`my-5 flex-1 flex-row flex-wrap justify-around`}>
-            {cocktails.map((cocktail, index) => (
-                <CocktailCard
-                    key={index}
-                    id={cocktail.cocktailId}
-                    name={cocktail.cocktailName}
-                    image={cocktail.cocktailImage}
-                />
-            ))}
+            {cocktails.length > 0 ? (
+                cocktails.map((cocktail, index) => (
+                    <CocktailCard
+                        key={index}
+                        id={cocktail.cocktailId}
+                        name={cocktail.cocktailName}
+                        image={cocktail.cocktailImage}
+                    />
+                ))
+            ) : (
+                <Text style={tw`text-base text-midLight dark:text-midDark`}>
+                    {i18n.t('noFavorites')}
+                </Text>
+            )}
         </View>
     );
 }

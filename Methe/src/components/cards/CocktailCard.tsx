@@ -21,7 +21,7 @@ export default function CocktailCard({ id, name, image }: CocktailCardProps) {
 
     return (
         <Link href={`/listing/${id}`} asChild>
-            <TouchableOpacity style={tw`w-36 my-3 rounded-xl bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+            <TouchableOpacity style={tw`w-36 my-3 rounded-xl shadow-lg bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <Image style={tw`h-36 rounded-t-xl`} source={{ uri: image }} />
                 <View style={tw`p-2 flex-auto items-center justify-center`}>
                     <Text style={tw`text-center text-base text-black dark:text-white `}>

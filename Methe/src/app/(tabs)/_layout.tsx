@@ -46,6 +46,7 @@ export default function TabsLayout() {
             }}/>
             <Tabs.Screen name="random" options={{
                 unmountOnBlur: true,
+                headerTransparent: true,
                 tabBarIcon: ({color, size}) => <FontAwesome5 name="dice" color={color} size={size} />,
             }}/>
             <Tabs.Screen name="favourites" options={{

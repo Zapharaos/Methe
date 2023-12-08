@@ -105,18 +105,18 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                     </View>
 
                     {/* Right */}
-                    <View style={tw`p-2 flex-row items-center justify-center gap-5`}>
+                    {cocktail && (
+                        <View style={tw`p-2 flex-row items-center justify-center gap-5`}>
 
-                        {/* Share */}
-                        <TouchableOpacity
-                            onPress={share}
-                            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
-                        >
-                            <Feather name="share" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
-                        </TouchableOpacity>
+                            {/* Share */}
+                            <TouchableOpacity
+                                onPress={share}
+                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                            >
+                                <Feather name="share" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
+                            </TouchableOpacity>
 
-                        {/* Favorite */}
-                        {cocktail && (
+                            {/* Favorite */}
                             <TouchableOpacity
                                 onPress={() => toggleFavorite(cocktail.cocktailId)}
                                 style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
@@ -132,8 +132,8 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                                     <MaterialIcons name="favorite" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
                                 )}
                             </TouchableOpacity>
-                        )}
-                    </View>
+                        </View>
+                    )}
                 </View>
             </>
         );
@@ -275,7 +275,9 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                     </View>
                     ) : (
                     <View>
-                        <Text>Error</Text>
+                        <Text>
+                            {i18n.t("noCocktail")}
+                        </Text>
                     </View>
                 )}
             </Animated.ScrollView>
