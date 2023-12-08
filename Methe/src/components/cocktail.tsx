@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, I18nManager, Share, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, I18nManager, Image, Share, Text, TouchableOpacity, View} from 'react-native';
 import tw from '@/lib/tailwind';
 import {CocktailDetail} from "@/src/utils/interface/CocktailInterface";
-import {extractUrlFromCocktail, getCocktailDetailsById} from "@/src/utils/cocktail";
+import {extractUrlFromCocktail, getCocktailDetailsById, getIngredientMeasure} from "@/src/utils/cocktail";
 import {Stack, useRouter} from "expo-router";
 import {useFavoritesContext} from "@/src/contexts/favorites";
 import Animated, {interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset} from "react-native-reanimated";
 import {AntDesign, Entypo, Feather, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {IMAGE_HEIGHT} from "@/src/constants/config";
-import IngredientsContainerCards from "@/src/components/cards/IngredientsContainerCards";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import {Display} from "@/src/utils/enums/utils";
 
@@ -151,7 +150,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                 }}
             />
             <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-                {cocktail &&
+                {cocktail ? (
                     <View>
                         {/* Image */}
                         <Animated.Image
@@ -170,7 +169,9 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                             {/* Categories */}
                             <View style={tw`mt-5 flex-row justify-between`}>
                                 <View style={tw`p-3 rounded-full bg-stone-800 max-w-1/3`}>
-                                    <Text style={tw`text-black dark:text-white`}> {cocktail.strAlcoholic} </Text>
+                                    <Text style={tw`text-black dark:text-white`}>
+                                        {cocktail.strAlcoholic}
+                                    </Text>
                                 </View>
                                 <View style={tw`p-3 rounded-full bg-stone-800 max-w-1/3`}>
                                     <Text style={tw`text-black dark:text-white`}>
@@ -184,9 +185,11 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                                 </View>
                             </View>
 
-                            {/* About */}
+                            {/* Instructions */}
                             <View style={tw`mt-5`}>
-                                <Text style={tw`font-bold text-xl text-black dark:text-white`}>{i18n.t('cocktail.about')}</Text>
+                                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                                    {i18n.t('cocktail.instructions')}
+                                </Text>
                                 <Text style={tw`mt-2 text-justify text-base text-black dark:text-white`}>
                                     {cocktail.strInstructions}
                                 </Text>
@@ -225,26 +228,47 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                                 </View>
 
                                 {/* Listing */}
-                                {ingredientsDisplay === Display.Grid &&
-                                    <View>
-                                        <Text>{Display.Grid}</Text>
+                                {ingredientsDisplay === Display.Grid ? (
+                                    <View style={tw`mt-5 flex-row flex-wrap justify-around items-stretch`}>
+                                        {cocktail.ingredientList.map((ingredient, index) => (
+                                            <View key={index} style={tw`m-3 py-2 rounded-xl shadow-lg bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                                <Image style={tw`h-36 w-36 rounded-3xl`} source={{ uri: ingredient.ingredientImage }} />
+                                                <View style={tw`w-36 mt-2 items-center`}>
+                                                    <Text style={tw`font-black text-center text-base text-black dark:text-white`}>
+                                                        {getIngredientMeasure(ingredient.ingredientMeasure, units)}
+                                                    </Text>
+                                                    <Text style={tw`text-center text-base text-black dark:text-white`}>
+                                                        {ingredient.ingredientName}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        ))}
                                     </View>
-                                }
-                                {ingredientsDisplay === Display.List &&
-                                    <View>
-                                        <Text>{Display.List}</Text>
+                                ) : (
+                                    <View style={tw`mt-5`}>
+                                        {cocktail.ingredientList.map((ingredient, index) => (
+                                            <View key={index} style={tw`flex-row`}>
+                                                <Text style={tw`mr-2 font-black text-justify text-base text-darkGrayBrown dark:text-palePeach`}>
+                                                    {`\u25CF`}
+                                                </Text>
+                                                <Text style={tw`text-justify text-base text-black dark:text-white`}>
+                                                    <Text style={tw`font-black`}>
+                                                        {getIngredientMeasure(ingredient.ingredientMeasure, units)}
+                                                    </Text>
+                                                    {ingredient.ingredientName}
+                                                </Text>
+                                            </View>
+                                        ))}
                                     </View>
-                                }
-                                <IngredientsContainerCards ingredientList={cocktail.ingredientList} numberPerson={units}/>
+                                )}
                             </View>
                         </View>
                     </View>
-                }
-                {!cocktail &&
+                    ) : (
                     <View>
                         <Text>Error</Text>
                     </View>
-                }
+                )}
             </Animated.ScrollView>
         </View>
     );

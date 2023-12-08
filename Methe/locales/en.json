@@ -25,7 +25,7 @@
     }
   },
   "cocktail": {
-    "about": "About",
+    "instructions": "Instructions",
     "ingredients": "Ingredients",
     "units": "units"
   },
