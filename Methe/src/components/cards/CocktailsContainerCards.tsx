@@ -4,34 +4,29 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-nativ
 
 import CocktailCard from "@/src/components/cards/CocktailCard";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+import tw from "@/lib/tailwind";
+import {Image, Text, View} from "react-native";
+import {getIngredientMeasure} from "@/src/utils/cocktail";
 
 /**
  * The props of the ContainerCards
  */
 interface ContainerCardsProps {
-    cocktailList: Cocktail[];
+    cocktails: Cocktail[];
 }
 
-export default function CocktailsContainerCards({ cocktailList }: ContainerCardsProps) {
+export default function CocktailsContainerCards({ cocktails }: ContainerCardsProps) {
 
     return (
-        <Carousel
-            firstItem={2}
-            sliderWidth={wp(100)}
-            itemWidth={wp(100)-200}
-            inactiveSlideOpacity={0.75}
-            inactiveSlideScale={0.77}
-            containerCustomStyle={{overflow: 'visible'}}
-            slideStyle={{display: 'flex', alignItems: 'center', height: hp(30)}}
-
-            data={cocktailList}
-            renderItem={({ item }) => (
+        <View style={tw`my-5 flex-1 flex-row flex-wrap justify-around`}>
+            {cocktails.map((cocktail, index) => (
                 <CocktailCard
-                    cocktailId={item.cocktailId}
-                    cocktailName={item.cocktailName}
-                    cocktailImage={item.cocktailImage}
+                    key={index}
+                    id={cocktail.cocktailId}
+                    name={cocktail.cocktailName}
+                    image={cocktail.cocktailImage}
                 />
-            )}
-        />
+            ))}
+        </View>
     );
 }

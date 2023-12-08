@@ -20,7 +20,7 @@ export default function RandomTab() {
     return (
         <>
             {cocktail ? (
-                <CocktailComponent id={cocktail.cocktailId ?? ''}/>
+                <CocktailComponent id={cocktail.cocktailId}/>
             ) : (
                 <Text>Loading...</Text>
             )}

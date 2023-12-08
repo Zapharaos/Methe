@@ -72,7 +72,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
         if(cocktail) {
             try {
                 await Share.share({
-                    message: "Hey ! Check this drink out !",
+                    message: i18n.t('share'),
                     url: extractUrlFromCocktail(cocktail),
                 })
             } catch (err) {
@@ -149,7 +149,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                     header: () => <Header/>,
                 }}
             />
-            <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
+            <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
                 {cocktail ? (
                     <View>
                         {/* Image */}
@@ -253,7 +253,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
                                                 </Text>
                                                 <Text style={tw`text-justify text-base text-black dark:text-white`}>
                                                     <Text style={tw`font-black`}>
-                                                        {getIngredientMeasure(ingredient.ingredientMeasure, units)}
+                                                        {getIngredientMeasure(ingredient.ingredientMeasure, units)}{' '}
                                                     </Text>
                                                     {ingredient.ingredientName}
                                                 </Text>
