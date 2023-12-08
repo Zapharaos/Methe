@@ -17,7 +17,7 @@ interface CocktailCardProps {
     image: string;
 }
 
-export default function  CocktailCard({ id, name, image }: CocktailCardProps) {
+export default function CocktailCard({ id, name, image }: CocktailCardProps) {
 
     return (
         <Link href={`/listing/${id}`} asChild>

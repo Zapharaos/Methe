@@ -8,11 +8,13 @@ import {INDEX_RANDOM_COCKTAILS} from "@/src/constants/config";
 import {getCocktailInfoById, getRandomCocktailObject} from "@/src/utils/cocktail";
 import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCards";
 import {ScrollView} from "react-native-gesture-handler";
+import Loader from "@/src/components/loader";
 
 export default function FavouritesTab() {
 
     const {favorites} = useFavoritesContext();
-    const [cocktails, setCocktails] = useState<Cocktail[]>([])
+    const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const tempCocktails :Cocktail[] = [];
@@ -26,9 +28,16 @@ export default function FavouritesTab() {
                 }
             }
             setCocktails(tempCocktails);
+            setLoading(false);
         };
         fetchCocktails();
     }, []);
+
+    if(loading) {
+        return (
+            <Loader/>
+        )
+    }
 
     return (
         <BaseComponent>

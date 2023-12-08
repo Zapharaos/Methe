@@ -49,6 +49,7 @@ export default function TabsLayout() {
                 tabBarIcon: ({color, size}) => <FontAwesome5 name="dice" color={color} size={size} />,
             }}/>
             <Tabs.Screen name="favourites" options={{
+                unmountOnBlur: true,
                 title: i18n.t('pages.favourites'),
                 tabBarIcon: ({color, size}) => <MaterialIcons name="favorite-border" color={color} size={size}/>,
                 headerStyle: {

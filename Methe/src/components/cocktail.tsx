@@ -10,6 +10,7 @@ import {AntDesign, Entypo, Feather, Ionicons, MaterialIcons} from "@expo/vector-
 import {IMAGE_HEIGHT} from "@/src/constants/config";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import {Display} from "@/src/utils/enums/utils";
+import Loader from "@/src/components/loader";
 
 const {width} = Dimensions.get('window');
 
@@ -32,6 +33,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
     const [cocktail, setCocktail] = useState<CocktailDetail>();
     const [units, setUnits] = useState<number>(1);
     const [ingredientsDisplay, setIngredientsDisplay] = useState(Display.Grid);
+    const [loading, setLoading] = useState(true);
 
     const router = useRouter();
     const scrollRef = useAnimatedRef<Animated.ScrollView>();
@@ -41,6 +43,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
         const fetchCocktail = async () => {
             const cocktail = await getCocktailDetailsById(id);
             setCocktail(cocktail);
+            setLoading(false);
         };
         fetchCocktail();
     }, []);
@@ -139,6 +142,12 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
     const changeIngredientsDisplay = (display: Display) => {
         setIngredientsDisplay(display);
     };
+
+    if(loading) {
+        return (
+            <Loader/>
+        )
+    }
 
     return (
         <View style={tw`flex-1 bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>

@@ -6,9 +6,11 @@ import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCa
 import BaseComponent from "@/src/components/base";
 import {INDEX_RANDOM_COCKTAILS} from "@/src/constants/config";
 import {ScrollView} from "react-native-gesture-handler";
+import Loader from "@/src/components/loader";
 
 export default function HomeTab() {
-    const [cocktails, setCocktails] = useState<Cocktail[]>([])
+    const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const tempCocktails :Cocktail[] = [];
@@ -22,9 +24,16 @@ export default function HomeTab() {
                 }
             }
             setCocktails(tempCocktails);
+            setLoading(false);
         };
         fetchCocktails();
     }, []);
+
+    if(loading) {
+        return (
+            <Loader/>
+        )
+    }
 
     return (
         <BaseComponent>
