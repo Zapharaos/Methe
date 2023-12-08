@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {asyncStorage, loadDataJson} from "@/src/utils/asyncStorage";
+import {asyncStorage, loadDataJson, storeData, storeDataJson} from "@/src/utils/asyncStorage";
 
 export interface Favorites {
     favorites: string[];
     isFavorite: (itemId: string) => boolean;
-    toggleFavorite: (itemId: string) => Promise<void>;
+    toggleFavorite: (itemId: string) => void;
 }
 
 const FavoritesContext = createContext<Favorites | undefined>(undefined);
@@ -39,20 +39,19 @@ export function FavoritesContextProvider({ children }: { children: React.ReactNo
         return favorites && favorites.includes(itemId);
     };
 
-    const toggleFavorite = async (itemId: string) => {
-        try {
-            const updatedFavorites = isFavorite(itemId)
-                ? favorites.filter((id) => id !== itemId)
-                : [...favorites, itemId];
+    const toggleFavorite = (itemId: string) => {
+        const updatedFavorites = isFavorite(itemId)
+            ? favorites.filter((id) => id !== itemId)
+            : [...favorites, itemId];
 
-            await AsyncStorage.setItem(asyncStorage.Favorites, JSON.stringify(updatedFavorites));
-            setFavorites(updatedFavorites);
-        } catch (error) {
-            console.error('Error toggling favorite:', error);
+        setFavorites(updatedFavorites);
+        const storeAsyncStorageData = async () => {
+            await storeDataJson(asyncStorage.Favorites, updatedFavorites);
         }
+        storeAsyncStorageData().catch(console.error);
     };
 
-    const favoritesValue = {
+    const favoritesValue: Favorites = {
         favorites,
         isFavorite,
         toggleFavorite,

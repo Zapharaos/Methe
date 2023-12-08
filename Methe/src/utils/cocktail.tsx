@@ -3,6 +3,7 @@ import {take} from "rxjs/operators";
 import CocktailService from "@/src/utils/services/cocktailService";
 import {Cocktail, CocktailDetail} from "@/src/utils/interface/CocktailInterface";
 import {CocktailDbImageSize} from "@/src/utils/enums/Cocktail";
+import {BASE_URL, URL_SEPARATOR} from "@/src/constants/config";
 
 /**
  * Return type of the Api call
@@ -94,3 +95,28 @@ export const getCocktailDetailsById = async (id: string): Promise<any> => {
         return null;
     }
 };
+
+export function extractUrlFromCocktail (cocktail: Cocktail | CocktailDetail) {
+    return BASE_URL + cocktail.cocktailId + URL_SEPARATOR + cocktail.cocktailName.replace(/\s/g, '-');
+}
+
+export const getIngredientMeasure = (ingredientMeasure : string[], units: number) => {
+    let result: string = '';
+
+    try{
+        const size: number = ingredientMeasure.length;
+
+        if(size > 1) {
+            result = (parseFloat(ingredientMeasure[0]) * units).toString();
+            for (let counter = 1; counter < size; counter++) {
+                result = result.concat(` ${ingredientMeasure[counter]}`)
+            }
+        }
+    }
+    catch (ex){
+        console.log(`Error : ${ex}`)
+    }
+
+
+    return result;
+}

@@ -31,6 +31,7 @@ function NavigationLayout() {
     return (
         <Stack>
             <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+            <Stack.Screen name="listing/[id]" options={{headerTitle: ''}}/>
             <Stack.Screen name="settings" options={{
                     title: i18n.t('settings.title'),
                     headerBackTitle: i18n.t('pages.home'),
@@ -70,18 +71,6 @@ function NavigationLayout() {
                             <Ionicons name="close-outline" color={textColor} size={24} />
                         </TouchableOpacity>
                     ),
-                }}/>
-            <Stack.Screen name="listing/[id]" options={{
-                    title: '',
-                    headerBackTitle: i18n.t('pages.home'),
-                    headerStyle: {
-                        backgroundColor: backgroundColor,
-                    },
-                    headerShadowVisible: false,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
                 }}/>
         </Stack>
     )
