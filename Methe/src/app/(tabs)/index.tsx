@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {FlatList, I18nManager, Text, TouchableOpacity, View} from "react-native";
+import {Text, TouchableOpacity, View} from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
 
@@ -11,8 +11,7 @@ import {
     RANDOM_COCKTAILS_LIMIT, RANDOM_COCKTAILS_LOAD, REPLACEMENT_ATTEMPTS
 } from "@/src/constants/config";
 import Loader from "@/src/components/loader";
-import CocktailCard from "@/src/components/cards/CocktailCard";
-
+import CocktailsFlatlist from "@/src/components/cards/CocktailsFlatlist";
 
 export default function HomeTab() {
 
@@ -70,19 +69,7 @@ export default function HomeTab() {
         fetchData();
     };
 
-    const resetCocktails = () => {
-        setCocktails([]);
-    }
-
-    const NoCocktails = () => {
-        return (
-            <Text style={tw`text-base text-midLight dark:text-midDark`}>
-                {i18n.t('noCocktails')}
-            </Text>
-        )
-    }
-
-    const Footer = () => {
+    const FlatlistFooter = () => {
         return (
             <View>
                 {cocktails.length >= RANDOM_COCKTAILS_LIMIT ? (
@@ -90,7 +77,7 @@ export default function HomeTab() {
                         <Text style={tw`text-base text-midLight dark:text-midDark`}>
                             {i18n.t('limitReached')}
                         </Text>
-                        <TouchableOpacity onPress={resetCocktails} style={tw`p-2 m-2 flex-row items-center rounded-lg bg-darkGrayBrown dark:bg-palePeach`}>
+                        <TouchableOpacity onPress={() => setCocktails([])} style={tw`p-2 m-2 flex-row items-center rounded-lg bg-darkGrayBrown dark:bg-palePeach`}>
                             <FontAwesome name="refresh" size={16} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
                             <Text style={tw`text-base text-palePeach dark:text-darkGrayBrown`}>
                                 {' '}{i18n.t('refresh')}
@@ -110,23 +97,7 @@ export default function HomeTab() {
         )
     }
 
-    const columns:number = 2;
-    // columns depending on the width
-
     return (
-        <FlatList
-            data={cocktails}
-            keyExtractor={item => item.cocktailId}
-            renderItem={({item}) => <CocktailCard id={item.cocktailId} name={item.cocktailName} image={item.cocktailImage} />}
-            ListEmptyComponent={<NoCocktails />}
-            ListFooterComponent={<Footer />}
-            ListFooterComponentStyle={tw`m-5 flex-1`}
-            showsVerticalScrollIndicator={false}
-            style={tw`p-3 bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}
-            contentContainerStyle={columns > 1 ? undefined : tw`items-center`}
-            columnWrapperStyle={columns > 1 ? tw`justify-around` : undefined}
-            onEndReached={handleFlatlistEndReached}
-            numColumns={columns}
-        />
+        <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
     );
 }
