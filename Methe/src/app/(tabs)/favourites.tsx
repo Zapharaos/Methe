@@ -31,7 +31,7 @@ export default function FavouritesTab() {
 
     useEffect(() => {
         const fetchData = async () => {
-            await fetchCocktails([...cocktails]);
+            await fetchCocktails([]);
         };
         fetchData();
     }, []);
