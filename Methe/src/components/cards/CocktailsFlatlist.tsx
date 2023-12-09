@@ -3,8 +3,9 @@ import React from "react";
 import CocktailCard from "@/src/components/cards/CocktailCard";
 import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 import tw from "@/lib/tailwind";
-import {FlatList, I18nManager, Text, View} from "react-native";
+import {FlatList, I18nManager, Text, useWindowDimensions, View} from "react-native";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+import {IMAGE_WIDTH} from "@/src/constants/config";
 
 /**
  * The props of the CocktailsFlatlist
@@ -15,24 +16,24 @@ interface CocktailsFlatlistProps {
     Footer?: React.FC;
 }
 
-export default function CocktailsFlatlist({ cocktails, endReached, Footer }: CocktailsFlatlistProps) {
+export default function CocktailsFlatlist({ cocktails, endReached, Footer = () => <View />}: CocktailsFlatlistProps) {
 
     const {
         i18n
     } = usePreferencesContext();
 
+    const { width } = useWindowDimensions();
+    const columns = Math.floor(width / IMAGE_WIDTH);
+
     const NoCocktails = () => {
         return (
-            <View style={tw`flex-1`}>
+            <View style={tw`mt-3 flex-1 items-center`}>
                 <Text style={tw`text-base text-midLight dark:text-midDark`}>
                     {i18n.t('noCocktails')}
                 </Text>
             </View>
         )
     }
-
-    const columns:number = 1;
-    // columns depending on the width
 
     return (
         <FlatList
