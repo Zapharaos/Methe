@@ -7,13 +7,13 @@ import {Text, View} from "react-native";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 
 /**
- * The props of the ContainerCards
+ * The props of the CocktailsFlatlist
  */
-interface ContainerCardsProps {
+interface CocktailsFlatlistProps {
     cocktails: Cocktail[];
 }
 
-export default function CocktailsContainerCards({ cocktails }: ContainerCardsProps) {
+export default function CocktailsFlatlist({ cocktails }: CocktailsFlatlistProps) {
 
     const {
         i18n

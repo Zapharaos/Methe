@@ -3,7 +3,7 @@ import {useFavoritesContext} from "@/src/contexts/favorites";
 import {useEffect, useState} from "react";
 import {Cocktail} from "@/src/utils/interface/CocktailInterface";
 import {getCocktailInfoById} from "@/src/utils/cocktail";
-import CocktailsContainerCards from "@/src/components/cards/CocktailsContainerCards";
+import CocktailsFlatlist from "@/src/components/cards/CocktailsFlatlist";
 import {ScrollView} from "react-native-gesture-handler";
 import Loader from "@/src/components/loader";
 
@@ -39,7 +39,7 @@ export default function FavouritesTab() {
     return (
         <BaseComponent>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <CocktailsContainerCards cocktails={cocktails}/>
+                <CocktailsFlatlist cocktails={cocktails}/>
             </ScrollView>
         </BaseComponent>
     )

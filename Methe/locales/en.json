@@ -34,5 +34,7 @@
   "welcome": "Hello",
   "share": "Hey ! Check this drink out !",
   "noCocktail": "The cocktail was not found.",
-  "noCocktails": "No cocktails to display."
+  "noCocktails": "No cocktails to display.",
+  "limitReached": "The limit has been reached.",
+  "refresh": "Refresh"
 }
