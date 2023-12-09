@@ -9,12 +9,13 @@ import {
 } from "@/src/utils/cocktail";
 import {Stack, useRouter} from "expo-router";
 import {useFavoritesContext} from "@/src/contexts/favorites";
-import Animated, {interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, scrollTo } from "react-native-reanimated";
+import Animated, {interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from "react-native-reanimated";
 import {AntDesign, Entypo, Feather, FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {IMAGE_HEIGHT} from "@/src/constants/config";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import {Display} from "@/src/utils/enums/utils";
 import Loader from "@/src/components/loader";
+import HeaderBaseComponent from "@/src/components/header";
 
 const {width} = Dimensions.get('window');
 
@@ -105,63 +106,61 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
 
     const Header = () => {
         return (
-            <>
-                <View style={tw`h-24 flex-row items-end justify-between`}>
+            <HeaderBaseComponent>
 
-                    {/* Background */}
-                    <Animated.View style={[headerAnimatedStyle, tw`absolute w-full h-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`]}/>
+                {/* Background */}
+                <Animated.View style={[headerAnimatedStyle, tw`absolute w-full h-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`]}/>
 
-                    {/* Left */}
-                    <View style={tw`p-2`}>
-                        {headerPushBack ? (
-                            <TouchableOpacity
-                                onPress={router.back}
-                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
-                            >
-                                <Ionicons name="chevron-back" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
-                            </TouchableOpacity>
-                        ) : (
-                            <TouchableOpacity
-                                onPress={getAnotherCocktail}
-                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
-                            >
-                                <FontAwesome name="refresh" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-
-                    {/* Right */}
-                    {cocktail && (
-                        <View style={tw`p-2 flex-row items-center justify-center gap-5`}>
-
-                            {/* Share */}
-                            <TouchableOpacity
-                                onPress={share}
-                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
-                            >
-                                <Feather name="share" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
-                            </TouchableOpacity>
-
-                            {/* Favorite */}
-                            <TouchableOpacity
-                                onPress={() => toggleFavorite(cocktail.cocktailId)}
-                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
-                            >
-                                {!isFavorite(cocktail.cocktailId) && (
-                                    <MaterialIcons
-                                        name="favorite-outline"
-                                        size={24}
-                                        style={tw`text-palePeach dark:text-darkGrayBrown`}
-                                    />
-                                )}
-                                {isFavorite(cocktail.cocktailId) && (
-                                    <MaterialIcons name="favorite" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
-                                )}
-                            </TouchableOpacity>
-                        </View>
+                {/* Left */}
+                <View style={tw`p-2`}>
+                    {headerPushBack ? (
+                        <TouchableOpacity
+                            onPress={router.back}
+                            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                        >
+                            <Ionicons name="chevron-back" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity
+                            onPress={getAnotherCocktail}
+                            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                        >
+                            <FontAwesome name="refresh" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
+                        </TouchableOpacity>
                     )}
                 </View>
-            </>
+
+                {/* Right */}
+                {cocktail && (
+                    <View style={tw`p-2 flex-row items-center justify-center gap-5`}>
+
+                        {/* Share */}
+                        <TouchableOpacity
+                            onPress={share}
+                            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                        >
+                            <Feather name="share" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
+                        </TouchableOpacity>
+
+                        {/* Favorite */}
+                        <TouchableOpacity
+                            onPress={() => toggleFavorite(cocktail.cocktailId)}
+                            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                        >
+                            {!isFavorite(cocktail.cocktailId) && (
+                                <MaterialIcons
+                                    name="favorite-outline"
+                                    size={24}
+                                    style={tw`text-palePeach dark:text-darkGrayBrown`}
+                                />
+                            )}
+                            {isFavorite(cocktail.cocktailId) && (
+                                <MaterialIcons name="favorite" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
+                            )}
+                        </TouchableOpacity>
+                    </View>
+                )}
+            </HeaderBaseComponent>
         );
     }
 

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Text, TouchableOpacity, View} from "react-native";
-import { FontAwesome } from '@expo/vector-icons';
+import {SafeAreaView, Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import {Link, Stack} from 'expo-router';
+import {FontAwesome, Ionicons} from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
 
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
@@ -12,6 +13,9 @@ import {
 } from "@/src/constants/config";
 import Loader from "@/src/components/loader";
 import CocktailsFlatlist from "@/src/components/cards/CocktailsFlatlist";
+import HeaderBaseComponent from "@/src/components/header";
+
+const Colors = require('@/src/constants/colors');
 
 export default function HomeTab() {
 
@@ -97,7 +101,61 @@ export default function HomeTab() {
         )
     }
 
+    const Header = () => {
+        return (
+            <HeaderBaseComponent style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
+                    <Link href={'/(modals)/locale'} asChild style={tw`flex-1`}>
+                        <TouchableOpacity>
+                            <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
+                                <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                                <View>
+                                    <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
+                                    <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </Link>
+                    <TouchableOpacity style={tw`w-12 h-12 rounded-full border border-midGray items-center justify-center`}>
+                        <Ionicons name="options-outline" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`}/>
+                    </TouchableOpacity>
+                </View>
+            </HeaderBaseComponent>
+        )
+    }
+
     return (
-        <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
+        <SafeAreaView>
+            <Stack.Screen
+                options={{
+                    header: () => <Header/>,
+                }}
+            />
+            <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
+        </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        shadowOffset: {
+            width: 1,
+            height: 10,
+        },
+    },
+    searchBtn: {
+        borderWidth: StyleSheet.hairlineWidth,
+        elevation: 2,
+        shadowColor: Colors.midGray,
+        shadowOpacity: 1,
+        shadowRadius: 8,
+        shadowOffset: {
+            width: 1,
+            height: 1,
+        },
+    },
+});
+

@@ -1,10 +1,10 @@
-import {router, Tabs} from "expo-router";
+import {Tabs} from "expo-router";
+import { Feather, AntDesign, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+
 import {
     usePreferencesContext
 } from "@/src/contexts/preferences/preferences";
-import {TouchableOpacity} from "react-native";
-import { Feather, AntDesign, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import tw from "@/lib/tailwind";
+
 import Theme from "@/src/utils/enums/theme";
 const Colors = require('@/src/constants/colors');
 
@@ -37,13 +37,9 @@ export default function TabsLayout() {
             },
         }}>
             <Tabs.Screen name="index" options={{
-                title: i18n.t('appName'),
+                headerTitle: '',
+                headerTransparent: true,
                 tabBarIcon: ({color, size}) => <AntDesign name="home" color={color} size={size}/>,
-                headerRight: () => (
-                    <TouchableOpacity style={tw`mr-5`} onPress={() => router.push("/settings")}>
-                        <Feather name="settings" size={20} color={textColor} />
-                    </TouchableOpacity>
-                ),
             }}/>
             <Tabs.Screen name="random" options={{
                 headerTitle: '',
@@ -53,6 +49,10 @@ export default function TabsLayout() {
             <Tabs.Screen name="favourites" options={{
                 title: i18n.t('pages.favourites'),
                 tabBarIcon: ({color, size}) => <MaterialIcons name="favorite-border" color={color} size={size}/>,
+            }}/>
+            <Tabs.Screen name="settings" options={{
+                title: i18n.t('settings.title'),
+                tabBarIcon: ({color, size}) => <Feather name="settings" color={color} size={size}/>,
             }}/>
         </Tabs>
     )
