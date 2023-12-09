@@ -33,21 +33,7 @@ const getCocktailDataById = async (id: string): Promise<ApiCocktailResponse | an
 export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | any> => {
     try {
         const result = await getRandomCocktailData();
-
-        // Check if 'drinks' array exists and has at least one item
-        if (!result || !result.drinks || result.drinks.length <= 0) {
-            console.warn('Invalid or empty response:', result);
-            // Return null or handle the situation as appropriate
-            return null;
-        }
-
-        const cocktail: Cocktail = {
-            cocktailId: result.drinks[0].idDrink,
-            cocktailName: result.drinks[0].strDrink,
-            cocktailImage: result.drinks[0].strDrinkThumb,
-        };
-
-        return cocktail;
+        return getInfosFromCocktail(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -58,21 +44,7 @@ export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | a
 export const getCocktailInfoById = async (id: string): Promise<ApiCocktailResponse | any> => {
     try {
         const result = await getCocktailDataById(id);
-
-        // Check if 'drinks' array exists and has at least one item
-        if (!result || !result.drinks || result.drinks.length <= 0) {
-            console.warn('Invalid or empty response:', result);
-            // Return null or handle the situation as appropriate
-            return null;
-        }
-
-        const cocktail: Cocktail = {
-            cocktailId: result.drinks[0].idDrink,
-            cocktailName: result.drinks[0].strDrink,
-            cocktailImage: result.drinks[0].strDrinkThumb,
-        };
-
-        return cocktail;
+        return getInfosFromCocktail(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -83,51 +55,18 @@ export const getCocktailInfoById = async (id: string): Promise<ApiCocktailRespon
 export const getCocktailDetailsById = async (id: string): Promise<any> => {
     try {
         const result = await getCocktailDataById(id);
+        return getDetailsFromCocktail(result);
+    } catch (err) {
+        console.error(err);
+        // Handle the error or return a default value if needed
+        return null;
+    }
+};
 
-        // Check if 'drinks' array exists and has at least one item
-        if (!result || !result.drinks || result.drinks.length <= 0) {
-            console.warn('Invalid or empty response:', result);
-            // Return null or handle the situation as appropriate
-            return null;
-        }
-
-        const cocktail: CocktailDetail = {
-            cocktailId: result.drinks[0].idDrink,
-            cocktailName: result.drinks[0].strDrink,
-            cocktailImage: result.drinks[0].strDrinkThumb,
-            strAlcoholic: result.drinks[0].strAlcoholic,
-            strCategory: result.drinks[0].strCategory,
-            strGlass: result.drinks[0].strGlass,
-            strIBA: result.drinks[0].strIBA,
-            strInstructions: result.drinks[0].strInstructions,
-            ingredientList: [],
-            instructionsByLanguageList: [],
-        }
-
-        const cocktailService : CocktailService = new CocktailService();
-
-        let hasOtherIngredient : boolean = true;
-        const size : number = CocktailService.maxNumberOfIngredient;
-        for(let counter: number = 1; hasOtherIngredient && counter <= size; counter++){
-
-            const ingredient: string = result.drinks[0][`strIngredient${counter}`];
-            const measure: string = result.drinks[0][`strMeasure${counter}`];
-
-            if(ingredient){
-                const ingredientMeasure: string[] = measure ? measure.split(' ') : [];
-
-                cocktail.ingredientList.push({
-                    ingredientName: ingredient,
-                    ingredientImage: cocktailService.getImageByIngredientName(ingredient,CocktailDbImageSize.Small),
-                    ingredientMeasure: ingredientMeasure
-                });
-            }
-            else {
-                hasOtherIngredient = !hasOtherIngredient;
-            }
-        }
-
-        return cocktail;
+export const getRandomCocktailDetails = async (): Promise<any> => {
+    try {
+        const result = await getRandomCocktailData();
+        return getDetailsFromCocktail(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -158,4 +97,68 @@ export const getIngredientMeasure = (ingredientMeasure : string[], units: number
 
 
     return result;
+}
+
+const getInfosFromCocktail = (input: { drinks: string | any[]; }) => {
+    // Check if 'drinks' array exists and has at least one item
+    if (!input || !input.drinks || input.drinks.length <= 0) {
+        console.warn('Invalid or empty response:', input);
+        // Return null or handle the situation as appropriate
+        return null;
+    }
+
+    const cocktail: Cocktail = {
+        cocktailId: input.drinks[0].idDrink,
+        cocktailName: input.drinks[0].strDrink,
+        cocktailImage: input.drinks[0].strDrinkThumb,
+    };
+
+    return cocktail;
+}
+
+const getDetailsFromCocktail = (input: { drinks: string | any[]; }) => {
+    // Check if 'drinks' array exists and has at least one item
+    if (!input || !input.drinks || input.drinks.length <= 0) {
+        console.warn('Invalid or empty response:', input);
+        // Return null or handle the situation as appropriate
+        return null;
+    }
+
+    const cocktail: CocktailDetail = {
+        cocktailId: input.drinks[0].idDrink,
+        cocktailName: input.drinks[0].strDrink,
+        cocktailImage: input.drinks[0].strDrinkThumb,
+        strAlcoholic: input.drinks[0].strAlcoholic,
+        strCategory: input.drinks[0].strCategory,
+        strGlass: input.drinks[0].strGlass,
+        strIBA: input.drinks[0].strIBA,
+        strInstructions: input.drinks[0].strInstructions,
+        ingredientList: [],
+        instructionsByLanguageList: [],
+    }
+
+    const cocktailService : CocktailService = new CocktailService();
+
+    let hasOtherIngredient : boolean = true;
+    const size : number = CocktailService.maxNumberOfIngredient;
+    for(let counter: number = 1; hasOtherIngredient && counter <= size; counter++){
+
+        const ingredient: string = input.drinks[0][`strIngredient${counter}`];
+        const measure: string = input.drinks[0][`strMeasure${counter}`];
+
+        if(ingredient){
+            const ingredientMeasure: string[] = measure ? measure.split(' ') : [];
+
+            cocktail.ingredientList.push({
+                ingredientName: ingredient,
+                ingredientImage: cocktailService.getImageByIngredientName(ingredient,CocktailDbImageSize.Small),
+                ingredientMeasure: ingredientMeasure
+            });
+        }
+        else {
+            hasOtherIngredient = !hasOtherIngredient;
+        }
+    }
+
+    return cocktail;
 }

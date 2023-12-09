@@ -2,11 +2,16 @@ import React, {useEffect, useState} from 'react';
 import {Dimensions, I18nManager, Image, Share, Text, TouchableOpacity, View} from 'react-native';
 import tw from '@/lib/tailwind';
 import {CocktailDetail} from "@/src/utils/interface/CocktailInterface";
-import {extractUrlFromCocktail, getCocktailDetailsById, getIngredientMeasure} from "@/src/utils/cocktail";
+import {
+    extractUrlFromCocktail,
+    getCocktailDetailsById,
+    getIngredientMeasure, getRandomCocktailDetails,
+    getRandomCocktailObject
+} from "@/src/utils/cocktail";
 import {Stack, useRouter} from "expo-router";
 import {useFavoritesContext} from "@/src/contexts/favorites";
 import Animated, {interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset} from "react-native-reanimated";
-import {AntDesign, Entypo, Feather, Ionicons, MaterialIcons} from "@expo/vector-icons";
+import {AntDesign, Entypo, Feather, FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {IMAGE_HEIGHT} from "@/src/constants/config";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import {Display} from "@/src/utils/enums/utils";
@@ -88,6 +93,16 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
         setIngredientsDisplay(display);
     };
 
+    const getAnotherCocktail = () => {
+        setLoading(true);
+        const fetchCocktail = async () => {
+            const cocktail = await getRandomCocktailDetails();
+            setCocktail(cocktail);
+            setLoading(false);
+        };
+        fetchCocktail();
+    }
+
     const Header = () => {
         return (
             <>
@@ -98,12 +113,19 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
 
                     {/* Left */}
                     <View style={tw`p-2`}>
-                        {headerPushBack && (
+                        {headerPushBack ? (
                             <TouchableOpacity
                                 onPress={router.back}
                                 style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
                             >
                                 <Ionicons name="chevron-back" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
+                            </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                                onPress={getAnotherCocktail}
+                                style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
+                            >
+                                <FontAwesome name="refresh" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
                             </TouchableOpacity>
                         )}
                     </View>
