@@ -6,11 +6,10 @@ import {
     extractUrlFromCocktail,
     getCocktailDetailsById,
     getIngredientMeasure, getRandomCocktailDetails,
-    getRandomCocktailObject
 } from "@/src/utils/cocktail";
 import {Stack, useRouter} from "expo-router";
 import {useFavoritesContext} from "@/src/contexts/favorites";
-import Animated, {interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset} from "react-native-reanimated";
+import Animated, {interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, scrollTo } from "react-native-reanimated";
 import {AntDesign, Entypo, Feather, FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {IMAGE_HEIGHT} from "@/src/constants/config";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
@@ -91,6 +90,7 @@ export default function CocktailComponent({ id, headerPushBack = false}: Cocktai
 
     const changeIngredientsDisplay = (display: Display) => {
         setIngredientsDisplay(display);
+        scrollOffset.value = 0;
     };
 
     const getAnotherCocktail = () => {
