@@ -25,25 +25,12 @@ export default function AppLayout() {
 function NavigationLayout() {
     const {i18n, colorScheme} = usePreferencesContext();
 
-    const backgroundColor = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
     const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
 
     return (
         <Stack>
             <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
             <Stack.Screen name="listing/[id]" options={{headerTitle: ''}}/>
-            <Stack.Screen name="settings" options={{
-                    title: i18n.t('settings.title'),
-                    headerBackTitle: i18n.t('pages.home'),
-                    headerStyle: {
-                        backgroundColor: backgroundColor,
-                    },
-                    headerShadowVisible: false,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                }}/>
             <Stack.Screen name="(modal)/locale" options={{
                     title: i18n.t('settings.locale.label'),
                     presentation: 'modal',
