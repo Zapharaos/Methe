@@ -1,7 +1,8 @@
 {
   "appName": "Methe",
   "pages": {
-    "home": "Home"
+    "home": "Home",
+    "favourites": "Favourites"
   },
   "settings": {
     "title": "Settings",
@@ -23,7 +24,17 @@
       "dark": "Dark"
     }
   },
+  "cocktail": {
+    "instructions": "Instructions",
+    "ingredients": "Ingredients",
+    "units": "units"
+  },
   "search": "Search",
   "notFound": "No results",
-  "welcome": "Hello"
+  "welcome": "Hello",
+  "share": "Hey ! Check this drink out !",
+  "noCocktail": "The cocktail was not found.",
+  "noCocktails": "No cocktails to display.",
+  "limitReached": "The limit has been reached.",
+  "refresh": "Refresh"
 }

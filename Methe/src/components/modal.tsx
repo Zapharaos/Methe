@@ -1,6 +1,5 @@
 import React from 'react';
 import {View} from 'react-native';
-
 import tw from '@/lib/tailwind';
 import {useHeaderHeight} from "@react-navigation/elements";
 

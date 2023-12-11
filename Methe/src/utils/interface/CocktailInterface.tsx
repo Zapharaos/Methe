@@ -2,8 +2,8 @@
  * Cocktail type use for cards
  */
 export interface Cocktail{
-    cocktailId: bigint;
-    cocktailNames: string;
+    cocktailId: string;
+    cocktailName: string;
     cocktailImage: string;
 }
 
@@ -11,8 +11,8 @@ export interface Cocktail{
  * Cocktail type use for recipe detail
  */
 export interface CocktailDetail{
-    cocktailId: bigint;
-    cocktailNames: string;
+    cocktailId: string;
+    cocktailName: string;
     cocktailImage: string;
     strCategory: string;
     strIBA: string;
