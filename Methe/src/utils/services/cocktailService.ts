@@ -55,6 +55,34 @@ class CocktailService {
     getImageByIngredientName = (ingredientName : string, imageSize : CocktailDbImageSize) => {
         return StringUtils.format(this.baseImageAPIUrl, ingredientName, imageSize);
     }
+
+    /**
+     * Return all cocktail which start with the letter in param
+     * @param letter the letter use to find the cocktail
+     */
+    getCocktailByFirstLetter = (letter : string) => {
+        const url = `${this.baseAPIUrl}search.php?f=${letter}`;
+        return ajax.getJSON(url);
+    }
+
+    /**
+     * Return all cocktail which the name match
+     * @param name the name use to find cocktails
+     */
+    getCocktailByName = (name : string) => {
+        const url = `${this.baseAPIUrl}search.php?s=${name}`;
+        console.log(url);
+        return ajax.getJSON(url);
+    }
+
+    /**
+     * Return all cocktail which the ingredient name match
+     * @param name the name use to find cocktails
+     */
+    getCocktailByIngredientName = (name : string) => {
+        const url = `${this.baseAPIUrl}filter.php?i=${name}`;
+        return ajax.getJSON(url);
+    }
 }
 
 export default CocktailService;

@@ -1,7 +1,7 @@
 // Import React and necessary components and libraries
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import { Link, Stack } from 'expo-router';
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Stack } from 'expo-router';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
 
@@ -17,6 +17,7 @@ import CocktailsFlatlist from "@/src/components/cocktail/flatList";
 import Header from "@/src/components/header/header";
 import HeaderButton from "@/src/components/header/button";
 import BaseComponent from "@/src/components/base";
+import ResearchModal from "@/src/app/(modal)/research";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -30,6 +31,12 @@ export default function HomeTab() {
     // State for storing fetched cocktails and loading status
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [isModalResearchVisible, setIsModalResearchVisible] = useState(false);
+
+    const toggleResearchModal = () => {
+        setIsModalResearchVisible(prevState => !prevState);
+    };
 
     // Function to fetch cocktails with replacement logic
     const fetchCocktails = async (tempCocktails: Cocktail[]) => {
@@ -103,19 +110,17 @@ export default function HomeTab() {
         return (
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <Link href={'/(modals)/locale'} asChild style={tw`flex-1`}>
-                        <TouchableOpacity>
-                            <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
-                                <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                                <View>
-                                    <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
-                                    <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
-                                </View>
+                    <TouchableOpacity onPress={toggleResearchModal}>
+                        <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
+                            <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                            <View>
+                                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
+                                <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
                             </View>
-                        </TouchableOpacity>
-                    </Link>
+                        </View>
+                    </TouchableOpacity>
                     <HeaderButton onPress={() => console.log("filter")} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
-                        buttonStyle={tw`w-12 h-12 bg-palePeachSecond dark:bg-darkGrayBrownSecond`} iconStyle={tw`text-darkGrayBrown dark:text-palePeach`}/>
+                                  buttonStyle={tw`w-12 h-12 bg-palePeachSecond dark:bg-darkGrayBrownSecond`} iconStyle={tw`text-darkGrayBrown dark:text-palePeach`}/>
                 </View>
             </Header>
         )
@@ -144,6 +149,10 @@ export default function HomeTab() {
                 }}
             />
             <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
+            <ResearchModal
+                isVisible={isModalResearchVisible}
+                onClose={toggleResearchModal}
+                setCocktails={setCocktails}/>
         </BaseComponent>
     );
 }
