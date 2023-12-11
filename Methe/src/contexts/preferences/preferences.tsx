@@ -1,11 +1,14 @@
-import React, {createContext, useContext, useEffect} from 'react';
-import {RnColorScheme} from "twrnc";
-import {I18n} from "i18n-js";
-import {setStatusBarStyle, StatusBarStyle} from "expo-status-bar";
+// Import React hooks, utilities, and modules from external libraries
+import React, { createContext, useContext, useEffect } from 'react';
+import { RnColorScheme } from "twrnc";
+import { I18n } from "i18n-js";
+import { setStatusBarStyle, StatusBarStyle } from "expo-status-bar";
 
-import {useColorSchemes} from "./colorScheme";
-import {useLocale} from "./locale";
+// Import custom hooks for managing color schemes and locales
+import { useColorSchemes } from "./colorScheme";
+import { useLocale } from "./locale";
 
+// Define the interface for preferences
 export interface Preferences {
     languages: { key: string; value: string }[];
     locale: string;
@@ -19,8 +22,10 @@ export interface Preferences {
     statusBarStyle: StatusBarStyle;
 }
 
+// Create a context for preferences
 const PreferencesContext = createContext<Preferences | undefined>(undefined);
 
+// Custom hook for using the preferences context
 export function usePreferencesContext() {
     const context = useContext(PreferencesContext);
 
@@ -31,11 +36,14 @@ export function usePreferencesContext() {
     return context;
 }
 
+// Component for providing the preferences context to its children
 export function PreferencesContextProvider({ children }: { children: React.ReactNode }) {
 
+    // Use custom hooks for managing color schemes and locales
     const { languages, setLanguages, locale, localeKey, changeLocale, i18n } = useLocale();
     const { colorSchemes, setColorSchemes, colorScheme, colorSchemeKey, changeColorScheme, statusBarStyle } = useColorSchemes();
 
+    // useEffect to update color schemes and locale system label on locale change
     useEffect(() => {
         const updateColorSchemes = () => {
             const updatedColorSchemes = [...colorSchemes];
@@ -54,10 +62,12 @@ export function PreferencesContextProvider({ children }: { children: React.React
         updateLocaleSystemLabel();
     }, [locale]);
 
+    // useEffect to set the status bar style based on the updated status bar style
     useEffect(() => {
         setStatusBarStyle(statusBarStyle)
     }, [statusBarStyle]);
 
+    // Define the preferences object with various properties and functions
     const preferences: Preferences = {
         languages,
         locale,
@@ -71,6 +81,7 @@ export function PreferencesContextProvider({ children }: { children: React.React
         statusBarStyle
     };
 
+    // Provide the preferences context to the children
     return (
         <PreferencesContext.Provider value={preferences}>
             {children}

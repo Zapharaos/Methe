@@ -1,29 +1,34 @@
-import React, {useEffect, useState} from "react";
-import {SafeAreaView, Text, TouchableOpacity, View, StyleSheet} from "react-native";
-import {Link, Stack} from 'expo-router';
-import {FontAwesome, Ionicons} from '@expo/vector-icons';
+// Import React and necessary components and libraries
+import React, { useEffect, useState } from "react";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Stack } from 'expo-router';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import tw from "@/lib/tailwind";
 
-import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+// Import context and utility functions
+import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
+import { getRandomCocktailObject } from "@/src/utils/cocktail";
+import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+import { RANDOM_COCKTAILS_LIMIT, RANDOM_COCKTAILS_LOAD, REPLACEMENT_ATTEMPTS } from "@/src/constants/config";
 
-import {getRandomCocktailObject} from "@/src/utils/cocktail";
-import {Cocktail} from "@/src/utils/interface/CocktailInterface";
-import {
-    RANDOM_COCKTAILS_LIMIT, RANDOM_COCKTAILS_LOAD, REPLACEMENT_ATTEMPTS
-} from "@/src/constants/config";
+// Import custom components
 import Loader from "@/src/components/loader";
-import CocktailsFlatlist from "@/src/components/cards/CocktailsFlatlist";
-import HeaderBaseComponent from "@/src/components/header";
+import CocktailsFlatlist from "@/src/components/cocktail/flatList";
+import Header from "@/src/components/header/header";
+import HeaderButton from "@/src/components/header/button";
+import BaseComponent from "@/src/components/base";
 import ResearchModal from "@/src/app/(modal)/research";
 
+// Import color constants
 const Colors = require('@/src/constants/colors');
 
+// Main component function
 export default function HomeTab() {
 
-    const {
-        i18n
-    } = usePreferencesContext();
+    // Retrieve the app's preferences from context
+    const {i18n} = usePreferencesContext();
 
+    // State for storing fetched cocktails and loading status
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -33,6 +38,7 @@ export default function HomeTab() {
         setIsModalResearchVisible(prevState => !prevState);
     };
 
+    // Function to fetch cocktails with replacement logic
     const fetchCocktails = async (tempCocktails: Cocktail[]) => {
         try {
             for (let i = 0; i < RANDOM_COCKTAILS_LOAD; i++) {
@@ -56,17 +62,12 @@ export default function HomeTab() {
         } catch (error) {
             console.error(error);
         }
+        // Update state with fetched cocktails and set loading to false
         setCocktails(tempCocktails);
         setLoading(false);
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await fetchCocktails([...cocktails]);
-        };
-        fetchData();
-    }, []);
-
+    // Function to handle end reached for Flatlist
     const handleFlatlistEndReached = () => {
 
         // Local limit reached
@@ -74,12 +75,14 @@ export default function HomeTab() {
             return;
         }
 
+        // Fetch more cocktails
         const fetchData = async () => {
             await fetchCocktails([...cocktails]);
         };
         fetchData();
     };
 
+    // Footer component for Flatlist
     const FlatlistFooter = () => {
         return (
             <View>
@@ -102,15 +105,10 @@ export default function HomeTab() {
         )
     }
 
-    if (loading) {
+    // Extended Header component
+    const ExtendedHeader = () => {
         return (
-            <Loader/>
-        )
-    }
-
-    const Header = () => {
-        return (
-            <HeaderBaseComponent style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+            <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
                     <TouchableOpacity onPress={toggleResearchModal}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
@@ -121,19 +119,33 @@ export default function HomeTab() {
                             </View>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={tw`w-12 h-12 rounded-full border border-midGray items-center justify-center`}>
-                        <Ionicons name="options-outline" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`}/>
-                    </TouchableOpacity>
+                    <HeaderButton onPress={() => console.log("filter")} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
+                                  buttonStyle={tw`w-12 h-12 bg-palePeachSecond dark:bg-darkGrayBrownSecond`} iconStyle={tw`text-darkGrayBrown dark:text-palePeach`}/>
                 </View>
-            </HeaderBaseComponent>
+            </Header>
+        )
+    }
+
+    // useEffect to fetch cocktails on component mount
+    useEffect(() => {
+        const fetchData = async () => {
+            await fetchCocktails([...cocktails]);
+        };
+        fetchData();
+    }, []);
+
+    // Check if still loading, show loader
+    if (loading) {
+        return (
+            <Loader/>
         )
     }
 
     return (
-        <SafeAreaView>
+        <BaseComponent wrapperComponent={View} style={tw`mt-28`}>
             <Stack.Screen
                 options={{
-                    header: () => <Header/>,
+                    header: () => <ExtendedHeader/>,
                 }}
             />
             <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
@@ -141,7 +153,7 @@ export default function HomeTab() {
                 isVisible={isModalResearchVisible}
                 onClose={toggleResearchModal}
                 setCocktails={setCocktails}/>
-        </SafeAreaView>
+        </BaseComponent>
     );
 }
 
