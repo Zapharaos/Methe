@@ -7,13 +7,14 @@ import tw from "@/lib/tailwind";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 
 import {getRandomCocktailObject} from "@/src/utils/cocktail";
-import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+import {Cocktail} from "@/src/utils/interface/CocktailInterface";
 import {
     RANDOM_COCKTAILS_LIMIT, RANDOM_COCKTAILS_LOAD, REPLACEMENT_ATTEMPTS
 } from "@/src/constants/config";
 import Loader from "@/src/components/loader";
 import CocktailsFlatlist from "@/src/components/cards/CocktailsFlatlist";
 import HeaderBaseComponent from "@/src/components/header";
+import ResearchModal from "@/src/app/(modal)/research";
 
 const Colors = require('@/src/constants/colors');
 
@@ -25,6 +26,12 @@ export default function HomeTab() {
 
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const [isModalResearchVisible, setIsModalResearchVisible] = useState(false);
+
+    const toggleResearchModal = () => {
+        setIsModalResearchVisible(prevState => !prevState);
+    };
 
     const fetchCocktails = async (tempCocktails: Cocktail[]) => {
         try {
@@ -105,17 +112,15 @@ export default function HomeTab() {
         return (
             <HeaderBaseComponent style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <Link href={'/(modals)/locale'} asChild style={tw`flex-1`}>
-                        <TouchableOpacity>
-                            <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
-                                <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                                <View>
-                                    <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
-                                    <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
-                                </View>
+                    <TouchableOpacity onPress={toggleResearchModal}>
+                        <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
+                            <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                            <View>
+                                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
+                                <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
                             </View>
-                        </TouchableOpacity>
-                    </Link>
+                        </View>
+                    </TouchableOpacity>
                     <TouchableOpacity style={tw`w-12 h-12 rounded-full border border-midGray items-center justify-center`}>
                         <Ionicons name="options-outline" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`}/>
                     </TouchableOpacity>
@@ -132,6 +137,10 @@ export default function HomeTab() {
                 }}
             />
             <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
+            <ResearchModal
+                isVisible={isModalResearchVisible}
+                onClose={toggleResearchModal}
+                setCocktails={setCocktails}/>
         </SafeAreaView>
     );
 }

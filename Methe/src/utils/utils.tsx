@@ -16,4 +16,8 @@ export class StringUtils {
     public static format = (template: string, ...args: any[]) => {
         return template.replace(/{(\d+)}/g, (match, index) => (args[index] !== undefined ? args[index] : match));
     };
+
+    public static isNullOrWhitespace = (str: string | null | undefined): boolean => {
+        return str == null || str.trim() === '';
+    };
 }

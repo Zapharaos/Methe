@@ -39,3 +39,10 @@ export interface Ingredient{
     ingredientImage: string;
     ingredientMeasure: string[];
 }
+
+/**
+ * Filter type use for filter the cocktail
+ */
+export interface FilterCocktail {
+    ingredientList: string[];
+}

@@ -59,6 +59,21 @@ function NavigationLayout() {
                         </TouchableOpacity>
                     ),
                 }}/>
+
+            <Stack.Screen name="(modal)/research" options={{
+                title: i18n.t('settings.research.label'),
+                presentation: 'modal',
+                headerTransparent: true,
+                headerTintColor: textColor,
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+                headerLeft: () => (
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Ionicons name="close-outline" color={textColor} size={24} />
+                    </TouchableOpacity>
+                ),
+            }}/>
         </Stack>
     )
 }
