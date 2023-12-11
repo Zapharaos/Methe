@@ -1,23 +1,30 @@
-import {Tabs} from "expo-router";
+// Import necessary components and libraries
+import { Tabs } from "expo-router";
 import { Feather, AntDesign, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 
+// Import context for managing preferences
 import {
     usePreferencesContext
 } from "@/src/contexts/preferences/preferences";
 
+// Import the Theme enum and color constants
 import Theme from "@/src/utils/enums/theme";
 const Colors = require('@/src/constants/colors');
 
+// Define the TabsLayout functional component
 export default function TabsLayout() {
 
+    // Retrieve the app's preferences from context
     const {i18n, colorScheme} = usePreferencesContext();
 
+    // Determine colors based on the selected color scheme
     const primary = colorScheme === Theme.Dark ? Colors.darkGrayBrown : Colors.palePeach;
     const secondary = colorScheme === Theme.Dark ? Colors.darkGrayBrownSecond : Colors.palePeachSecond;
     const reversed = colorScheme === Theme.Dark ? Colors.palePeach : Colors.darkGrayBrown;
     const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
 
     return (
+        /*Tabs component with general options*/
         <Tabs screenOptions={{
             unmountOnBlur: true,
             headerStyle: {

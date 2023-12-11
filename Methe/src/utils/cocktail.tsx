@@ -74,7 +74,8 @@ export const getRandomCocktailDetails = async (): Promise<any> => {
     }
 };
 
-export function extractUrlFromCocktail (cocktail: Cocktail | CocktailDetail) {
+export function extractUrlFromCocktail (cocktail: Cocktail | CocktailDetail | undefined) {
+    if (!cocktail) return '';
     return BASE_URL + cocktail.cocktailId + URL_SEPARATOR + cocktail.cocktailName.replace(/\s/g, '-');
 }
 

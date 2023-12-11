@@ -1,30 +1,34 @@
+// Import necessary React components, libraries, and styles
 import React from "react";
-
-import CocktailCard from "@/src/components/cards/CocktailCard";
-import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+import { FlatList, I18nManager, Text, useWindowDimensions, View } from "react-native";
 import tw from "@/lib/tailwind";
-import {FlatList, I18nManager, Text, useWindowDimensions, View} from "react-native";
-import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
-import {IMAGE_WIDTH} from "@/src/constants/config";
 
-/**
- * The props of the CocktailsFlatlist
- */
+// Import custom components and interfaces
+import CocktailCard from "@/src/components/cocktail/card";
+import { Cocktail } from "@/src/utils/interface/CocktailInterface";
+
+// Import context and constants
+import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
+import { IMAGE_WIDTH } from "@/src/constants/config";
+
+// Define interface for CocktailsFlatlistProps
 interface CocktailsFlatlistProps {
-    cocktails: Cocktail[];
-    endReached?: () => void;
-    Footer?: React.FC;
+    cocktails: Cocktail[];                      // List of cocktails to display
+    endReached?: () => void;                    // Callback when reaching the end of the list
+    Footer?: React.FC;                          // Footer component
 }
 
+// CocktailsFlatlist functional component
 export default function CocktailsFlatlist({ cocktails, endReached, Footer = () => <View />}: CocktailsFlatlistProps) {
 
-    const {
-        i18n
-    } = usePreferencesContext();
+    // Retrieve the app's preferences from context
+    const {i18n} = usePreferencesContext();
 
+    // Get window dimensions and calculate number of columns based on image width
     const { width } = useWindowDimensions();
     const columns = Math.floor(width / IMAGE_WIDTH);
 
+    // NoCocktails component to display when there are no cocktails
     const NoCocktails = () => {
         return (
             <View style={tw`mt-3 flex-1 items-center`}>
@@ -35,6 +39,7 @@ export default function CocktailsFlatlist({ cocktails, endReached, Footer = () =
         )
     }
 
+    // Render a FlatList of cocktails with specified configurations
     return (
         <FlatList
             data={cocktails}

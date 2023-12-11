@@ -1,63 +1,48 @@
-import {TouchableOpacity} from "react-native";
-import {router, Stack} from 'expo-router';
-import {Ionicons} from "@expo/vector-icons";
+// Import necessary modules and components
+import { Stack } from 'expo-router';
+import { useDeviceContext } from "twrnc";
 import tw from "@/lib/tailwind";
 
-import {PreferencesContextProvider, usePreferencesContext} from "@/src/contexts/preferences/preferences";
-import {FavoritesContextProvider} from "@/src/contexts/favorites";
-import {useDeviceContext} from "twrnc";
+import { PreferencesContextProvider, usePreferencesContext } from "@/src/contexts/preferences/preferences";
+import { FavoritesContextProvider } from "@/src/contexts/favorites";
 
-import Theme from "@/src/utils/enums/theme";
-const Colors = require('@/src/constants/colors');
-
+// AppLayout component definition
 export default function AppLayout() {
+
+    // Apply device context from twrnc
     useDeviceContext(tw);
 
     return (
             <PreferencesContextProvider>
                 <FavoritesContextProvider>
+                    {/* Render the main navigation layout */}
                     <NavigationLayout/>
                 </FavoritesContextProvider>
             </PreferencesContextProvider>
     );
 }
 
+// NavigationLayout component definition
 function NavigationLayout() {
-    const {i18n, colorScheme} = usePreferencesContext();
 
-    const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
+    // Retrieve the app's preferences from context
+    const {i18n} = usePreferencesContext();
 
     return (
         <Stack>
+            {/* Screen for the main tabs */}
             <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+            {/* Screen for displaying individual cocktail details */}
             <Stack.Screen name="listing/[id]" options={{headerTitle: ''}}/>
+            {/* Modal screen for changing the app's locale */}
             <Stack.Screen name="(modal)/locale" options={{
-                    title: i18n.t('settings.locale.label'),
                     presentation: 'modal',
-                    headerTransparent: true,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => router.back()}>
-                            <Ionicons name="close-outline" color={textColor} size={24} />
-                        </TouchableOpacity>
-                    ),
+                    title: i18n.t('settings.locale.label')
                 }}/>
+            {/* Modal screen for changing the app's color scheme */}
             <Stack.Screen name="(modal)/colorScheme" options={{
-                    title: i18n.t('settings.colorScheme.label'),
                     presentation: 'modal',
-                    headerTransparent: true,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => router.back()}>
-                            <Ionicons name="close-outline" color={textColor} size={24} />
-                        </TouchableOpacity>
-                    ),
+                    title: i18n.t('settings.colorScheme.label')
                 }}/>
         </Stack>
     )
