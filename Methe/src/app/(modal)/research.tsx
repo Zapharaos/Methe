@@ -10,6 +10,7 @@ import {Cocktail, FilterCocktail} from "@/src/utils/interface/CocktailInterface"
 import CocktailService from "@/src/utils/services/cocktailService";
 import {StringUtils} from "@/src/utils/utils";
 import {set} from "i18n-js/typings/lodash";
+import {CloseModal} from "@/src/components/utils/utils";
 
 /**
  * Return type of the Api call
@@ -136,13 +137,10 @@ export default function ResearchModal({ isVisible, onClose, setCocktails } : Res
     }
 
     return (
-        <Modal animationType="slide" transparent={true} visible={isVisible}>
-            <View style={tw ``}>
-                <View style={tw ``}>
-                    <Text style={tw ``}>Choose a sticker</Text>
-                    <Pressable onPress={onClose}>
-                        <MaterialIcons name="close" color="#fff" size={22} />
-                    </Pressable>
+        <Modal animationType="slide" visible={isVisible}>
+            <View style={tw `flex`}>
+                <View style={tw `m-1 flex-row justify-end`}>
+                   <CloseModal toggleModal={onClose}/>
                 </View>
                 <ResearchComponent
                     textWriteByUser={textWriteByUser}
