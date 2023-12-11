@@ -16,6 +16,7 @@ import Loader from "@/src/components/loader";
 import CocktailsFlatlist from "@/src/components/cocktail/flatList";
 import Header from "@/src/components/header/header";
 import HeaderButton from "@/src/components/header/button";
+import BaseComponent from "@/src/components/base";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -136,14 +137,14 @@ export default function HomeTab() {
     }
 
     return (
-        <SafeAreaView>
+        <BaseComponent wrapperComponent={View} style={tw`mt-28`}>
             <Stack.Screen
                 options={{
                     header: () => <ExtendedHeader/>,
                 }}
             />
             <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
-        </SafeAreaView>
+        </BaseComponent>
     );
 }
 
