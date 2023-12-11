@@ -7,13 +7,14 @@ import tw from '@/lib/tailwind';
 interface BaseComponentProps {
     children: React.ReactNode;
     style?: ViewStyle;
+    wrapperComponent?: React.ComponentType<any>;
 }
 
-const BaseComponent: React.FC<BaseComponentProps> = ({ children, style }: BaseComponentProps) => {
+const BaseComponent: React.FC<BaseComponentProps> = ({ children, style, wrapperComponent: WrapperComponent = SafeAreaView }: BaseComponentProps) => {
     return (
-        <SafeAreaView style={[tw`flex-1 items-center justify-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`, style]}>
+        <WrapperComponent style={[tw`flex-1 items-center justify-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`, style]}>
             {children}
-        </SafeAreaView>
+        </WrapperComponent>
     );
 };
 

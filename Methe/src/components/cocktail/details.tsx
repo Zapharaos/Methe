@@ -139,22 +139,27 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
     }
 
     // Base component
-    const Base = ({ children }: { children: React.ReactNode }) => {
+    const ExtendedBaseComponent = ({ children, contentContainerStyle }: { children: React.ReactNode; contentContainerStyle?: any }) => {
         return (
-            <View style={tw`flex-1 bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
+            <BaseComponent wrapperComponent={View}>
                 <Stack.Screen
                     options={{
                         headerTitle: '',
                         headerTransparent: true,
-                        header: () => <ExtendedHeader/>,
+                        header: () => <ExtendedHeader />,
                     }}
                 />
-                <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
+                <Animated.ScrollView
+                    ref={scrollRef}
+                    contentContainerStyle={contentContainerStyle}
+                    scrollEventThrottle={16}
+                    showsVerticalScrollIndicator={false}
+                >
                     {children}
                 </Animated.ScrollView>
-            </View>
-        )
-    }
+            </BaseComponent>
+        );
+    };
 
     // Fetch cocktail details on component mount
     useEffect(() => {
@@ -169,24 +174,26 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
     // Loading state
     if(loading) {
         return (
-            <Loader/>
+            <ExtendedBaseComponent contentContainerStyle={tw`flex-1 items-center`}>
+                <Loader/>
+            </ExtendedBaseComponent>
         )
     }
 
     // No cocktail found state
     if(!cocktail) {
         return (
-            <BaseComponent>
+            <ExtendedBaseComponent contentContainerStyle={tw`flex-1 justify-center`}>
                 <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
                     {i18n.t("noCocktail")}
                 </Text>
-            </BaseComponent>
+            </ExtendedBaseComponent>
         )
     }
 
     // Cocktail details state
     return (
-        <Base>
+        <ExtendedBaseComponent>
             {/* Image */}
             <Animated.Image
                 source={{ uri: cocktail.cocktailImage }}
@@ -275,6 +282,6 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                     )}
                 </View>
             </View>
-        </Base>
+        </ExtendedBaseComponent>
     );
 };
