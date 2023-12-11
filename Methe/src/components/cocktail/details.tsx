@@ -25,6 +25,104 @@ import BaseComponent from "@/src/components/base";
 // Get window width
 const { width } = Dimensions.get('window');
 
+// Extracted content component
+const CocktailDetailsContent = ({ cocktail }: { cocktail: CocktailDetail; }) => {
+
+    // Retrieve the app's preferences from context
+    const { i18n } = usePreferencesContext();
+
+    const [units, setUnits] = useState<number>(1);
+    const [ingredientsDisplay, setIngredientsDisplay] = useState(Display.Grid);
+
+    // Change ingredients display function
+    const changeIngredientsDisplay = (display: Display) => {
+        setIngredientsDisplay(display);
+    };
+
+    return (
+        <View style={tw`p-5 bg-palePeach dark:bg-darkGrayBrown`}>
+            {/* Title */}
+            <Text style={tw`text-3xl font-semibold text-black dark:text-white`}>
+                {cocktail.cocktailName}
+            </Text>
+
+            {/* Categories */}
+            <View style={tw`mt-5 flex-row justify-around items-stretch`}>
+                {/* Alcoholic */}
+                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
+                        {cocktail.strAlcoholic}
+                    </Text>
+                </View>
+                {/* Category */}
+                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
+                        {cocktail.strCategory}
+                    </Text>
+                </View>
+                {/* Glass */}
+                <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                    <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
+                        {cocktail.strGlass}
+                    </Text>
+                </View>
+            </View>
+
+            {/* Instructions */}
+            <View style={tw`mt-5`}>
+                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                    {i18n.t('cocktail.instructions')}
+                </Text>
+                <Text style={tw`mt-2 text-justify text-base text-black dark:text-white`}>
+                    {cocktail.strInstructions}
+                </Text>
+            </View>
+
+            {/* Ingredients */}
+            <View style={tw`mt-5`}>
+
+                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                    {i18n.t('cocktail.ingredients')}
+                </Text>
+
+                {/* Properties */}
+                <View style={tw`mt-2 flex-row justify-between items-center`}>
+
+                    {/* Units */}
+                    <View style={tw`p-1 px-4 flex-row items-center rounded-xl bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                        <TouchableOpacity onPress={() => setUnits(prevState => { return prevState > 1 ? prevState - 1 : prevState })}>
+                            <AntDesign name="minus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                        </TouchableOpacity>
+                        <Text style={tw`mx-5 font-extrabold text-base text-darkGrayBrown dark:text-palePeach`}>
+                            {units} {i18n.t('cocktail.units')}
+                        </Text>
+                        <TouchableOpacity onPress={() => setUnits(prevState => { return prevState + 1 })}>
+                            <AntDesign name="plus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Display */}
+                    <View style={tw`flex-row gap-3`}>
+                        <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.Grid)}>
+                            <Entypo name="grid" size={32} style={tw`${ingredientsDisplay === Display.Grid ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.List)}>
+                            <Entypo name="list" size={32} style={tw`${ingredientsDisplay === Display.List ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Listing */}
+                {ingredientsDisplay === Display.Grid ? (
+                    <IngredientsGrid ingredients={cocktail.ingredientList} units={units} />
+                ) : (
+                    <IngredientsList ingredients={cocktail.ingredientList} units={units} />
+                )}
+            </View>
+        </View>
+    );
+}
+
 // Interface for CocktailDetailsProps
 interface CocktailDetailsProps {
     id: string;                       // Cocktail ID
@@ -42,8 +140,6 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
 
     // State variables for cocktail details, units, ingredients display, and loading state
     const [cocktail, setCocktail] = useState<CocktailDetail>();
-    const [units, setUnits] = useState<number>(1);
-    const [ingredientsDisplay, setIngredientsDisplay] = useState(Display.Grid);
     const [loading, setLoading] = useState(true);
 
     // Initialize router from Expo Router
@@ -60,7 +156,7 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                 {
                     translateY: interpolate(
                         scrollOffset.value,
-                        [-IMAGE_HEIGHT, 0, IMAGE_HEIGHT, IMAGE_HEIGHT],
+                        [-IMAGE_HEIGHT, 0, IMAGE_HEIGHT],
                         [-IMAGE_HEIGHT / 2, 0, IMAGE_HEIGHT * 0.75]
                     ),
                 },
@@ -89,12 +185,6 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
             console.log(err);
         }
     }
-
-    // Change ingredients display function
-    const changeIngredientsDisplay = (display: Display) => {
-        setIngredientsDisplay(display);
-        scrollOffset.value = 0; // when the display changes, so does the height but not the scrollOffset value = reset
-    };
 
     // Fetch another random cocktail
     const getAnotherCocktail = () => {
@@ -201,87 +291,7 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                 resizeMode="cover"
             />
             {/* Details */}
-            <View style={tw`p-5 bg-palePeach dark:bg-darkGrayBrown`}>
-
-                {/* Title */}
-                <Text style={tw`text-3xl font-semibold text-black dark:text-white`}>
-                    {cocktail.cocktailName}
-                </Text>
-
-                {/* Categories */}
-                <View style={tw`mt-5 flex-row justify-around items-stretch`}>
-                    {/* Alcoholic */}
-                    <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                        <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
-                            {cocktail.strAlcoholic}
-                        </Text>
-                    </View>
-                    {/* Category */}
-                    <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                        <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
-                            {cocktail.strCategory}
-                        </Text>
-                    </View>
-                    {/* Glass */}
-                    <View style={tw`p-3 max-w-1/3 justify-center rounded-full bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                        <Text style={tw`text-center text-darkGrayBrown dark:text-palePeach`}>
-                            {cocktail.strGlass}
-                        </Text>
-                    </View>
-                </View>
-
-                {/* Instructions */}
-                <View style={tw`mt-5`}>
-                    <Text style={tw`font-bold text-xl text-black dark:text-white`}>
-                        {i18n.t('cocktail.instructions')}
-                    </Text>
-                    <Text style={tw`mt-2 text-justify text-base text-black dark:text-white`}>
-                        {cocktail.strInstructions}
-                    </Text>
-                </View>
-
-                {/* Ingredients */}
-                <View style={tw`mt-5`}>
-
-                    <Text style={tw`font-bold text-xl text-black dark:text-white`}>
-                        {i18n.t('cocktail.ingredients')}
-                    </Text>
-
-                    {/* Properties */}
-                    <View style={tw`mt-2 flex-row justify-between items-center`}>
-
-                        {/* Units */}
-                        <View style={tw`p-1 px-4 flex-row items-center rounded-xl bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                            <TouchableOpacity onPress={() => setUnits(prevState => {return prevState > 1 ? prevState - 1 : prevState})}>
-                                <AntDesign name="minus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                            </TouchableOpacity>
-                            <Text style={tw`mx-5 font-extrabold text-base text-darkGrayBrown dark:text-palePeach`}>
-                                {units} {i18n.t('cocktail.units')}
-                            </Text>
-                            <TouchableOpacity onPress={() => setUnits(prevState => {return prevState + 1})}>
-                                <AntDesign name="plus" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                            </TouchableOpacity>
-                        </View>
-
-                        {/* Display */}
-                        <View style={tw`flex-row gap-3`}>
-                            <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.Grid)}>
-                                <Entypo name="grid" size={32} style={tw`${ingredientsDisplay === Display.Grid ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => changeIngredientsDisplay(Display.List)}>
-                                <Entypo name="list" size={32} style={tw`${ingredientsDisplay === Display.List ? 'text-darkGrayBrown dark:text-palePeach' : 'text-midDark dark:text-midLight'}`} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    {/* Listing */}
-                    {ingredientsDisplay === Display.Grid ? (
-                        <IngredientsGrid ingredients={cocktail.ingredientList} units={units}/>
-                    ) : (
-                        <IngredientsList ingredients={cocktail.ingredientList} units={units}/>
-                    )}
-                </View>
-            </View>
+            <CocktailDetailsContent cocktail={cocktail}/>
         </ExtendedBaseComponent>
     );
 };
