@@ -20,6 +20,7 @@ import { extractUrlFromCocktail, getCocktailDetailsById, getRandomCocktailDetail
 import HeaderButton from "@/src/components/header/button";
 import IngredientsGrid from "@/src/components/ingredients/grid";
 import IngredientsList from "@/src/components/ingredients/list";
+import BaseComponent from "@/src/components/base";
 
 // Get window width
 const { width } = Dimensions.get('window');
@@ -168,20 +169,18 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
     // Loading state
     if(loading) {
         return (
-            <Base>
-                <Loader/>
-            </Base>
+            <Loader/>
         )
     }
 
     // No cocktail found state
     if(!cocktail) {
         return (
-            <Base>
-                <Text>
+            <BaseComponent>
+                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
                     {i18n.t("noCocktail")}
                 </Text>
-            </Base>
+            </BaseComponent>
         )
     }
 

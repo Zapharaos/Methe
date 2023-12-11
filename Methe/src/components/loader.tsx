@@ -14,9 +14,7 @@ export default function Loader() {
 
     return (
         <BaseComponent>
-            <View style={tw`flex-1 items-center justify-center`}>
-                <ActivityIndicator size="large" color={Colors.midGray}/>
-            </View>
+            <ActivityIndicator size="large" color={Colors.midGray}/>
         </BaseComponent>
     );
 }

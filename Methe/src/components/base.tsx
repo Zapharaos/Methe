@@ -1,15 +1,18 @@
 // Import necessary React and React Native components and styles
 import React from 'react';
-import { SafeAreaView, View, I18nManager } from 'react-native';
+import {SafeAreaView, I18nManager, ViewStyle} from 'react-native';
 import tw from '@/lib/tailwind';
 
 // Define the BaseComponent functional component
-const BaseComponent = ({ children }: { children: React.ReactNode }) => {
+interface BaseComponentProps {
+    children: React.ReactNode;
+    style?: ViewStyle;
+}
+
+const BaseComponent: React.FC<BaseComponentProps> = ({ children, style }: BaseComponentProps) => {
     return (
-        <SafeAreaView style={tw`flex-1 items-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`}>
-            <View style={tw`w-11/12 flex-1 items-center`}>
-                {children}
-            </View>
+        <SafeAreaView style={[tw`flex-1 items-center justify-center bg-palePeach dark:bg-darkGrayBrown ${I18nManager.isRTL ? 'direction-rtl' : ''}`, style]}>
+            {children}
         </SafeAreaView>
     );
 };

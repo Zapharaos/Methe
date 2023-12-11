@@ -21,22 +21,24 @@ export default function SettingsScreen() {
 
     return (
         <BaseComponent>
-            {/* Container for the settings items */}
-            <View style={tw`mt-5 w-full rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                {/* SettingsItem component for selecting the app's locale */}
-                <SettingsItem
-                    label={i18n.t('settings.locale.label')}
-                    value={findValueByKey(languages, localeKey)}
-                    onPress={() => router.push("/(modal)/locale")}
-                    isLast={false}
-                />
-                {/* SettingsItem component for selecting the app's color scheme */}
-                <SettingsItem
-                    label={i18n.t('settings.colorScheme.label')}
-                    value={findValueByKey(colorSchemes, colorSchemeKey)}
-                    onPress={() => router.push("/(modal)/colorScheme")}
-                    isLast={true}
-                />
+            <View style={tw`w-11/12 flex-1 items-center`}>
+                {/* Container for the settings items */}
+                <View style={tw`mt-5 w-full rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                    {/* SettingsItem component for selecting the app's locale */}
+                    <SettingsItem
+                        label={i18n.t('settings.locale.label')}
+                        value={findValueByKey(languages, localeKey)}
+                        onPress={() => router.push("/(modal)/locale")}
+                        isLast={false}
+                    />
+                    {/* SettingsItem component for selecting the app's color scheme */}
+                    <SettingsItem
+                        label={i18n.t('settings.colorScheme.label')}
+                        value={findValueByKey(colorSchemes, colorSchemeKey)}
+                        onPress={() => router.push("/(modal)/colorScheme")}
+                        isLast={true}
+                    />
+                </View>
             </View>
         </BaseComponent>
     );
