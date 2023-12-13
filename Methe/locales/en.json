@@ -1,7 +1,6 @@
 {
   "appName": "Methe",
   "pages": {
-    "home": "Home",
     "favourites": "Favourites"
   },
   "settings": {
@@ -29,12 +28,19 @@
     "ingredients": "Ingredients",
     "units": "units"
   },
-  "search": "Search",
+  "search": {
+    "title": "Research",
+    "barTitle": "Being thirsty?",
+    "barSubTitle": "Any drink · Any ingredient",
+    "button": "Search",
+    "byNameTitle": "Looking for a specific drink?",
+    "byIngredientTitle": "Looking for a specific ingredient?"
+  },
   "notFound": "No results",
-  "welcome": "Hello",
   "share": "Hey ! Check this drink out !",
   "noCocktail": "The cocktail was not found.",
   "noCocktails": "No cocktails to display.",
   "limitReached": "The limit has been reached.",
-  "refresh": "Refresh"
+  "refresh": "Refresh",
+
 }

@@ -13,10 +13,10 @@ import { RANDOM_COCKTAILS_LIMIT, RANDOM_COCKTAILS_LOAD, REPLACEMENT_ATTEMPTS } f
 
 // Import custom components
 import Loader from "@/src/components/loader";
-import CocktailsFlatlist from "@/src/components/cocktail/flatList";
+import BaseComponent from "@/src/components/base";
 import Header from "@/src/components/header/header";
 import HeaderButton from "@/src/components/header/button";
-import BaseComponent from "@/src/components/base";
+import CocktailsFlatlist from "@/src/components/cocktail/flatList";
 import ResearchModal from "@/src/app/(modal)/research";
 
 // Import color constants
@@ -110,12 +110,16 @@ export default function HomeTab() {
         return (
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <TouchableOpacity onPress={toggleResearchModal}>
+                    <TouchableOpacity onPress={toggleResearchModal} style={tw`flex-1`}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
                             <View>
-                                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
-                                <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
+                                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
+                                    {i18n.t('search.barTitle')}
+                                </Text>
+                                <Text style={tw`text-midGray`}>
+                                    {i18n.t('search.barSubTitle')}
+                                </Text>
                             </View>
                         </View>
                     </TouchableOpacity>

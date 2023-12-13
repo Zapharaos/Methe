@@ -4,6 +4,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import HeaderButton from "@/src/components/header/button";
 
 /**
  * The porps of the LikeCocktail
@@ -42,15 +43,6 @@ interface CloseModalProps {
 export function CloseModal ({ toggleModal }: CloseModalProps) {
 
     return (
-        <TouchableOpacity
-            onPress={toggleModal}
-            style={tw`w-10 h-10 rounded-full border border-palePeach dark:border-darkGrayBrown bg-darkGrayBrown dark:bg-palePeach items-center justify-center`}
-        >
-            <MaterialIcons
-                name="close"
-                size={24}
-                style={tw`text-palePeach dark:text-darkGrayBrown`}
-            />
-        </TouchableOpacity>
+        <HeaderButton onPress={toggleModal} iconComponent1={<MaterialIcons/>} iconName1={"close"} buttonStyle={tw`absolute left-0`}/>
     );
 }

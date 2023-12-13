@@ -13,7 +13,7 @@ interface SelectionProps {
 
 // Define the Selection functional component
 const SettingsItemOptions: React.FC<SelectionProps> = ({ list, current, change }) => (
-    <View style={tw`mt-5 flex-1 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+    <View style={tw`mt-5 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
         {/* Iterate over the list and render a TouchableOpacity for each item */}
         {list.map(({ key, value }, index) => (
             <TouchableOpacity
