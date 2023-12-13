@@ -19,25 +19,10 @@ import { ApiCocktailResponse } from "@/src/utils/cocktail";
 
 // List of example ingredients for searching by ingredient
 const ingredients = [
-    {"key": "0", "value": "Light rum"},
-    {"key": "1", "value": "Applejack"},
-    {"key": "2", "value": "Gin"},
-    {"key": "3", "value": "Dark rum"},
-    {"key": "4", "value": "Sweet Vermouth"},
-    {"key": "5", "value": "Strawberry schnapps"},
-    {"key": "6", "value": "Light rum"},
-    {"key": "7", "value": "Applejack"},
-    {"key": "8", "value": "Gin"},
-    {"key": "9", "value": "Dark rum"},
-    {"key": "10", "value": "Sweet Vermouth"},
-    {"key": "11", "value": "Strawberry schnapps"},
-    {"key": "12", "value": "Light rum"},
-    {"key": "13", "value": "Applejack"},
-    {"key": "14", "value": "Gin"},
-    {"key": "15", "value": "Dark rum"},
-    {"key": "16", "value": "Sweet Vermouth"},
-    {"key": "17", "value": "Strawberry schnapps"},
-]
+    "Light rum", "Applejack", "Gin", "Dark rum", "Sweet Vermouth", "Strawberry schnapps",
+    "Light rum", "Applejack", "Gin", "Dark rum", "Sweet Vermouth", "Strawberry schnapps",
+    "Light rum", "Applejack", "Gin", "Dark rum", "Sweet Vermouth", "Strawberry schnapps"
+    ]
 
 // Interface for API response representing a cocktail
 interface CocktailAPI {
@@ -95,13 +80,16 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                     console.error(err);
                 }
             }
-            else
+            else if(searchByIngredient)
             {
                 try {
-                    return await lastValueFrom(
-                        searchByIngredient ? cocktailService.getCocktailByIngredientName(searchValue.trim()).pipe(take(1)) :
-                            cocktailService.getCocktailByName(searchValue.trim()).pipe(take(1))
-                    );
+                    return await lastValueFrom(cocktailService.getCocktailByIngredientName(searchValue.trim()).pipe(take(1)));
+                } catch (err) {
+                    console.error(err);
+                }
+            } else {
+                try {
+                    return await lastValueFrom(cocktailService.getCocktailByName(searchValue.trim()).pipe(take(1)));
                 } catch (err) {
                     console.error(err);
                 }
@@ -150,7 +138,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                             <SearchItem style={tw`flex-1`}>
                                 <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
                                 <ScrollView showsVerticalScrollIndicator={false}>
-                                    <ListingOptions list={ingredients} current={searchValue} change={setSearchValue} />
+                                    <ListingOptions list={ingredients} current={searchValue} change={setSearchValue}/>
                                 </ScrollView>
                             </SearchItem>
                         </View>
