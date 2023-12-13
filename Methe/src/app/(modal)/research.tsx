@@ -1,19 +1,9 @@
 import React, {Dispatch, SetStateAction, useState} from "react";
-import {
-    SafeAreaView,
-    TextInput,
-    TouchableOpacity,
-    View,
-    Modal,
-    Text,
-    Pressable,
-    ScrollView,
-    ViewStyle
-} from "react-native";
+import {TouchableOpacity, View, Modal, Text, ScrollView} from "react-native";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
 import tw from "@/lib/tailwind";
-import {Entypo, Feather, MaterialIcons} from "@expo/vector-icons";
+import {Entypo, MaterialIcons} from "@expo/vector-icons";
 
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import {Cocktail, FilterCocktail} from "@/src/utils/interface/CocktailInterface";
@@ -59,27 +49,26 @@ interface CocktailAPI {
 }
 
 interface ResearchModalProps {
+    searchValue: string,
+    setSearchValue: Dispatch<SetStateAction<string>>,
+    setSearchResult: Dispatch<SetStateAction<Cocktail[]>>,
     isVisible: boolean,
     onClose: () => void,
-    setCocktails: Dispatch<SetStateAction<Cocktail[]>>
 }
 
-export default function ResearchModal({ isVisible, onClose, setCocktails } : ResearchModalProps) {
+export default function ResearchModal({ searchValue, setSearchValue, setSearchResult, isVisible, onClose } : ResearchModalProps) {
 
-    const {
-        i18n
-    } = usePreferencesContext();
+    const {i18n} = usePreferencesContext();
 
-    const [searchedValue, setSearchedValue] = useState<string>('');
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
 
     const toggleSearchByIngredient = () => {
-        setSearchedValue('');
+        setSearchValue('');
         setSearchByIngredient(!searchByIngredient);
     }
 
     const onClear = () => {
-        setSearchedValue('');
+        setSearchValue('');
         setSearchByIngredient(false);
     }
 
@@ -93,13 +82,13 @@ export default function ResearchModal({ isVisible, onClose, setCocktails } : Res
         const cocktailService : CocktailService = new CocktailService();
 
         // Nothing to do with Empty input
-        if(!StringUtils.isNullOrWhitespace(searchedValue))
+        if(!StringUtils.isNullOrWhitespace(searchValue))
         {
             // Just one character => get List all cocktails by first letter
-            if(searchedValue.trim().length == 1)
+            if(searchValue.trim().length == 1)
             {
                 try {
-                    return await lastValueFrom(cocktailService.getCocktailByFirstLetter(searchedValue.trim()).pipe(take(1)));
+                    return await lastValueFrom(cocktailService.getCocktailByFirstLetter(searchValue.trim()).pipe(take(1)));
                 } catch (err) {
                     console.error(err);
                 }
@@ -108,8 +97,8 @@ export default function ResearchModal({ isVisible, onClose, setCocktails } : Res
             {
                 try {
                     return await lastValueFrom(
-                        searchByIngredient ? cocktailService.getCocktailByIngredientName(searchedValue.trim()).pipe(take(1)) :
-                            cocktailService.getCocktailByName(searchedValue.trim()).pipe(take(1))
+                        searchByIngredient ? cocktailService.getCocktailByIngredientName(searchValue.trim()).pipe(take(1)) :
+                            cocktailService.getCocktailByName(searchValue.trim()).pipe(take(1))
                     );
                 } catch (err) {
                     console.error(err);
@@ -124,14 +113,14 @@ export default function ResearchModal({ isVisible, onClose, setCocktails } : Res
     const fetchResearch = () => {
         callResearch().then((result: ApiCocktailResponse) => {
             if(result && result.drinks){
-                setCocktails([]);
+                setSearchResult([]);
                 result.drinks.map((cocktail: CocktailAPI) => {
                     const newCocktail: Cocktail = {
                         cocktailId: cocktail.idDrink,
                         cocktailName: cocktail.strDrink,
                         cocktailImage: cocktail.strDrinkThumb,
                     };
-                    setCocktails((prevList: Cocktail[]) => [...prevList, newCocktail]);
+                    setSearchResult((prevList: Cocktail[]) => [...prevList, newCocktail]);
                 });
             }
             else
@@ -159,7 +148,7 @@ export default function ResearchModal({ isVisible, onClose, setCocktails } : Res
                             <ResearchItem style={tw`flex-1`}>
                                 <ResearchItemTitle label={i18n.t('search.byIngredientTitle')} />
                                 <ScrollView showsVerticalScrollIndicator={false}>
-                                    <SettingsItemOptions list={ingredients} current={searchedValue} change={setSearchedValue} />
+                                    <SettingsItemOptions list={ingredients} current={searchValue} change={setSearchValue} />
                                 </ScrollView>
                             </ResearchItem>
                         </View>
@@ -168,7 +157,7 @@ export default function ResearchModal({ isVisible, onClose, setCocktails } : Res
                             <ResearchItem>
                                 <ResearchItemTitle label={i18n.t('search.byNameTitle')} />
 
-                                <ResearchBar fetchResearch={fetchResearch} searchedValue={searchedValue} setSearchedValue={setSearchedValue}/>
+                                <ResearchBar fetchResearch={fetchResearch} searchedValue={searchValue} setSearchedValue={setSearchValue}/>
 
                             </ResearchItem>
                             <ResearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>

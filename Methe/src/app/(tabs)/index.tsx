@@ -32,6 +32,9 @@ export default function HomeTab() {
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [searchActive, setSearchActive] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
+    const [searchResult, setSearchResult] = useState<Cocktail[]>([]);
     const [isModalResearchVisible, setIsModalResearchVisible] = useState(false);
 
     const toggleResearchModal = () => {
@@ -113,14 +116,20 @@ export default function HomeTab() {
                     <TouchableOpacity onPress={toggleResearchModal} style={tw`flex-1`}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                            <View>
+                            {searchActive ? (
                                 <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
-                                    {i18n.t('search.barTitle')}
+                                    {searchValue}
                                 </Text>
-                                <Text style={tw`text-midGray`}>
-                                    {i18n.t('search.barSubTitle')}
-                                </Text>
-                            </View>
+                                ) : (
+                                <View>
+                                    <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
+                                        {i18n.t('search.barTitle')}
+                                    </Text>
+                                    <Text style={tw`text-midGray`}>
+                                        {i18n.t('search.barSubTitle')}
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </TouchableOpacity>
                     <HeaderButton onPress={() => console.log("filter")} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
@@ -138,6 +147,14 @@ export default function HomeTab() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (searchValue && !searchActive) {
+            setSearchActive(true);
+        } else if (!searchValue && searchActive) {
+            setSearchActive(false);
+        }
+    }, [searchValue]);
+
     // Check if still loading, show loader
     if (loading) {
         return (
@@ -152,11 +169,25 @@ export default function HomeTab() {
                     header: () => <ExtendedHeader/>,
                 }}
             />
-            <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
+            {searchActive ? (
+                <CocktailsFlatlist
+                    cocktails={searchResult}
+                    endReached={() => {}}
+                />
+            ) : (
+                <CocktailsFlatlist
+                    cocktails={cocktails}
+                    endReached={handleFlatlistEndReached}
+                    Footer={FlatlistFooter}
+                />
+            )}
             <ResearchModal
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setSearchResult={setSearchResult}
                 isVisible={isModalResearchVisible}
                 onClose={toggleResearchModal}
-                setCocktails={setCocktails}/>
+            />
         </BaseComponent>
     );
 }
