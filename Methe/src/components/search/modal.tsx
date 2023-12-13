@@ -118,12 +118,17 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         });
     }
 
+    const onSearch = () => {
+        fetchSearch();
+        onClose();
+    }
+
     return (
         <Modal animationType="slide" visible={isVisible}>
             <BaseComponent>
                 <View style={tw`w-full flex-1 flex-col gap-5`}>
                     {/* Header */}
-                    <View style={tw`h-10 items-center justify-center`}>
+                    <View style={tw`h-14 items-center justify-center`}>
                         <HeaderButton onPress={onClose} iconComponent1={<MaterialIcons/>} iconName1={"close"} buttonStyle={tw`ml-3 mr-auto`}/>
                         <Text style={tw`absolute text-xl text-black dark:text-white`}>
                             {i18n.t('search.title')}
@@ -147,7 +152,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                             {/* Item that allows to execute the search by name */}
                             <SearchItem>
                                 <SearchItemTitle label={i18n.t('search.byNameTitle')} />
-                                <SearchBar fetchSearch={fetchSearch} searchedValue={searchValue} setSearchedValue={setSearchValue}/>
+                                <SearchBar searchedValue={searchValue} setSearchedValue={setSearchValue}/>
                             </SearchItem>
                             {/* Item to toggle the search by ingredient */}
                             <SearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>
@@ -157,13 +162,13 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                     <View style={tw`p-5 flex-row justify-between items-center`}>
                         <TouchableOpacity onPress={onClear}>
                             <Text style={tw`underline text-lg text-black dark:text-white`}>
-                                Clear all
+                                {i18n.t('search.buttonClear')}
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onClose} style={tw`p-2 flex-row gap-2 rounded-md bg-darkGrayBrown dark:bg-palePeach`}>
+                        <TouchableOpacity onPress={onSearch} style={tw`p-2 flex-row gap-2 rounded-md bg-darkGrayBrown dark:bg-palePeach`}>
                             <Entypo name="magnifying-glass" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
                             <Text style={tw`text-lg text-palePeach dark:text-darkGrayBrown`}>
-                                Rechercher
+                                {i18n.t('search.buttonSearch')}
                             </Text>
                         </TouchableOpacity>
                     </View>

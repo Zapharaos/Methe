@@ -32,7 +32,8 @@
     "title": "Search",
     "barTitle": "Being thirsty?",
     "barSubTitle": "Any drink · Any ingredient",
-    "button": "Search",
+    "buttonClear": "Clear all",
+    "buttonSearch": "Search",
     "byNameTitle": "Looking for a specific drink?",
     "byIngredientTitle": "Looking for a specific ingredient?"
   },
