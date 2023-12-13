@@ -1,19 +1,23 @@
-import React, {Dispatch, SetStateAction, useState} from "react";
-import {TouchableOpacity, View, Modal, Text, ScrollView} from "react-native";
+// Import necessary components and styles from React Native and external libraries
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { TouchableOpacity, View, Modal, Text, ScrollView } from "react-native";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
 import tw from "@/lib/tailwind";
-import {Entypo, MaterialIcons} from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
-import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
-import {Cocktail, FilterCocktail} from "@/src/utils/interface/CocktailInterface";
+// Import context and utility functions
+import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
+import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
 import CocktailService from "@/src/utils/services/cocktailService";
-import {StringUtils} from "@/src/utils/utils";
+import { StringUtils } from "@/src/utils/utils";
 import BaseComponent from "@/src/components/base";
 import HeaderButton from "@/src/components/header/button";
-import SettingsItemOptions from "@/src/components/settings/itemOptions";
-import {ResearchBar, ResearchClickableItem, ResearchItem, ResearchItemTitle} from "@/src/components/research/utils";
+import ListingOptions from "@/src/components/listingOptions";
+import { SearchBar, SearchClickableItem, SearchItem, SearchItemTitle } from "@/src/components/search/utils";
+import { ApiCocktailResponse } from "@/src/utils/cocktail";
 
+// List of example ingredients for searching by ingredient
 const ingredients = [
     {"key": "0", "value": "Light rum"},
     {"key": "1", "value": "Applejack"},
@@ -35,20 +39,15 @@ const ingredients = [
     {"key": "17", "value": "Strawberry schnapps"},
 ]
 
-/**
- * Return type of the Api call
- */
-interface ApiCocktailResponse  {
-    drinks: []
-}
-
+// Interface for API response representing a cocktail
 interface CocktailAPI {
     idDrink: string,
     strDrink: string,
     strDrinkThumb: string,
 }
 
-interface ResearchModalProps {
+// Interface for the props of the SearchModal component
+interface SearchModalProps {
     searchValue: string,
     setSearchValue: Dispatch<SetStateAction<string>>,
     setSearchResult: Dispatch<SetStateAction<Cocktail[]>>,
@@ -56,17 +55,22 @@ interface ResearchModalProps {
     onClose: () => void,
 }
 
-export default function ResearchModal({ searchValue, setSearchValue, setSearchResult, isVisible, onClose } : ResearchModalProps) {
+// Main component for the search modal
+export default function SearchModal({ searchValue, setSearchValue, setSearchResult, isVisible, onClose } : SearchModalProps) {
 
+    // Retrieve the app's preferences from context
     const {i18n} = usePreferencesContext();
 
+    // State for toggling between search by name and search by ingredient
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
 
+    // Toggle between search modes and clear search input
     const toggleSearchByIngredient = () => {
         setSearchValue('');
         setSearchByIngredient(!searchByIngredient);
     }
 
+    // Clear search input and reset search mode
     const onClear = () => {
         setSearchValue('');
         setSearchByIngredient(false);
@@ -75,16 +79,14 @@ export default function ResearchModal({ searchValue, setSearchValue, setSearchRe
     const [filterCocktailList, setFilterCocktailList] = useState<Cocktail[]>();
     const [filterList, setFilterList] = useState<FilterCocktail>();
 
-    /**
-     * API call to get cocktail with cocktail name or ingredient name
-     */
-    const callResearch = async (): Promise<ApiCocktailResponse | any> => {
+    // Function to call the cocktail search API
+    const callSearch = async (): Promise<ApiCocktailResponse | any> => {
         const cocktailService : CocktailService = new CocktailService();
 
-        // Nothing to do with Empty input
+        // Nothing to do with empty input
         if(!StringUtils.isNullOrWhitespace(searchValue))
         {
-            // Just one character => get List all cocktails by first letter
+            // Just one character => get list of all cocktails by first letter
             if(searchValue.trim().length == 1)
             {
                 try {
@@ -107,11 +109,9 @@ export default function ResearchModal({ searchValue, setSearchValue, setSearchRe
         }
     }
 
-    /**
-     * Do research with data from textWriteByUser
-     */
-    const fetchResearch = () => {
-        callResearch().then((result: ApiCocktailResponse) => {
+    // Function to fetch search results and update state
+    const fetchSearch = () => {
+        callSearch().then((result: ApiCocktailResponse) => {
             if(result && result.drinks){
                 setSearchResult([]);
                 result.drinks.map((cocktail: CocktailAPI) => {
@@ -141,26 +141,28 @@ export default function ResearchModal({ searchValue, setSearchValue, setSearchRe
                             {i18n.t('search.title')}
                         </Text>
                     </View>
-                    {/* Research mode */}
+                    {/* Search mode */}
                     {searchByIngredient ? (
                         <View style={tw`flex-1 mx-5 gap-5`}>
-                            <ResearchClickableItem label={i18n.t('search.byNameTitle')} onPress={toggleSearchByIngredient} />
-                            <ResearchItem style={tw`flex-1`}>
-                                <ResearchItemTitle label={i18n.t('search.byIngredientTitle')} />
+                            {/* Item to toggle the search by name */}
+                            <SearchClickableItem label={i18n.t('search.byNameTitle')} onPress={toggleSearchByIngredient} />
+                            {/* Item that allows to execute the search by ingredient */}
+                            <SearchItem style={tw`flex-1`}>
+                                <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
                                 <ScrollView showsVerticalScrollIndicator={false}>
-                                    <SettingsItemOptions list={ingredients} current={searchValue} change={setSearchValue} />
+                                    <ListingOptions list={ingredients} current={searchValue} change={setSearchValue} />
                                 </ScrollView>
-                            </ResearchItem>
+                            </SearchItem>
                         </View>
                     ) : (
                         <View style={tw`flex-1 mx-5 gap-5`}>
-                            <ResearchItem>
-                                <ResearchItemTitle label={i18n.t('search.byNameTitle')} />
-
-                                <ResearchBar fetchResearch={fetchResearch} searchedValue={searchValue} setSearchedValue={setSearchValue}/>
-
-                            </ResearchItem>
-                            <ResearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>
+                            {/* Item that allows to execute the search by name */}
+                            <SearchItem>
+                                <SearchItemTitle label={i18n.t('search.byNameTitle')} />
+                                <SearchBar fetchSearch={fetchSearch} searchedValue={searchValue} setSearchedValue={setSearchValue}/>
+                            </SearchItem>
+                            {/* Item to toggle the search by ingredient */}
+                            <SearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>
                         </View>
                     )}
                     {/* Footer */}

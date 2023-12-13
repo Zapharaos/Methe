@@ -17,7 +17,7 @@ import BaseComponent from "@/src/components/base";
 import Header from "@/src/components/header/header";
 import HeaderButton from "@/src/components/header/button";
 import CocktailsFlatlist from "@/src/components/cocktail/flatList";
-import ResearchModal from "@/src/app/(modal)/research";
+import SearchModal from "@/src/components/search/modal";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -32,13 +32,15 @@ export default function HomeTab() {
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // State for the search
     const [searchActive, setSearchActive] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState<Cocktail[]>([]);
-    const [isModalResearchVisible, setIsModalResearchVisible] = useState(false);
+    const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
 
-    const toggleResearchModal = () => {
-        setIsModalResearchVisible(prevState => !prevState);
+    // Function to toggle the search modal
+    const toggleSearchModal = () => {
+        setIsSearchModalVisible(prevState => !prevState);
     };
 
     // Function to fetch cocktails with replacement logic
@@ -113,7 +115,7 @@ export default function HomeTab() {
         return (
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <TouchableOpacity onPress={toggleResearchModal} style={tw`flex-1`}>
+                    <TouchableOpacity onPress={toggleSearchModal} style={tw`flex-1`}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
                             {searchActive ? (
@@ -147,6 +149,7 @@ export default function HomeTab() {
         fetchData();
     }, []);
 
+    // useEffect to detect if the search is active or not
     useEffect(() => {
         if (searchValue && !searchActive) {
             setSearchActive(true);
@@ -169,6 +172,7 @@ export default function HomeTab() {
                     header: () => <ExtendedHeader/>,
                 }}
             />
+            {/* Display the cocktails : search results or randoms */}
             {searchActive ? (
                 <CocktailsFlatlist
                     cocktails={searchResult}
@@ -181,12 +185,13 @@ export default function HomeTab() {
                     Footer={FlatlistFooter}
                 />
             )}
-            <ResearchModal
+            {/* Search modal */}
+            <SearchModal
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
                 setSearchResult={setSearchResult}
-                isVisible={isModalResearchVisible}
-                onClose={toggleResearchModal}
+                isVisible={isSearchModalVisible}
+                onClose={toggleSearchModal}
             />
         </BaseComponent>
     );

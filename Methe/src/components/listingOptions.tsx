@@ -4,15 +4,15 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import tw from '@/lib/tailwind';
 
-// Define the props interface for the Selection component
-interface SelectionProps {
+// Define the props interface for the ListingOptions component
+interface ListingOptionsProps {
     list: { key: string; value: string }[]; // List of items with keys and values
     current: string;                        // Current selection key
     change: (key: string) => void;          // Function to be called on selection change
 }
 
-// Define the Selection functional component
-const SettingsItemOptions: React.FC<SelectionProps> = ({ list, current, change }) => (
+// Define the ListingOptions functional component
+const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change }) => (
     <View style={tw`mt-5 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
         {/* Iterate over the list and render a TouchableOpacity for each item */}
         {list.map(({ key, value }, index) => (
@@ -36,4 +36,4 @@ const SettingsItemOptions: React.FC<SelectionProps> = ({ list, current, change }
     </View>
 );
 
-export default SettingsItemOptions;
+export default ListingOptions;

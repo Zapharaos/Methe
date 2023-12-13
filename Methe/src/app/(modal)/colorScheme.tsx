@@ -8,7 +8,7 @@ import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
 
 // Import custom components
 import ModalComponent from "@/src/components/modal";
-import SettingsItemOptions from "@/src/components/settings/itemOptions";
+import ListingOptions from "@/src/components/listingOptions";
 
 // Define the ColorSchemeModal functional component
 export default function ColorSchemeModal() {
@@ -21,7 +21,7 @@ export default function ColorSchemeModal() {
             {/* View to contain the main content of the modal */}
             <ScrollView style={tw`w-full`} contentContainerStyle={tw`items-center`}>
                 <View style={tw`w-11/12`}>
-                    <SettingsItemOptions list={colorSchemes} current={colorSchemeKey} change={changeColorScheme} />
+                    <ListingOptions list={colorSchemes} current={colorSchemeKey} change={changeColorScheme} />
                 </View>
             </ScrollView>
         </ModalComponent>

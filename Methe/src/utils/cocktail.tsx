@@ -8,7 +8,7 @@ import {BASE_URL, URL_SEPARATOR} from "@/src/constants/config";
 /**
  * Return type of the Api call
  */
-interface ApiCocktailResponse {
+export interface ApiCocktailResponse {
     drinks: []
 }
 
