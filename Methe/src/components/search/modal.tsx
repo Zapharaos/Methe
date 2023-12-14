@@ -101,15 +101,16 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     const fetchSearch = () => {
         callSearch().then((result: ApiCocktailResponse) => {
             if(result && result.drinks){
-                setSearchResult([]);
+                const tempResult: Cocktail[] = [];
                 result.drinks.map((cocktail: CocktailAPI) => {
                     const newCocktail: Cocktail = {
                         cocktailId: cocktail.idDrink,
                         cocktailName: cocktail.strDrink,
                         cocktailImage: cocktail.strDrinkThumb,
                     };
-                    setSearchResult((prevList: Cocktail[]) => [...prevList, newCocktail]);
+                    tempResult.push(newCocktail);
                 });
+                setSearchResult(tempResult);
             }
             else
             {
