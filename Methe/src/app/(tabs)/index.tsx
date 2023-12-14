@@ -17,7 +17,8 @@ import BaseComponent from "@/src/components/base";
 import Header from "@/src/components/header/header";
 import HeaderButton from "@/src/components/header/button";
 import CocktailsFlatlist from "@/src/components/cocktail/flatList";
-import SearchModal from "@/src/components/search/modal";
+import SearchModal from "@/src/components/search/search";
+import {set} from "i18n-js/typings/lodash";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -37,11 +38,6 @@ export default function HomeTab() {
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState<Cocktail[]>([]);
     const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
-
-    // Function to toggle the search modal
-    const toggleSearchModal = () => {
-        setIsSearchModalVisible(prevState => !prevState);
-    };
 
     // Function to fetch cocktails with replacement logic
     const fetchCocktails = async (tempCocktails: Cocktail[]) => {
@@ -115,7 +111,7 @@ export default function HomeTab() {
         return (
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <TouchableOpacity onPress={toggleSearchModal} style={tw`flex-1`}>
+                    <TouchableOpacity onPress={() => setIsSearchModalVisible(true)} style={tw`flex-1`}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
                             {searchActive ? (
@@ -190,8 +186,8 @@ export default function HomeTab() {
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
                 setSearchResult={setSearchResult}
-                isVisible={isSearchModalVisible}
-                onClose={toggleSearchModal}
+                visible={isSearchModalVisible}
+                setVisible={setIsSearchModalVisible}
             />
         </BaseComponent>
     );
