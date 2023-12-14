@@ -9,6 +9,7 @@ import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
 import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
 import ModalComponent from "@/src/components/modal";
 import ListingOptions from "@/src/components/listingOptions";
+import {FilterItem} from "@/src/components/search/utils";
 
 const categories = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
 const glasses = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
@@ -83,12 +84,45 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
             {/* Filter */}
             <ScrollView style={tw`flex-1 px-5 gap-5`}>
                 {/* Categories */}
-                <View>
-                    <Text>
-                        {i18n.t('filter.categories.category')}
-                    </Text>
-                    <ListingOptions list={categories} change={toggleCategoryFilter} current={filterCategory} />
-                </View>
+                <FilterItem
+                    label={'filter.categories.category'}
+                    listingProps={{
+                        list: categories,
+                        current: filterCategory,
+                        change: toggleCategoryFilter,
+                        maxHeight: 250
+                    }}
+                />
+                {/* Glasses */}
+                <FilterItem
+                    label={'filter.categories.glasses'}
+                    listingProps={{
+                        list: glasses,
+                        current: filterGlasses,
+                        change: toggleGlassesFilter,
+                        maxHeight: 250
+                    }}
+                />
+                {/* Ingredients */}
+                <FilterItem
+                    label={'filter.categories.ingredients'}
+                    listingProps={{
+                        list: ingredients,
+                        current: filterIngredients,
+                        change: toggleIngredientsFilter,
+                        maxHeight: 250
+                    }}
+                />
+                {/* Alcoholic */}
+                <FilterItem
+                    label={'filter.categories.alcoholic'}
+                    listingProps={{
+                        list: alcoholic,
+                        current: filterAlcoholic,
+                        change: toggleAlcoholicFilter,
+                        maxHeight: 250
+                    }}
+                />
             </ScrollView>
             {/* Footer */}
             <View style={tw`p-5 flex-row justify-between items-center`}>

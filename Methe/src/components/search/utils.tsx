@@ -4,6 +4,7 @@ import tw from "@/lib/tailwind";
 import React, { Dispatch, SetStateAction } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
+import ListingOptions, {ListingOptionsProps} from "@/src/components/listingOptions";
 
 // Import Colors constant for setting the placeholder color
 const Colors = require('@/src/constants/colors');
@@ -71,6 +72,33 @@ export const SearchBar = ({ searchedValue, setSearchedValue, onCancel }: SearchB
                     <MaterialIcons name="cancel" size={24} style={tw`text-midGray`} />
                 </TouchableOpacity>
             }
+        </View>
+    );
+};
+
+// Interface for the props of the SearchBar component
+interface FilterItemProps {
+    label: string;
+    listingProps: ListingOptionsProps;
+}
+
+// Component for rendering a search bar
+export const FilterItem = ({ label, listingProps }: FilterItemProps) => {
+
+    const {i18n} = usePreferencesContext();
+
+    return (
+        <View>
+            <Text style={tw`text-base font-semibold text-darkGrayBrown dark:text-palePeach`}>
+                {i18n.t(label)}
+            </Text>
+            <ListingOptions
+                list={listingProps.list}
+                change={listingProps.change}
+                current={listingProps.current}
+                style={listingProps.style}
+                maxHeight={listingProps.maxHeight}
+            />
         </View>
     );
 };
