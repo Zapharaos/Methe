@@ -31,13 +31,12 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
     const [filterCocktailList, setFilterCocktailList] = useState<Cocktail[]>();
     const [filterList, setFilterList] = useState<FilterCocktail>();
 
-    // Clear filters
-    const onCancel = () => {
-    }
-
     // Clear filters and filter mode
     const onClear = () => {
-        onCancel();
+        setFilterCategory([]);
+        setFilterGlasses([]);
+        setFilterIngredients([]);
+        setFilterAlcoholic([]);
     }
 
     // Executes the filter and closes the modal
