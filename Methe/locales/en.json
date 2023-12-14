@@ -40,7 +40,13 @@
   "filter": {
     "title": "Filter",
     "buttonClear": "Clear all",
-    "buttonSearch": "Filter"
+    "buttonSearch": "Filter",
+    "categories": {
+      "category": "Category",
+      "glasses": "Glasses",
+      "ingredients": "Ingredients",
+      "alcoholic": "Alcoholic"
+    }
   },
   "notFound": "No results",
   "share": "Hey ! Check this drink out !",

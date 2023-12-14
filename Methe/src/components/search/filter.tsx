@@ -8,6 +8,12 @@ import { Entypo } from "@expo/vector-icons";
 import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
 import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
 import ModalComponent from "@/src/components/modal";
+import ListingOptions from "@/src/components/listingOptions";
+
+const categories = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+const glasses = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+const ingredients = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+const alcoholic = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
 
 // Interface for the props of the SearchModal component
 interface FilterModalProps {
@@ -38,11 +44,52 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
         setVisible(false);
     }
 
+    const [filterCategory, setFilterCategory] = useState<string[]>([]);
+    const [filterGlasses, setFilterGlasses] = useState<string[]>([]);
+    const [filterIngredients, setFilterIngredients] = useState<string[]>([]);
+    const [filterAlcoholic, setFilterAlcoholic] = useState<string[]>([]);
+
+    const toggleFilter = (list:string[], item:string) => {
+        const index = list.indexOf(item);
+
+        if (index !== -1) {
+            // If the item is already in the array, remove it
+            const newList = [...list];
+            newList.splice(index, 1);
+            return newList;
+        } else {
+            // If the item is not in the array, add it
+            return [...list, item];
+        }
+    }
+    const toggleCategoryFilter = (category: string) => {
+        setFilterCategory(toggleFilter(filterCategory, category));
+    }
+
+    const toggleGlassesFilter = (glass: string) => {
+        setFilterGlasses(toggleFilter(filterGlasses, glass));
+    }
+
+    const toggleIngredientsFilter = (ingredient: string) => {
+        setFilterIngredients(toggleFilter(filterIngredients, ingredient));
+    }
+
+    const toggleAlcoholicFilter = (alcoholic: string) => {
+        setFilterAlcoholic(toggleFilter(filterAlcoholic, alcoholic));
+    }
+
     return (
         <ModalComponent title={i18n.t('filter.title')} visible={visible} setVisible={setVisible}>
             {/* Filter */}
-            <View style={tw`flex-1 mx-5 gap-5`}>
-            </View>
+            <ScrollView style={tw`flex-1 px-5 gap-5`}>
+                {/* Categories */}
+                <View>
+                    <Text>
+                        {i18n.t('filter.categories.category')}
+                    </Text>
+                    <ListingOptions list={categories} change={toggleCategoryFilter} current={filterCategory} />
+                </View>
+            </ScrollView>
             {/* Footer */}
             <View style={tw`p-5 flex-row justify-between items-center`}>
                 <TouchableOpacity onPress={onClear}>
