@@ -1,20 +1,24 @@
 // Import necessary React and React Native components and styles
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, ViewStyle} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import tw from '@/lib/tailwind';
 
 // Define the props interface for the ListingOptions component
-interface ListingOptionsProps {
+export interface ListingOptionsProps {
     list: { key: string; value: string }[] | string[]; // List of items with keys and values
-    current: string;                        // Current selection key
-    change: (key: string) => void;          // Function to be called on selection change
+    current: string | string[];                        // Current selection key
+    change: (key: string) => void;                     // Function to be called on selection change
+    style?: ViewStyle;                                      // Additional style for the container
 }
 
 // Define the ListingOptions functional component
-const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change }) => {
+const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change, style }) => {
+
+    const currentList = Array.isArray(current) ? current : [current];
+
     return (
-        <View style={tw`mt-5 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+        <View style={[tw`mt-5 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`, style]}>
             {/* Iterate over the list and render a TouchableOpacity for each item */}
             {list.map((item, index) => {
 
@@ -37,7 +41,7 @@ const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change }
                         {/* Display the value of the item */}
                         <Text style={tw`text-left text-base text-black dark:text-white`}>{value}</Text>
                         {/* Display a check mark if the item is the current selection */}
-                        {key === current && <Feather name="check" size={24} style={tw`text-midLight dark:text-midDark`} />}
+                        {currentList.includes(key) && <Feather name="check" size={24} style={tw`text-midLight dark:text-midDark`} />}
                     </TouchableOpacity>
                 )
             })}

@@ -69,9 +69,6 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         onCancel();
     }
 
-    const [filterCocktailList, setFilterCocktailList] = useState<Cocktail[]>();
-    const [filterList, setFilterList] = useState<FilterCocktail>();
-
     // Function to call the cocktail search API
     const callSearch = async (): Promise<ApiCocktailResponse | any> => {
         const cocktailService : CocktailService = new CocktailService();
@@ -163,18 +160,18 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
             )}
             {/* Footer */}
             <View style={tw`p-5 flex-row justify-between items-center`}>
-                    <TouchableOpacity onPress={onClear}>
-                        <Text style={tw`underline text-lg text-black dark:text-white`}>
-                            {i18n.t('search.buttonClear')}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={onExecuteSearch} style={tw`p-2 flex-row gap-2 rounded-md bg-darkGrayBrown dark:bg-palePeach`}>
-                        <Entypo name="magnifying-glass" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
-                        <Text style={tw`text-lg text-palePeach dark:text-darkGrayBrown`}>
-                            {i18n.t('search.buttonSearch')}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={onClear}>
+                    <Text style={tw`underline text-lg text-black dark:text-white`}>
+                        {i18n.t('search.buttonClear')}
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onExecuteSearch} style={tw`p-2 flex-row gap-2 rounded-md bg-darkGrayBrown dark:bg-palePeach`}>
+                    <Entypo name="magnifying-glass" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
+                    <Text style={tw`text-lg text-palePeach dark:text-darkGrayBrown`}>
+                        {i18n.t('search.buttonSearch')}
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </ModalComponent>
     );
 }

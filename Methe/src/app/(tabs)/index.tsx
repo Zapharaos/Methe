@@ -19,6 +19,8 @@ import HeaderButton from "@/src/components/header/button";
 import CocktailsFlatlist from "@/src/components/cocktail/flatList";
 import SearchModal from "@/src/components/search/search";
 import {set} from "i18n-js/typings/lodash";
+import FilterModal from "@/src/components/search/filter";
+import {filter} from "rxjs";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -37,7 +39,10 @@ export default function HomeTab() {
     const [searchActive, setSearchActive] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState<Cocktail[]>([]);
-    const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
+    const [searchVisible, setSearchVisible] = useState(false);
+
+    // State for the filter
+    const [filterVisible, setFilterVisible] = useState(false);
 
     // Function to fetch cocktails with replacement logic
     const fetchCocktails = async (tempCocktails: Cocktail[]) => {
@@ -111,7 +116,7 @@ export default function HomeTab() {
         return (
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <TouchableOpacity onPress={() => setIsSearchModalVisible(true)} style={tw`flex-1`}>
+                    <TouchableOpacity onPress={() => setSearchVisible(true)} style={tw`flex-1`}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
                             {searchActive ? (
@@ -130,7 +135,7 @@ export default function HomeTab() {
                             )}
                         </View>
                     </TouchableOpacity>
-                    <HeaderButton onPress={() => console.log("filter")} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
+                    <HeaderButton onPress={() => setFilterVisible(true)} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
                                   buttonStyle={tw`w-12 h-12 bg-palePeachSecond dark:bg-darkGrayBrownSecond`} iconStyle={tw`text-darkGrayBrown dark:text-palePeach`}/>
                 </View>
             </Header>
@@ -186,9 +191,11 @@ export default function HomeTab() {
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
                 setSearchResult={setSearchResult}
-                visible={isSearchModalVisible}
-                setVisible={setIsSearchModalVisible}
+                visible={searchVisible}
+                setVisible={setSearchVisible}
             />
+            {/* Search modal */}
+            <FilterModal visible={filterVisible} setVisible={setFilterVisible} />
         </BaseComponent>
     );
 }

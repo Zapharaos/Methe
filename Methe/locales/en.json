@@ -37,11 +37,21 @@
     "byNameTitle": "Looking for a specific drink?",
     "byIngredientTitle": "Looking for a specific ingredient?"
   },
+  "filter": {
+    "title": "Filter",
+    "buttonClear": "Clear all",
+    "buttonSearch": "Filter",
+    "categories": {
+      "category": "Category",
+      "glasses": "Glass type",
+      "ingredients": "Ingredient",
+      "alcoholic": "Alcoholic status"
+    }
+  },
   "notFound": "No results",
   "share": "Hey ! Check this drink out !",
   "noCocktail": "The cocktail was not found.",
   "noCocktails": "No cocktails to display.",
   "limitReached": "The limit has been reached.",
-  "refresh": "Refresh",
-
+  "refresh": "Refresh"
 }
