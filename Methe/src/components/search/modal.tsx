@@ -46,19 +46,28 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     // Retrieve the app's preferences from context
     const {i18n} = usePreferencesContext();
 
+    // State for saving the local searched value
+    const [localSearchValue, setLocalSearchValue] = useState(searchValue);
+
     // State for toggling between search by name and search by ingredient
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
 
     // Toggle between search modes and clear search input
     const toggleSearchByIngredient = () => {
-        setSearchValue('');
+        setLocalSearchValue('');
         setSearchByIngredient(!searchByIngredient);
     }
 
-    // Clear search input and reset search mode
-    const onClear = () => {
+    // Clear inputs
+    const onCancel = () => {
+        setLocalSearchValue('');
         setSearchValue('');
+    }
+
+    // Clear inputs and reset search mode
+    const onClear = () => {
         setSearchByIngredient(false);
+        onCancel();
     }
 
     const [filterCocktailList, setFilterCocktailList] = useState<Cocktail[]>();
@@ -69,13 +78,14 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         const cocktailService : CocktailService = new CocktailService();
 
         // Nothing to do with empty input
-        if(!StringUtils.isNullOrWhitespace(searchValue))
+        if(!StringUtils.isNullOrWhitespace(localSearchValue))
         {
+            const trimValue = localSearchValue.trim();
             // Just one character => get list of all cocktails by first letter
-            if(searchValue.trim().length == 1)
+            if(trimValue.length == 1)
             {
                 try {
-                    return await lastValueFrom(cocktailService.getCocktailByFirstLetter(searchValue.trim()).pipe(take(1)));
+                    return await lastValueFrom(cocktailService.getCocktailByFirstLetter(trimValue).pipe(take(1)));
                 } catch (err) {
                     console.error(err);
                 }
@@ -83,13 +93,13 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
             else if(searchByIngredient)
             {
                 try {
-                    return await lastValueFrom(cocktailService.getCocktailByIngredientName(searchValue.trim()).pipe(take(1)));
+                    return await lastValueFrom(cocktailService.getCocktailByIngredientName(trimValue).pipe(take(1)));
                 } catch (err) {
                     console.error(err);
                 }
             } else {
                 try {
-                    return await lastValueFrom(cocktailService.getCocktailByName(searchValue.trim()).pipe(take(1)));
+                    return await lastValueFrom(cocktailService.getCocktailByName(trimValue).pipe(take(1)));
                 } catch (err) {
                     console.error(err);
                 }
@@ -119,8 +129,10 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         });
     }
 
-    const onSearch = () => {
+    // Executes the search and closes the modal
+    const onExecuteSearch = () => {
         fetchSearch();
+        setSearchValue(localSearchValue);
         onClose();
     }
 
@@ -144,7 +156,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                             <SearchItem style={tw`flex-1`}>
                                 <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
                                 <ScrollView showsVerticalScrollIndicator={false}>
-                                    <ListingOptions list={ingredients} current={searchValue} change={setSearchValue}/>
+                                    <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
                                 </ScrollView>
                             </SearchItem>
                         </View>
@@ -153,7 +165,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                             {/* Item that allows to execute the search by name */}
                             <SearchItem>
                                 <SearchItemTitle label={i18n.t('search.byNameTitle')} />
-                                <SearchBar searchedValue={searchValue} setSearchedValue={setSearchValue}/>
+                                <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
                             </SearchItem>
                             {/* Item to toggle the search by ingredient */}
                             <SearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>
@@ -166,7 +178,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                                 {i18n.t('search.buttonClear')}
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={onSearch} style={tw`p-2 flex-row gap-2 rounded-md bg-darkGrayBrown dark:bg-palePeach`}>
+                        <TouchableOpacity onPress={onExecuteSearch} style={tw`p-2 flex-row gap-2 rounded-md bg-darkGrayBrown dark:bg-palePeach`}>
                             <Entypo name="magnifying-glass" size={24} style={tw`text-palePeach dark:text-darkGrayBrown`} />
                             <Text style={tw`text-lg text-palePeach dark:text-darkGrayBrown`}>
                                 {i18n.t('search.buttonSearch')}

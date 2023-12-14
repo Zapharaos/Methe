@@ -41,10 +41,11 @@ export const SearchClickableItem = ({ onPress, label }: { onPress: () => void; l
 interface SearchBarProps {
     searchedValue: string;
     setSearchedValue: Dispatch<SetStateAction<string>>;
+    onCancel: () => void;
 }
 
 // Component for rendering a search bar
-export const SearchBar = ({ searchedValue, setSearchedValue }: SearchBarProps) => {
+export const SearchBar = ({ searchedValue, setSearchedValue, onCancel }: SearchBarProps) => {
 
     const {i18n} = usePreferencesContext();
 
@@ -66,7 +67,7 @@ export const SearchBar = ({ searchedValue, setSearchedValue }: SearchBarProps) =
 
             {/* Button to clear the search query */}
             {searchedValue &&
-                <TouchableOpacity style={tw`rounded-full p-2`} onPress={() => setSearchedValue('')}>
+                <TouchableOpacity style={tw`rounded-full p-2`} onPress={onCancel}>
                     <MaterialIcons name="cancel" size={24} style={tw`text-midGray`} />
                 </TouchableOpacity>
             }
