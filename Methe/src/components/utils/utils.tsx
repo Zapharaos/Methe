@@ -4,6 +4,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import HeaderButton from "@/src/components/header/button";
 
 /**
  * The porps of the LikeCocktail
@@ -25,5 +26,23 @@ export function CocktailFavoriteStatus ({ isFavorite, toggleFavorite }: Cocktail
             {!isFavorite && <MaterialIcons name="favorite-outline" size={24} color="black" />}
             {isFavorite && <MaterialIcons name="favorite" size={24} color="black" />}
         </TouchableOpacity>
+    );
+}
+
+/**
+ * The Props of the Close modal component
+ */
+interface CloseModalProps {
+    toggleModal: () => void
+}
+
+/**
+ * The component to print a close and set up a click event
+ * @param toggleModal the function to handel on close event
+ */
+export function CloseModal ({ toggleModal }: CloseModalProps) {
+
+    return (
+        <HeaderButton onPress={toggleModal} iconComponent1={<MaterialIcons/>} iconName1={"close"} buttonStyle={tw`absolute left-0`}/>
     );
 }

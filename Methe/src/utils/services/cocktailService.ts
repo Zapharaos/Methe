@@ -71,7 +71,6 @@ class CocktailService {
      */
     getCocktailByName = (name : string) => {
         const url = `${this.baseAPIUrl}search.php?s=${name}`;
-        console.log(url);
         return ajax.getJSON(url);
     }
 
