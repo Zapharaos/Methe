@@ -82,15 +82,14 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
     return (
         <ModalComponent title={i18n.t('filter.title')} visible={visible} setVisible={setVisible}>
             {/* Filter */}
-            <ScrollView style={tw`flex-1 px-5 gap-5`}>
+            <ScrollView style={tw`flex-1 px-5`}>
                 {/* Categories */}
                 <FilterItem
                     label={'filter.categories.category'}
                     listingProps={{
                         list: categories,
                         current: filterCategory,
-                        change: toggleCategoryFilter,
-                        maxHeight: 250
+                        change: toggleCategoryFilter
                     }}
                 />
                 {/* Glasses */}
@@ -99,8 +98,7 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
                     listingProps={{
                         list: glasses,
                         current: filterGlasses,
-                        change: toggleGlassesFilter,
-                        maxHeight: 250
+                        change: toggleGlassesFilter
                     }}
                 />
                 {/* Ingredients */}
@@ -109,8 +107,7 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
                     listingProps={{
                         list: ingredients,
                         current: filterIngredients,
-                        change: toggleIngredientsFilter,
-                        maxHeight: 250
+                        change: toggleIngredientsFilter
                     }}
                 />
                 {/* Alcoholic */}
@@ -119,8 +116,7 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
                     listingProps={{
                         list: alcoholic,
                         current: filterAlcoholic,
-                        change: toggleAlcoholicFilter,
-                        maxHeight: 250
+                        change: toggleAlcoholicFilter
                     }}
                 />
             </ScrollView>

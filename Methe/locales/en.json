@@ -43,9 +43,9 @@
     "buttonSearch": "Filter",
     "categories": {
       "category": "Category",
-      "glasses": "Glasses",
-      "ingredients": "Ingredients",
-      "alcoholic": "Alcoholic"
+      "glasses": "Glass type",
+      "ingredients": "Ingredient",
+      "alcoholic": "Alcoholic status"
     }
   },
   "notFound": "No results",

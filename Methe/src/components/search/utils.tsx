@@ -1,8 +1,9 @@
 // Import necessary components and styles from React Native and external libraries
 import { Text, TextInput, TouchableOpacity, View, ViewStyle } from "react-native";
 import tw from "@/lib/tailwind";
-import React, { Dispatch, SetStateAction } from "react";
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import React, {Dispatch, SetStateAction, useState} from "react";
+import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
+
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import ListingOptions, {ListingOptionsProps} from "@/src/components/listingOptions";
 
@@ -87,18 +88,32 @@ export const FilterItem = ({ label, listingProps }: FilterItemProps) => {
 
     const {i18n} = usePreferencesContext();
 
+    const [showListingOptions, setShowListingOptions] = useState(false);
+
+    const toggleListingOptions = () => {
+        setShowListingOptions(!showListingOptions);
+    };
+
     return (
-        <View>
-            <Text style={tw`text-base font-semibold text-darkGrayBrown dark:text-palePeach`}>
-                {i18n.t(label)}
-            </Text>
-            <ListingOptions
-                list={listingProps.list}
-                change={listingProps.change}
-                current={listingProps.current}
-                style={listingProps.style}
-                maxHeight={listingProps.maxHeight}
-            />
+        <View style={tw`border border-midGray my-3 rounded-lg`}>
+            <TouchableOpacity style={tw`flex-row justify-between p-5 ${showListingOptions ? 'border-b border-midGray' : ''}`} onPress={toggleListingOptions}>
+                <Text style={tw`text-base font-semibold text-darkGrayBrown dark:text-palePeach`}>
+                    {i18n.t(label)}
+                </Text>
+                {showListingOptions ? (
+                    <AntDesign name="up" size={24} style={tw`text-midGray`} />
+                ) : (
+                    <AntDesign name="down" size={24} style={tw`text-midGray`} />
+                )}
+            </TouchableOpacity>
+            {showListingOptions && (
+                <ListingOptions
+                    list={listingProps.list}
+                    change={listingProps.change}
+                    current={listingProps.current}
+                    style={tw`mx-5 mb-5`}
+                />
+            )}
         </View>
     );
 };

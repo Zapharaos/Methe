@@ -1,6 +1,6 @@
 // Import necessary React and React Native components and styles
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, ViewStyle} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import tw from '@/lib/tailwind';
 
@@ -9,20 +9,16 @@ export interface ListingOptionsProps {
     list: { key: string; value: string }[] | string[]; // List of items with keys and values
     current: string | string[];                        // Current selection key
     change: (key: string) => void;                     // Function to be called on selection change
-    style?: any;                                      // Additional style for the container
-    maxHeight?: number;                               // Maximum height for the ScrollView
+    style?: ViewStyle;                                      // Additional style for the container
 }
 
 // Define the ListingOptions functional component
-const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change, style, maxHeight }) => {
+const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change, style }) => {
 
     const currentList = Array.isArray(current) ? current : [current];
 
     return (
-        <ScrollView
-            style={[tw`mt-5 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`, style, { maxHeight }]}
-            contentContainerStyle={tw`flex-grow`}
-        >
+        <View style={[tw`mt-5 rounded-md bg-palePeachSecond dark:bg-darkGrayBrownSecond`, style]}>
             {/* Iterate over the list and render a TouchableOpacity for each item */}
             {list.map((item, index) => {
 
@@ -49,7 +45,7 @@ const ListingOptions: React.FC<ListingOptionsProps> = ({ list, current, change, 
                     </TouchableOpacity>
                 )
             })}
-        </ScrollView>
+        </View>
     )
 }
 
