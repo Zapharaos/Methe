@@ -1,7 +1,7 @@
 import { ajax } from 'rxjs/ajax';
 
 import { StringUtils } from "@/src/utils/utils";
-import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
+import {CocktailDbImageSize, CocktailInformationList} from "@/src/utils/enums/Cocktail";
 
 /**
  * Service class to get cocktails by the API
@@ -19,6 +19,12 @@ class CocktailService {
      * @private
      */
     private readonly baseImageAPIUrl: string = 'https://www.thecocktaildb.com/images/ingredients/{0}{1}.png';
+
+    /**
+     * The base URL use to get list of information from the cocktailAPI
+     * @private
+     */
+    private readonly baseListAPIUrl: string = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?{0}=list';
 
     /**
      * In the cocktailAPI, there are only 15 ingredient maximum
@@ -80,6 +86,38 @@ class CocktailService {
      */
     getCocktailByIngredientName = (name : string) => {
         const url = `${this.baseAPIUrl}filter.php?i=${name}`;
+        return ajax.getJSON(url);
+    }
+
+    /**
+     * Return all categories from cocktail API
+     */
+    getCategoriesList = () => {
+        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Categories);
+        return ajax.getJSON(url);
+    }
+
+    /**
+     * Return all glass type from cocktail API
+     */
+    getGlassList = () => {
+        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Glass);
+        return ajax.getJSON(url);
+    }
+
+    /**
+     * Return all ingredient from cocktail API
+     */
+    getIngredientList = () => {
+        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Ingredient);
+        return ajax.getJSON(url);
+    }
+
+    /**
+     * Return all alcoholic type from cocktail API
+     */
+    getAlcoholicList = () => {
+        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Alcoholic);
         return ajax.getJSON(url);
     }
 }
