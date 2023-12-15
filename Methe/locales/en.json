@@ -1,7 +1,6 @@
 {
   "appName": "Methe",
   "pages": {
-    "home": "Home",
     "favourites": "Favourites"
   },
   "settings": {
@@ -29,9 +28,27 @@
     "ingredients": "Ingredients",
     "units": "units"
   },
-  "search": "Search",
+  "search": {
+    "title": "Search",
+    "barTitle": "Being thirsty?",
+    "barSubTitle": "Any drink · Any ingredient",
+    "buttonClear": "Clear all",
+    "buttonSearch": "Search",
+    "byNameTitle": "Looking for a specific drink?",
+    "byIngredientTitle": "Looking for a specific ingredient?"
+  },
+  "filter": {
+    "title": "Filter",
+    "buttonClear": "Clear all",
+    "buttonSearch": "Filter",
+    "categories": {
+      "category": "Category",
+      "glasses": "Glass type",
+      "ingredients": "Ingredient",
+      "alcoholic": "Alcoholic status"
+    }
+  },
   "notFound": "No results",
-  "welcome": "Hello",
   "share": "Hey ! Check this drink out !",
   "noCocktail": "The cocktail was not found.",
   "noCocktails": "No cocktails to display.",

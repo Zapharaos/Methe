@@ -9,7 +9,7 @@ import {MathUtils, StringUtils} from "@/src/utils/utils";
 /**
  * Return type of the Api call
  */
-interface ApiCocktailResponse {
+export interface ApiCocktailResponse {
     drinks: []
 }
 

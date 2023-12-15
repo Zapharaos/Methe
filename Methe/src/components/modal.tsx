@@ -1,46 +1,41 @@
-// Import necessary React and React Native components and styles
-import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { useHeaderHeight } from "@react-navigation/elements";
-import { router, Stack } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+// Import necessary components and styles from React Native and external libraries
+import React, {Dispatch, SetStateAction, useState} from "react";
+import {View, Modal, Text} from "react-native";
+import tw from "@/lib/tailwind";
+import { MaterialIcons } from "@expo/vector-icons";
 
-// Import the usePreferencesContext for retrieving app preferences
-import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
-
-// Import the Theme enum for determining text color based on color scheme
-import Theme from "@/src/utils/enums/theme";
+// Import context and utility functions
 import BaseComponent from "@/src/components/base";
+import HeaderButton from "@/src/components/header/button";
 
-// ModalComponent for displaying modals with consistent styling
-const ModalComponent = ({ children }: { children: React.ReactNode }) => {
+// Interface for the props of the Modal component
+interface ModalProps {
+    children: React.ReactNode;
+    title: string;
+    visible: boolean,
+    setVisible: Dispatch<SetStateAction<boolean>>,
+}
 
-    // Retrieve the app's preferences from context
-    const {colorScheme} = usePreferencesContext();
-
-    // Determine text color based on the selected color scheme
-    const textColor = colorScheme === Theme.Dark ? '#fff' : '#000';
+// Main component for the search modal
+const ModalComponent: React.FC<ModalProps> = ({ children, title, visible, setVisible } : ModalProps) => {
 
     return (
-        <BaseComponent style={{paddingTop: useHeaderHeight()}}>
-            {/* Centralize the Stack Screen options for all the modals */}
-            <Stack.Screen
-                options={{
-                    headerTransparent: true,
-                    headerTintColor: textColor,
-                    headerTitleStyle: {
-                        fontWeight: 'bold',
-                    },
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => router.back()}>
-                            <Ionicons name="close-outline" color={textColor} size={24} />
-                        </TouchableOpacity>
-                    ),
-                }}
-            />
-            {children}
-        </BaseComponent>
+        <Modal animationType="slide" visible={visible}>
+            <BaseComponent>
+                <View style={tw`w-full flex-1 flex-col gap-5`}>
+                    {/* Header */}
+                    <View style={tw`h-14 items-center justify-center`}>
+                        <HeaderButton onPress={() => setVisible(false)} iconComponent1={<MaterialIcons/>} iconName1={"close"} buttonStyle={tw`ml-3 mr-auto`}/>
+                        <Text style={tw`absolute text-xl text-black dark:text-white`}>
+                            {title}
+                        </Text>
+                    </View>
+                    {children}
+                </View>
+            </BaseComponent>
+        </Modal>
     );
-};
+}
 
 export default ModalComponent;
+

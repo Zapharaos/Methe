@@ -13,11 +13,14 @@ import { RANDOM_COCKTAILS_LIMIT, RANDOM_COCKTAILS_LOAD, REPLACEMENT_ATTEMPTS } f
 
 // Import custom components
 import Loader from "@/src/components/loader";
-import CocktailsFlatlist from "@/src/components/cocktail/flatList";
+import BaseComponent from "@/src/components/base";
 import Header from "@/src/components/header/header";
 import HeaderButton from "@/src/components/header/button";
-import BaseComponent from "@/src/components/base";
-import ResearchModal from "@/src/app/(modal)/research";
+import CocktailsFlatlist from "@/src/components/cocktail/flatList";
+import SearchModal from "@/src/components/search/search";
+import {set} from "i18n-js/typings/lodash";
+import FilterModal from "@/src/components/search/filter";
+import {filter} from "rxjs";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -32,11 +35,14 @@ export default function HomeTab() {
     const [cocktails, setCocktails] = useState<Cocktail[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const [isModalResearchVisible, setIsModalResearchVisible] = useState(false);
+    // State for the search
+    const [searchActive, setSearchActive] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
+    const [searchResult, setSearchResult] = useState<Cocktail[]>([]);
+    const [searchVisible, setSearchVisible] = useState(false);
 
-    const toggleResearchModal = () => {
-        setIsModalResearchVisible(prevState => !prevState);
-    };
+    // State for the filter
+    const [filterVisible, setFilterVisible] = useState(false);
 
     // Function to fetch cocktails with replacement logic
     const fetchCocktails = async (tempCocktails: Cocktail[]) => {
@@ -110,16 +116,26 @@ export default function HomeTab() {
         return (
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
-                    <TouchableOpacity onPress={toggleResearchModal}>
+                    <TouchableOpacity onPress={() => setSearchVisible(true)} style={tw`flex-1`}>
                         <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
-                            <View>
-                                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>Being thirsty?</Text>
-                                <Text style={tw`text-midGray`}>Any alcool · Any ingredient</Text>
-                            </View>
+                            {searchActive ? (
+                                <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
+                                    {searchValue}
+                                </Text>
+                                ) : (
+                                <View>
+                                    <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
+                                        {i18n.t('search.barTitle')}
+                                    </Text>
+                                    <Text style={tw`text-midGray`}>
+                                        {i18n.t('search.barSubTitle')}
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </TouchableOpacity>
-                    <HeaderButton onPress={() => console.log("filter")} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
+                    <HeaderButton onPress={() => setFilterVisible(true)} iconComponent1={<Ionicons/>} iconName1={"options-outline"}
                                   buttonStyle={tw`w-12 h-12 bg-palePeachSecond dark:bg-darkGrayBrownSecond`} iconStyle={tw`text-darkGrayBrown dark:text-palePeach`}/>
                 </View>
             </Header>
@@ -133,6 +149,15 @@ export default function HomeTab() {
         };
         fetchData();
     }, []);
+
+    // useEffect to detect if the search is active or not
+    useEffect(() => {
+        if (searchValue && !searchActive) {
+            setSearchActive(true);
+        } else if (!searchValue && searchActive) {
+            setSearchActive(false);
+        }
+    }, [searchValue]);
 
     // Check if still loading, show loader
     if (loading) {
@@ -148,11 +173,29 @@ export default function HomeTab() {
                     header: () => <ExtendedHeader/>,
                 }}
             />
-            <CocktailsFlatlist cocktails={cocktails} endReached={handleFlatlistEndReached} Footer={FlatlistFooter}/>
-            <ResearchModal
-                isVisible={isModalResearchVisible}
-                onClose={toggleResearchModal}
-                setCocktails={setCocktails}/>
+            {/* Display the cocktails : search results or randoms */}
+            {searchActive ? (
+                <CocktailsFlatlist
+                    cocktails={searchResult}
+                    endReached={() => {}}
+                />
+            ) : (
+                <CocktailsFlatlist
+                    cocktails={cocktails}
+                    endReached={handleFlatlistEndReached}
+                    Footer={FlatlistFooter}
+                />
+            )}
+            {/* Search modal */}
+            <SearchModal
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                setSearchResult={setSearchResult}
+                visible={searchVisible}
+                setVisible={setSearchVisible}
+            />
+            {/* Search modal */}
+            <FilterModal visible={filterVisible} setVisible={setFilterVisible} />
         </BaseComponent>
     );
 }
