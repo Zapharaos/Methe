@@ -56,24 +56,6 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     // State for toggling between search by name and search by ingredient
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
 
-    const accordionRef = useAnimatedRef<View>();
-    const accordionHeight = useSharedValue(0);
-    const accordionAnimation = useAnimatedStyle(() => ({
-        height: accordionHeight.value,
-    }));
-
-    // Toggle between search modes and clear search input
-    const toggleSearchByIngredient = () => {
-        runOnUI(() => {
-            'worklet';
-            console.log(accordionHeight.value)
-            accordionHeight.value = withTiming(searchByIngredient ? 0 : measure(accordionRef)!.height);
-            console.log(accordionHeight.value)
-        })();
-        setLocalSearchValue('');
-        setSearchByIngredient(!searchByIngredient);
-    }
-
     // Clear inputs
     const onCancel = () => {
         setLocalSearchValue('');
@@ -149,38 +131,84 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         setVisible(false);
     }
 
+    const [accordionSearchLoad, setAccordionSearchLoad] = useState(false);
+    const accordionSearchRef = useAnimatedRef<Animated.View>();
+    const accordionSearchHeight = useSharedValue(0);
+    const accordionSearchAnimation = useAnimatedStyle(() => ({
+        height: accordionSearchHeight.value,
+    }));
+
+    const accordionIngredientRef = useAnimatedRef<Animated.View>();
+    const accordionIngredientHeight = useSharedValue(0);
+    const accordionIngredientAnimation = useAnimatedStyle(() => ({
+        height: accordionIngredientHeight.value,
+    }));
+
+    // Toggle between search modes and clear search input
+    const toggleSearchByIngredient = () => {
+        if (!searchByIngredient) {
+            accordionSearchHeight.value = 0;
+            runOnUI(() => {
+                'worklet'; // Indicates that should run on the UI thread = better perf
+                accordionIngredientHeight.value = withTiming(measure(accordionIngredientRef)!.height);
+            })();
+        } else {
+            runOnUI(() => {
+                'worklet'; // Indicates that should run on the UI thread = better perf
+                accordionSearchHeight.value = withTiming(measure(accordionSearchRef)!.height);
+            })();
+            accordionIngredientHeight.value = 0;
+        }
+        setLocalSearchValue('');
+        setSearchByIngredient(!searchByIngredient);
+    }
+
     return (
         <ModalComponent title={i18n.t('search.title')} visible={visible} setVisible={setVisible}>
             {/* Search mode */}
-            <View style={tw`flex-1 mx-5 gap-5 overflow-hidden`}>
-                { searchByIngredient &&
-                    <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond p-0`}>
-                        <TouchableOpacity onPress={toggleSearchByIngredient} style={tw`p-5`}>
-                            <SearchItemTitle label={i18n.t('search.byNameTitle')} />
-                        </TouchableOpacity>
-                    </View>
-                }
-                <Animated.View style={accordionAnimation}>
-                    <View ref={accordionRef} style={tw`w-full absolute`}>
-                        <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond border border-black`}>
-                            <SearchItemTitle label={i18n.t('search.byNameTitle')} />
-                            <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
+            <View style={tw`flex-1 px-5 gap-5 border border-red`}>
+                <View style={tw`overflow-hidden`}>
+                    { searchByIngredient &&
+                        <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond p-0`}>
+                            <TouchableOpacity onPress={toggleSearchByIngredient} style={tw`p-5`}>
+                                <SearchItemTitle label={i18n.t('search.byNameTitle')} />
+                            </TouchableOpacity>
                         </View>
-                    </View>
-                </Animated.View>
-                { !searchByIngredient &&
-                    <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond p-0`}>
-                        <TouchableOpacity onPress={toggleSearchByIngredient} style={tw`p-5`}>
-                            <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
-                        </TouchableOpacity>
-                    </View>
-                }
-                {/*<View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
-                    <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
-                    </ScrollView>
-                </View>*/}
+                    }
+                    <Animated.View style={accordionSearchAnimation}>
+                        <Animated.View ref={accordionSearchRef} style={tw`w-full absolute`} onLayout={(event) => {
+                            if(!accordionSearchLoad) {
+                                const {height} = event.nativeEvent.layout;
+                                accordionSearchHeight.value = height;
+                                setAccordionSearchLoad(true);
+                            }
+                        }}>
+                            <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                <SearchItemTitle label={i18n.t('search.byNameTitle')} />
+                                <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
+                            </View>
+                        </Animated.View>
+                    </Animated.View>
+                </View>
+                <View style={tw`overflow-hidden border border-white`}>
+                    { !searchByIngredient &&
+                        <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond p-0`}>
+                            <TouchableOpacity onPress={toggleSearchByIngredient} style={tw`p-5`}>
+                                <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
+                            </TouchableOpacity>
+                        </View>
+                    }
+                    <Animated.View style={accordionIngredientAnimation}>
+                        <Animated.View ref={accordionIngredientRef} style={tw`w-full absolute`}>
+                            <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                                <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
+                                <ScrollView showsVerticalScrollIndicator={false}>
+                                    <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
+                                </ScrollView>
+                            </View>
+                        </Animated.View>
+                    </Animated.View>
+                </View>
             </View>
 
             {/* Footer */}
