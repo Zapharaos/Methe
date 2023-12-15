@@ -267,3 +267,51 @@ const getDetailsFromCocktail = (input: { drinks: string | any[]; }) => {
 
     return cocktail;
 }
+
+/**
+ * Get all categories
+ */
+export const getCategoriesListData = async (): Promise<ApiCocktailResponse | any> => {
+    const cocktailService : CocktailService = new CocktailService();
+    try {
+        return await lastValueFrom(cocktailService.getCategoriesList().pipe(take(1)));
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+/**
+ * Get all ingredient
+ */
+export const getIngredientListData = async (): Promise<ApiCocktailResponse | any> => {
+    const cocktailService : CocktailService = new CocktailService();
+    try {
+        return await lastValueFrom(cocktailService.getIngredientList().pipe(take(1)));
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+/**
+ * Get all glass type
+ */
+export const getGlassListData = async (): Promise<ApiCocktailResponse | any> => {
+    const cocktailService : CocktailService = new CocktailService();
+    try {
+        return await lastValueFrom(cocktailService.getGlassList().pipe(take(1)));
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+/**
+ * Get all alcoholic type
+ */
+export const getAlcoholicListData = async (): Promise<ApiCocktailResponse | any> => {
+    const cocktailService : CocktailService = new CocktailService();
+    try {
+        return await lastValueFrom(cocktailService.getAlcoholicList().pipe(take(1)));
+    } catch (err) {
+        console.error(err);
+    }
+};

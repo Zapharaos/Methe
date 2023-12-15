@@ -93,7 +93,7 @@ class CocktailService {
      * Return all categories from cocktail API
      */
     getCategoriesList = () => {
-        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Categories);
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Categories);
         return ajax.getJSON(url);
     }
 
@@ -101,7 +101,7 @@ class CocktailService {
      * Return all glass type from cocktail API
      */
     getGlassList = () => {
-        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Glass);
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Glass);
         return ajax.getJSON(url);
     }
 
@@ -109,7 +109,7 @@ class CocktailService {
      * Return all ingredient from cocktail API
      */
     getIngredientList = () => {
-        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Ingredient);
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Ingredient);
         return ajax.getJSON(url);
     }
 
@@ -117,7 +117,7 @@ class CocktailService {
      * Return all alcoholic type from cocktail API
      */
     getAlcoholicList = () => {
-        const url = StringUtils.format(this.baseImageAPIUrl, CocktailInformationList.Alcoholic);
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Alcoholic);
         return ajax.getJSON(url);
     }
 }

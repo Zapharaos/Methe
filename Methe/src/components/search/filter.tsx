@@ -1,5 +1,5 @@
 // Import necessary components and styles from React Native and external libraries
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import { TouchableOpacity, View, Text, ScrollView } from "react-native";
 import tw from "@/lib/tailwind";
 import { Entypo } from "@expo/vector-icons";
@@ -10,16 +10,34 @@ import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterfac
 import ModalComponent from "@/src/components/modal";
 import ListingOptions from "@/src/components/listingOptions";
 import {FilterItem} from "@/src/components/search/utils";
+import CocktailService from "@/src/utils/services/cocktailService";
+import { getCategoriesListData, getIngredientListData, getAlcoholicListData, getGlassListData } from "@/src/utils/cocktail"
 
-const categories = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
-const glasses = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
-const ingredients = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
-const alcoholic = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+//let categories = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+//const glasses = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+//const ingredients = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+//const alcoholic = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
 
 // Interface for the props of the SearchModal component
 interface FilterModalProps {
     visible: boolean,
     setVisible: Dispatch<SetStateAction<boolean>>,
+}
+
+interface CategoriesAPI {
+    strCategory: string
+}
+
+interface  GlassAPI {
+    strGlass: string
+}
+
+interface  IngredientAPI {
+    strIngredient1: string
+}
+
+interface  AlcoholicAPI {
+    strAlcoholic: string
 }
 
 // Main component for the search modal
@@ -30,6 +48,11 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
 
     const [filterCocktailList, setFilterCocktailList] = useState<Cocktail[]>();
     const [filterList, setFilterList] = useState<FilterCocktail>();
+
+    const [categories, setCategories] = useState<string[]>([]);
+    const [glasses, setGlasses] = useState<string[]>([]);
+    const [ingredients, setIngredients] = useState<string[]>([]);
+    const [alcoholic, setAlcoholic] = useState<string[]>([]);
 
     // Clear filters and filter mode
     const onClear = () => {
@@ -77,6 +100,53 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
     const toggleAlcoholicFilter = (alcoholic: string) => {
         setFilterAlcoholic(toggleFilter(filterAlcoholic, alcoholic));
     }
+
+    useEffect(() => {
+        getCategoriesListData().then(( result ) => {
+            const resultList: string[] = [];
+            if(result && result.drinks){
+                result.drinks.map(( category: CategoriesAPI ) => {
+                    resultList.push(category.strCategory);
+                });
+            }
+
+            setCategories(resultList);
+        });
+
+        getGlassListData().then(( result ) => {
+            const resultList: string[] = [];
+            if(result && result.drinks){
+                result.drinks.map(( glass: GlassAPI ) => {
+                    resultList.push(glass.strGlass);
+                });
+            }
+
+            setGlasses(resultList);
+        });
+
+        getIngredientListData().then(( result ) => {
+            const resultList: string[] = [];
+            if(result && result.drinks){
+                result.drinks.map(( ingredient: IngredientAPI ) => {
+                    resultList.push(ingredient.strIngredient1);
+                });
+            }
+
+            setIngredients(resultList);
+        });
+
+        getAlcoholicListData().then(( result ) => {
+            const resultList: string[] = [];
+            if(result && result.drinks){
+                result.drinks.map(( alcoholic: AlcoholicAPI ) => {
+                    resultList.push(alcoholic.strAlcoholic);
+                });
+            }
+
+            setAlcoholic(resultList);
+        });
+
+    }, []);
 
     return (
         <ModalComponent title={i18n.t('filter.title')} visible={visible} setVisible={setVisible}>
