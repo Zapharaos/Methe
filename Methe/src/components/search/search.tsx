@@ -140,7 +140,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
                     {/* Item to toggle the search by name */}
                     <SearchClickableItem label={i18n.t('search.byNameTitle')} onPress={toggleSearchByIngredient} />
                     {/* Item that allows to execute the search by ingredient */}
-                    <SearchItem style={tw`flex-1`}>
+                    <SearchItem style={tw`flex-1`} isVisible={searchByIngredient}>
                         <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
                         <ScrollView showsVerticalScrollIndicator={false}>
                             <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
@@ -150,7 +150,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
             ) : (
                 <View style={tw`flex-1 mx-5 gap-5`}>
                     {/* Item that allows to execute the search by name */}
-                    <SearchItem>
+                    <SearchItem isVisible={searchByIngredient}>
                         <SearchItemTitle label={i18n.t('search.byNameTitle')} />
                         <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
                     </SearchItem>

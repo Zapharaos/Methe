@@ -3,6 +3,11 @@ import { Text, TextInput, TouchableOpacity, View, ViewStyle } from "react-native
 import tw from "@/lib/tailwind";
 import React, {Dispatch, SetStateAction, useState} from "react";
 import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withTiming, useAnimatedRef, measure, runOnUI, useDerivedValue,
+} from 'react-native-reanimated';
 
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";
 import ListingOptions, {ListingOptionsProps} from "@/src/components/listingOptions";
@@ -88,32 +93,43 @@ export const FilterItem = ({ label, listingProps }: FilterItemProps) => {
 
     const {i18n} = usePreferencesContext();
 
-    const [showListingOptions, setShowListingOptions] = useState(false);
+    const [accordion, setAccordion] = useState(false);
+    const accordionRef = useAnimatedRef<View>();
+    const accordionHeight = useSharedValue(0);
+    const accordionAnimation = useAnimatedStyle(() => ({
+        height: accordionHeight.value,
+    }));
 
-    const toggleListingOptions = () => {
-        setShowListingOptions(!showListingOptions);
+    const toggleAccordion = () => {
+        if (accordion) {
+            accordionHeight.value = withTiming(0);
+        } else {
+            runOnUI(() => {
+                'worklet'; // Indicates that should run on the UI thread = better perf
+                accordionHeight.value = withTiming(measure(accordionRef)!.height);
+            })();
+        }
+        setAccordion(!accordion);
     };
 
     return (
-        <View style={tw`border border-midGray my-3 rounded-lg`}>
-            <TouchableOpacity style={tw`flex-row justify-between p-5 ${showListingOptions ? 'border-b border-midGray' : ''}`} onPress={toggleListingOptions}>
+        <View style={tw`border border-midGray my-3 rounded-lg overflow-hidden`}>
+            <TouchableOpacity style={tw`flex-row justify-between p-5`} onPress={toggleAccordion}>
                 <Text style={tw`text-base font-semibold text-darkGrayBrown dark:text-palePeach`}>
                     {i18n.t(label)}
                 </Text>
-                {showListingOptions ? (
-                    <AntDesign name="up" size={24} style={tw`text-midGray`} />
-                ) : (
-                    <AntDesign name="down" size={24} style={tw`text-midGray`} />
-                )}
+                <AntDesign name={accordion ? 'up' : 'down'} size={24} style={tw`text-midGray`} />
             </TouchableOpacity>
-            {showListingOptions && (
-                <ListingOptions
-                    list={listingProps.list}
-                    change={listingProps.change}
-                    current={listingProps.current}
-                    style={tw`mx-5 mb-5`}
-                />
-            )}
+            <Animated.View style={accordionAnimation}>
+                <View ref={accordionRef} style={tw`w-full absolute`}>
+                    <ListingOptions
+                        list={listingProps.list}
+                        change={listingProps.change}
+                        current={listingProps.current}
+                        style={tw`mx-5 mb-5`}
+                    />
+                </View>
+            </Animated.View>
         </View>
     );
 };
