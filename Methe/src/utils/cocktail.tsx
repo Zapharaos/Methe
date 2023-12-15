@@ -4,6 +4,7 @@ import CocktailService from "@/src/utils/services/cocktailService";
 import {Cocktail, CocktailDetail} from "@/src/utils/interface/CocktailInterface";
 import {CocktailDbImageSize} from "@/src/utils/enums/Cocktail";
 import {BASE_URL, URL_SEPARATOR} from "@/src/constants/config";
+import {MathUtils, StringUtils} from "@/src/utils/utils";
 
 /**
  * Return type of the Api call
@@ -79,23 +80,125 @@ export function extractUrlFromCocktail (cocktail: Cocktail | CocktailDetail | un
     return BASE_URL + cocktail.cocktailId + URL_SEPARATOR + cocktail.cocktailName.replace(/\s/g, '-');
 }
 
-export const getIngredientMeasure = (ingredientMeasure : string[], units: number) => {
+type Fraction = {
+    numerator: number;
+    denominator: number;
+};
+
+/**
+ * Extract the measure if it represent a fraction (number/number)
+ * @param measure the measure to extract
+ * @param units the units to add
+ */
+const extractFactionMeasure = (measure: string, units: number) => {
     let result: string = '';
+    const pattern = /^(\d+)\/(\d+)$/; // Regular expression to capture "number/number" format and extract numbers
+    let match = measure.match(pattern);
 
-    try{
-        const size: number = ingredientMeasure.length;
+    if (match) {
+        const fraction: Fraction = {
+            numerator: parseInt(match[1], 10) * units,
+            denominator: parseInt(match[2], 10)
+        };
 
-        if(size > 1) {
-            result = (parseFloat(ingredientMeasure[0]) * units).toString();
-            for (let counter = 1; counter < size; counter++) {
-                result = result.concat(` ${ingredientMeasure[counter]}`)
-            }
+        const divisor = MathUtils.gcd(fraction.numerator, fraction.denominator);
+
+        console.log('denominator : '+ fraction.denominator)
+        if (fraction.denominator === divisor) {
+            result = fraction.numerator.toString();
+        }
+        else
+        {
+            fraction.numerator /= divisor;
+            fraction.denominator /= divisor;
+            result = `${fraction.numerator}/${fraction.denominator}`
         }
     }
-    catch (ex){
-        console.log(`Error : ${ex}`)
+
+    return result;
+}
+
+/**
+ * Extract the measure if it represent a range value (number - number)
+ * @param measure the measure to extract
+ * @param units the units to add
+ */
+const extractRangeMeasure = (measure: string, units: number) =>{
+    let result = '';
+    const patternSeparator = /^(\d+)-(\d+)$/;
+    const match = measure.match(patternSeparator);
+
+    if(match){
+        const firstNumber: number = parseInt(match[1], 10) * units;
+        const secondNumber: number = parseInt(match[2], 10) * units;
+
+        result =`${firstNumber}-${secondNumber}`;
     }
 
+    return result;
+}
+
+/**
+ * Extract the number from the measure if it exist
+ * @param measure the measure to extract
+ * @param units the units to add
+ * @param setMeasure if the measure must be set if it isn't a number
+ */
+const extractNumberMeasure = (measure: string, units: number, setMeasure: boolean) =>{
+    let result = '';
+    const patternNumber = /^(\d+)$/;
+    let match = measure.match(patternNumber);
+
+    if(match){
+        result = (parseFloat(measure) * units).toString();
+    }
+    else{
+        result = setMeasure ? `${units} ${measure}` : '';
+    }
+
+    return result;
+}
+
+/**
+ * Modify the ingredient measure to add the units
+ * @param ingredientMeasure the measure from the API data
+ * @param units the units selected by the user
+ */
+export const getIngredientMeasure = (ingredientMeasure : string[], units: number) => {
+    let result;
+    let startCounter = 0;
+    const size: number = ingredientMeasure.length;
+
+    if(size == 0){
+        result = units.toString();
+    }
+    else if(size == 1) {
+        result = extractNumberMeasure(ingredientMeasure[startCounter], units, true);
+    }
+    else if(size > 1) {
+        result = extractFactionMeasure(ingredientMeasure[startCounter], units);
+        result = extractRangeMeasure(ingredientMeasure[startCounter], units);
+
+        if(StringUtils.isNullOrWhitespace(result)){
+            result = extractFactionMeasure(ingredientMeasure[++startCounter], units);
+        }
+
+        if(StringUtils.isNullOrWhitespace(result)){
+            result = extractNumberMeasure(ingredientMeasure[0], units, false);
+
+            if(StringUtils.isNullOrWhitespace(result)){
+                startCounter--;
+                result = units.toString();
+            }
+        }
+        else {
+            startCounter++;
+        }
+
+        for (let counter = startCounter; counter < size; counter++) {
+            result = result.concat(` ${ingredientMeasure[counter]}`)
+        }
+    }
 
     return result;
 }
