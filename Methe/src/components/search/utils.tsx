@@ -94,7 +94,7 @@ export const FilterItem = ({ label, listingProps }: FilterItemProps) => {
     const {i18n} = usePreferencesContext();
 
     const [accordion, setAccordion] = useState(false);
-    const accordionRef = useAnimatedRef<View>();
+    const accordionRef = useAnimatedRef<Animated.View>();
     const accordionHeight = useSharedValue(0);
     const accordionAnimation = useAnimatedStyle(() => ({
         height: accordionHeight.value,
@@ -121,14 +121,14 @@ export const FilterItem = ({ label, listingProps }: FilterItemProps) => {
                 <AntDesign name={accordion ? 'up' : 'down'} size={24} style={tw`text-midGray`} />
             </TouchableOpacity>
             <Animated.View style={accordionAnimation}>
-                <View ref={accordionRef} style={tw`w-full absolute`}>
+                <Animated.View ref={accordionRef} style={tw`w-full absolute`}>
                     <ListingOptions
                         list={listingProps.list}
                         change={listingProps.change}
                         current={listingProps.current}
                         style={tw`mx-5 mb-5`}
                     />
-                </View>
+                </Animated.View>
             </Animated.View>
         </View>
     );
