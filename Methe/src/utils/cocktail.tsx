@@ -100,10 +100,8 @@ const extractFactionMeasure = (measure: string, units: number) => {
             numerator: parseInt(match[1], 10) * units,
             denominator: parseInt(match[2], 10)
         };
-
         const divisor = MathUtils.gcd(fraction.numerator, fraction.denominator);
 
-        console.log('denominator : '+ fraction.denominator)
         if (fraction.denominator === divisor) {
             result = fraction.numerator.toString();
         }
@@ -177,7 +175,10 @@ export const getIngredientMeasure = (ingredientMeasure : string[], units: number
     }
     else if(size > 1) {
         result = extractFactionMeasure(ingredientMeasure[startCounter], units);
-        result = extractRangeMeasure(ingredientMeasure[startCounter], units);
+
+        if(StringUtils.isNullOrWhitespace(result)){
+            result = extractRangeMeasure(ingredientMeasure[startCounter], units);
+        }
 
         if(StringUtils.isNullOrWhitespace(result)){
             result = extractFactionMeasure(ingredientMeasure[++startCounter], units);
