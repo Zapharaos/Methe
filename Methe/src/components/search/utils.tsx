@@ -6,7 +6,7 @@ import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
-    withTiming, useAnimatedRef, measure, runOnUI, useDerivedValue,
+    withTiming, useAnimatedRef, measure, runOnUI,
 } from 'react-native-reanimated';
 
 import {usePreferencesContext} from "@/src/contexts/preferences/preferences";

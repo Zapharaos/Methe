@@ -1,5 +1,5 @@
 // Import necessary components and styles from React Native and external libraries
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import { TouchableOpacity, View, Text, ScrollView } from "react-native";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
@@ -15,6 +15,11 @@ import ListingOptions from "@/src/components/listingOptions";
 import { SearchBar, SearchClickableItem, SearchItem, SearchItemTitle } from "@/src/components/search/utils";
 import { ApiCocktailResponse } from "@/src/utils/cocktail";
 import ModalComponent from "@/src/components/modal";
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withTiming, useAnimatedRef, measure, runOnUI,
+} from 'react-native-reanimated';
 
 // List of example ingredients for searching by ingredient
 const ingredients = [
@@ -51,8 +56,20 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     // State for toggling between search by name and search by ingredient
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
 
+    const accordionRef = useAnimatedRef<View>();
+    const accordionHeight = useSharedValue(0);
+    const accordionAnimation = useAnimatedStyle(() => ({
+        height: accordionHeight.value,
+    }));
+
     // Toggle between search modes and clear search input
     const toggleSearchByIngredient = () => {
+        runOnUI(() => {
+            'worklet';
+            console.log(accordionHeight.value)
+            accordionHeight.value = withTiming(searchByIngredient ? 0 : measure(accordionRef)!.height);
+            console.log(accordionHeight.value)
+        })();
         setLocalSearchValue('');
         setSearchByIngredient(!searchByIngredient);
     }
@@ -135,29 +152,37 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     return (
         <ModalComponent title={i18n.t('search.title')} visible={visible} setVisible={setVisible}>
             {/* Search mode */}
-            {searchByIngredient ? (
-                <View style={tw`flex-1 mx-5 gap-5`}>
-                    {/* Item to toggle the search by name */}
-                    <SearchClickableItem label={i18n.t('search.byNameTitle')} onPress={toggleSearchByIngredient} />
-                    {/* Item that allows to execute the search by ingredient */}
-                    <SearchItem style={tw`flex-1`} isVisible={searchByIngredient}>
-                        <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
-                        </ScrollView>
-                    </SearchItem>
-                </View>
-            ) : (
-                <View style={tw`flex-1 mx-5 gap-5`}>
-                    {/* Item that allows to execute the search by name */}
-                    <SearchItem isVisible={searchByIngredient}>
-                        <SearchItemTitle label={i18n.t('search.byNameTitle')} />
-                        <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
-                    </SearchItem>
-                    {/* Item to toggle the search by ingredient */}
-                    <SearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>
-                </View>
-            )}
+            <View style={tw`flex-1 mx-5 gap-5 overflow-hidden`}>
+                { searchByIngredient &&
+                    <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond p-0`}>
+                        <TouchableOpacity onPress={toggleSearchByIngredient} style={tw`p-5`}>
+                            <SearchItemTitle label={i18n.t('search.byNameTitle')} />
+                        </TouchableOpacity>
+                    </View>
+                }
+                <Animated.View style={accordionAnimation}>
+                    <View ref={accordionRef} style={tw`w-full absolute`}>
+                        <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond border border-black`}>
+                            <SearchItemTitle label={i18n.t('search.byNameTitle')} />
+                            <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
+                        </View>
+                    </View>
+                </Animated.View>
+                { !searchByIngredient &&
+                    <View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond p-0`}>
+                        <TouchableOpacity onPress={toggleSearchByIngredient} style={tw`p-5`}>
+                            <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
+                        </TouchableOpacity>
+                    </View>
+                }
+                {/*<View style={tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
+                    <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
+                    </ScrollView>
+                </View>*/}
+            </View>
+
             {/* Footer */}
             <View style={tw`p-5 flex-row justify-between items-center`}>
                 <TouchableOpacity onPress={onClear}>
