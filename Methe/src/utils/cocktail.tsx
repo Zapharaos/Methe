@@ -1,5 +1,3 @@
-import {lastValueFrom} from "rxjs";
-import {take} from "rxjs/operators";
 import CocktailService from "@/src/utils/services/cocktailService";
 import {Cocktail, CocktailDetail} from "@/src/utils/interface/CocktailInterface";
 import {CocktailDbImageSize} from "@/src/utils/enums/Cocktail";
@@ -12,27 +10,15 @@ export interface ApiCocktailResponse {
     drinks: []
 }
 
-const getRandomCocktailData = async (): Promise<ApiCocktailResponse | any> => {
-    const cocktailService : CocktailService = new CocktailService();
-    try {
-        return await lastValueFrom(cocktailService.getRandomCocktail().pipe(take(1)));
-    } catch (err) {
-        console.error(err);
-    }
-};
-
-const getCocktailDataById = async (id: string): Promise<ApiCocktailResponse | any> => {
-    const cocktailService : CocktailService = new CocktailService();
-    try {
-        return await lastValueFrom(cocktailService.getCocktailById(id).pipe(take(1)));
-    } catch (err) {
-        console.error(err);
-    }
-};
-
 export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | any> => {
     try {
-        const result = await getRandomCocktailData();
+        // Create an instance of CocktailService
+        const cocktailService = new CocktailService();
+
+        // Call getRandomCocktail method
+        const result = await cocktailService.getRandomCocktail();
+
+        // Process the result, if needed
         return getInfosFromCocktail(result);
     } catch (err) {
         console.error(err);
@@ -43,7 +29,13 @@ export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | a
 
 export const getCocktailInfoById = async (id: string): Promise<ApiCocktailResponse | any> => {
     try {
-        const result = await getCocktailDataById(id);
+        // Create an instance of CocktailService
+        const cocktailService = new CocktailService();
+
+        // Call getRandomCocktail method
+        const result = await cocktailService.getCocktailById(id);
+
+        // Process the result, if needed
         return getInfosFromCocktail(result);
     } catch (err) {
         console.error(err);
@@ -54,7 +46,13 @@ export const getCocktailInfoById = async (id: string): Promise<ApiCocktailRespon
 
 export const getCocktailDetailsById = async (id: string): Promise<any> => {
     try {
-        const result = await getCocktailDataById(id);
+        // Create an instance of CocktailService
+        const cocktailService = new CocktailService();
+
+        // Call getRandomCocktail method
+        const result = await cocktailService.getCocktailById(id);
+
+        // Process the result, if needed
         return getDetailsFromCocktail(result);
     } catch (err) {
         console.error(err);
@@ -65,7 +63,13 @@ export const getCocktailDetailsById = async (id: string): Promise<any> => {
 
 export const getRandomCocktailDetails = async (): Promise<any> => {
     try {
-        const result = await getRandomCocktailData();
+        // Create an instance of CocktailService
+        const cocktailService = new CocktailService();
+
+        // Call getRandomCocktail method
+        const result = await cocktailService.getRandomCocktail();
+
+        // Process the result, if needed
         return getDetailsFromCocktail(result);
     } catch (err) {
         console.error(err);
