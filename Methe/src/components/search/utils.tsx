@@ -24,25 +24,34 @@ export const SearchItemTitle = ({ label }: { label: string }) => {
     );
 };
 
+// Interface for the props of the SearchBar component
+interface SearchItemProps {
+    children: React.ReactNode;
+    isActive: boolean;
+    title: string;
+    onPress: () => void;
+    style?: ViewStyle;
+}
+
 // Component for rendering a search item container
-export const SearchItem = ({ children, style }: { children: React.ReactNode; style?: ViewStyle }) => {
+export const SearchItem = ({ children, isActive, title, onPress, style }: SearchItemProps) => {
     return (
         <View style={[tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond`, style]}>
-            {children}
+            { isActive ? (
+                <TouchableOpacity onPress={onPress}>
+                    <SearchItemTitle label={title} />
+                </TouchableOpacity>
+            ) : (
+                <SearchItemTitle label={title} />
+            )}
+
+            { !isActive &&
+                children
+            }
         </View>
     );
 };
 
-// Component for rendering a clickable search item
-export const SearchClickableItem = ({ onPress, label }: { onPress: () => void; label: string }) => {
-    return (
-        <SearchItem style={tw`p-0`}>
-            <TouchableOpacity onPress={onPress} style={tw`p-5`}>
-                <SearchItemTitle label={label} />
-            </TouchableOpacity>
-        </SearchItem>
-    );
-};
 
 // Interface for the props of the SearchBar component
 interface SearchBarProps {
