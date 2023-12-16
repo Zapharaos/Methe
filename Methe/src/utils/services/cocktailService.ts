@@ -1,4 +1,4 @@
-import { ajax } from 'rxjs/ajax';
+import axios from 'axios';
 
 import { StringUtils } from "@/src/utils/utils";
 import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
@@ -33,18 +33,32 @@ class CocktailService {
     /**
      * Get a random cocktail
      */
-    getRandomCocktail = () => {
+    getRandomCocktail = async () => {
         const url = `${this.baseAPIUrl}random.php`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error('Error fetching random cocktail:', error);
+            throw error;
+        }
     }
 
     /**
      * Get a cocktail by his identifier
      * @param cocktailId : string the cocktail identifier
      */
-    getCocktailById = (cocktailId : string) => {
+    getCocktailById = async (cocktailId : string) => {
         const url = `${this.baseAPIUrl}lookup.php?i=${cocktailId}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktail with id ${cocktailId}:`, error);
+            throw error;
+        }
     }
 
     /**
@@ -60,27 +74,48 @@ class CocktailService {
      * Return all cocktail which start with the letter in param
      * @param letter the letter use to find the cocktail
      */
-    getCocktailByFirstLetter = (letter : string) => {
+    getCocktailByFirstLetter = async (letter : string) => {
         const url = `${this.baseAPIUrl}search.php?f=${letter}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktails with letter ${letter}:`, error);
+            throw error;
+        }
     }
 
     /**
      * Return all cocktail which the name match
      * @param name the name use to find cocktails
      */
-    getCocktailByName = (name : string) => {
+    getCocktailByName = async (name : string) => {
         const url = `${this.baseAPIUrl}search.php?s=${name}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktails with name ${name}:`, error);
+            throw error;
+        }
     }
 
     /**
      * Return all cocktail which the ingredient name match
      * @param name the name use to find cocktails
      */
-    getCocktailByIngredientName = (name : string) => {
+    getCocktailByIngredientName = async (name : string) => {
         const url = `${this.baseAPIUrl}filter.php?i=${name}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktails with ingredient name ${name}:`, error);
+            throw error;
+        }
     }
 }
 

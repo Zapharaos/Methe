@@ -2,13 +2,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Import utility functions for handling async storage
-import { asyncStorage, loadDataJson, storeData, storeDataJson } from "@/src/utils/asyncStorage";
+import { asyncStorage, loadDataJson, storeDataJson } from "@/src/utils/asyncStorage";
+import {Cocktail, CocktailDetail} from "@/src/utils/interface/CocktailInterface";
 
 // Define the Favorites interface
 export interface Favorites {
-    favorites: string[];
-    isFavorite: (itemId: string) => boolean;
-    toggleFavorite: (itemId: string) => void;
+    favorites: Cocktail[];
+    isFavorite: (cocktail: CocktailDetail) => boolean;
+    toggleFavorite: (cocktail: any) => void;
 }
 
 // Create a context for managing favorites
@@ -29,7 +30,7 @@ export function useFavoritesContext() {
 export function FavoritesContextProvider({ children }: { children: React.ReactNode }) {
 
     // State variable for managing the list of favorites
-    const [favorites, setFavorites] = useState<string[]>([]);
+    const [favorites, setFavorites] = useState<Cocktail[]>([]);
 
     // useEffect to load favorites data from async storage on component mount
     useEffect(() => {
@@ -43,18 +44,27 @@ export function FavoritesContextProvider({ children }: { children: React.ReactNo
         getAsyncStorageData().catch(console.error);
     }, []);
 
+    const getFavoriteFromCocktailDetails = (cocktail: CocktailDetail) => {
+        const { cocktailId, cocktailName, cocktailImage } = cocktail;
+        return {
+            cocktailId,
+            cocktailName,
+            cocktailImage,
+        };
+    }
+
     // Function to check if an item is marked as a favorite
-    const isFavorite = (itemId: string) => {
-        return favorites && favorites.includes(itemId);
+    const isFavorite = (cocktail: CocktailDetail) => {
+        return favorites && favorites.some((item) => item.cocktailId === cocktail.cocktailId);
     };
 
     // Function to toggle an item's favorite status
-    const toggleFavorite = (itemId: string) => {
+    const toggleFavorite = (cocktail: any) => {
 
         // Update the list of favorites based on the current state
-        const updatedFavorites = isFavorite(itemId)
-            ? favorites.filter((id) => id !== itemId)
-            : [...favorites, itemId];
+        const updatedFavorites = isFavorite(cocktail)
+            ? favorites.filter((item) => item.cocktailId !== cocktail.cocktailId)
+            : [...favorites, getFavoriteFromCocktailDetails(cocktail)];
 
         setFavorites(updatedFavorites);
 
@@ -69,7 +79,7 @@ export function FavoritesContextProvider({ children }: { children: React.ReactNo
     const favoritesValue: Favorites = {
         favorites,
         isFavorite,
-        toggleFavorite,
+        toggleFavorite
     };
 
     // Provide the FavoritesContext with the favoritesValue
