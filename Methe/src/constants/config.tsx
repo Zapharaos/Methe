@@ -3,8 +3,8 @@ export const BASE_URL = "https://www.thecocktaildb.com/drink/";
 export const URL_SEPARATOR = "-";
 
 // API
-export const MAX_RETRIES = 3;
-export const RETRY_DELAI = 10000;
+export const MAX_RETRIES = 6;
+export const RETRY_DELAI = 5000;
 
 // INDEX
 export const RANDOM_COCKTAILS_LOAD = 10;

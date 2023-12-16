@@ -88,6 +88,14 @@ export default function HomeTab() {
         fetchData();
     };
 
+    const refreshRandomCocktails = () => {
+        setCocktails([]);
+        const fetchData = async () => {
+            await fetchCocktails([...cocktails]);
+        };
+        fetchData();
+    }
+
     // Footer component for Flatlist
     const FlatlistFooter = () => {
         return (
@@ -97,7 +105,7 @@ export default function HomeTab() {
                         <Text style={tw`text-base text-midLight dark:text-midDark`}>
                             {i18n.t('limitReached')}
                         </Text>
-                        <TouchableOpacity onPress={() => setCocktails([])} style={tw`p-2 m-2 flex-row items-center rounded-lg bg-darkGrayBrown dark:bg-palePeach`}>
+                        <TouchableOpacity onPress={() => refreshRandomCocktails()} style={tw`p-2 m-2 flex-row items-center rounded-lg bg-darkGrayBrown dark:bg-palePeach`}>
                             <FontAwesome name="refresh" size={16} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
                             <Text style={tw`text-base text-palePeach dark:text-darkGrayBrown`}>
                                 {' '}{i18n.t('refresh')}
