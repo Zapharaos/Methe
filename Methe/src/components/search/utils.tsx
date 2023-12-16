@@ -36,9 +36,9 @@ interface SearchItemProps {
 // Component for rendering a search item container
 export const SearchItem = ({ children, isActive, title, onPress, style }: SearchItemProps) => {
     return (
-        <View style={[tw`rounded-2xl p-5 bg-palePeachSecond dark:bg-darkGrayBrownSecond`, style]}>
+        <View style={[tw`rounded-2xl bg-palePeachSecond dark:bg-darkGrayBrownSecond ${isActive ? '' : 'p-5 '}`, style]}>
             { isActive ? (
-                <TouchableOpacity onPress={onPress}>
+                <TouchableOpacity onPress={onPress} style={tw`p-5`}>
                     <SearchItemTitle label={title} />
                 </TouchableOpacity>
             ) : (
