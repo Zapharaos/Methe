@@ -219,8 +219,8 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                         {/* Share */}
                         <HeaderButton onPress={share} iconComponent1={<Feather/>} iconName1={"share"}/>
                         {/* Favorite */}
-                        <HeaderButton onPress={() => toggleFavorite(cocktail.cocktailId)} iconComponent1={<MaterialIcons/>} iconName1={"favorite-outline"}
-                            iconComponent2={<MaterialIcons/>} iconName2={"favorite"} useSecondIcon={isFavorite(cocktail.cocktailId)}
+                        <HeaderButton onPress={() => toggleFavorite(cocktail)} iconComponent1={<MaterialIcons/>} iconName1={"favorite-outline"}
+                            iconComponent2={<MaterialIcons/>} iconName2={"favorite"} useSecondIcon={isFavorite(cocktail)}
                         />
                     </View>
                 )}
