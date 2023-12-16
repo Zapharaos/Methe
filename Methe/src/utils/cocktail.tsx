@@ -1,7 +1,8 @@
 import CocktailService from "@/src/utils/services/cocktailService";
 import {Cocktail, CocktailDetail} from "@/src/utils/interface/CocktailInterface";
 import {CocktailDbImageSize} from "@/src/utils/enums/Cocktail";
-import {BASE_URL, URL_SEPARATOR} from "@/src/constants/config";
+import {BASE_URL, MAX_RETRIES, RETRY_DELAI, URL_SEPARATOR} from "@/src/constants/config";
+import {sleep} from "@/src/utils/utils";
 
 /**
  * Return type of the Api call
@@ -10,70 +11,92 @@ export interface ApiCocktailResponse {
     drinks: []
 }
 
+const handleRequestError = async (error: any, retryCount: number): Promise<number> => {
+    console.error('Error fetching cocktail:', error);
+
+    if (error.response && error.response.status === 429) {
+        retryCount = await handleRateLimit(retryCount);
+    } else if (error.code === 'ECONNABORTED' || !error.response) {
+        // Handle timeout or network errors
+        console.warn('Network error or request timeout. Retrying...');
+        retryCount = await handleRateLimit(retryCount);
+    } else {
+        // Rethrow the error if it's not a 429 error, timeout, or network error
+        throw error;
+    }
+
+    return retryCount;
+};
+
+const handleRateLimit = async (retryCount: number = 0) => {
+    if (retryCount >= MAX_RETRIES) {
+        console.error('Max retries reached. Unable to make the request.');
+        throw new Error('Max retries reached.');
+    }
+
+    console.warn(`Received 429 error. Retrying in ${RETRY_DELAI / 1000} seconds (Retry ${retryCount + 1}/${MAX_RETRIES})...`);
+
+    await sleep(RETRY_DELAI);
+
+    // Retry the request
+    return retryCount + 1;
+};
+
+const fetchCocktail = async (fetchFunction: () => Promise<ApiCocktailResponse>, processResult: (input: { drinks: string | any[] }) => any): Promise<ApiCocktailResponse | any> => {
+    let retryCount = 0;
+    while (true) {
+        try {
+            const result = await fetchFunction();
+
+            // Check if result is null or undefined
+            if (!result) {
+                console.warn('Invalid or empty response:', result);
+                throw new Error('Invalid or empty response from the server');
+            }
+
+            return processResult(result);
+        } catch (error: any) {
+            retryCount = await handleRequestError(error, retryCount);
+        }
+    }
+};
+
 export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | any> => {
     try {
-        // Create an instance of CocktailService
         const cocktailService = new CocktailService();
-
-        // Call getRandomCocktail method
-        const result = await cocktailService.getRandomCocktail();
-
-        // Process the result, if needed
-        return getInfosFromCocktail(result);
+        return await fetchCocktail(() => cocktailService.getRandomCocktail(), getInfosFromCocktail);
     } catch (err) {
         console.error(err);
-        // Handle the error or return a default value if needed
         return null;
     }
 };
 
 export const getCocktailInfoById = async (id: string): Promise<ApiCocktailResponse | any> => {
     try {
-        // Create an instance of CocktailService
         const cocktailService = new CocktailService();
-
-        // Call getRandomCocktail method
-        const result = await cocktailService.getCocktailById(id);
-
-        // Process the result, if needed
-        return getInfosFromCocktail(result);
+        return await fetchCocktail(() => cocktailService.getCocktailById(id), getInfosFromCocktail);
     } catch (err) {
         console.error(err);
-        // Handle the error or return a default value if needed
         return null;
     }
 };
 
 export const getCocktailDetailsById = async (id: string): Promise<any> => {
     try {
-        // Create an instance of CocktailService
         const cocktailService = new CocktailService();
-
-        // Call getRandomCocktail method
-        const result = await cocktailService.getCocktailById(id);
-
-        // Process the result, if needed
-        return getDetailsFromCocktail(result);
+        return await fetchCocktail(() => cocktailService.getCocktailById(id), getDetailsFromCocktail);
     } catch (err) {
         console.error(err);
-        // Handle the error or return a default value if needed
         return null;
     }
 };
 
 export const getRandomCocktailDetails = async (): Promise<any> => {
     try {
-        // Create an instance of CocktailService
         const cocktailService = new CocktailService();
-
-        // Call getRandomCocktail method
-        const result = await cocktailService.getRandomCocktail();
-
-        // Process the result, if needed
-        return getDetailsFromCocktail(result);
+        return await fetchCocktail(() => cocktailService.getRandomCocktail(), getDetailsFromCocktail);
     } catch (err) {
         console.error(err);
-        // Handle the error or return a default value if needed
         return null;
     }
 };

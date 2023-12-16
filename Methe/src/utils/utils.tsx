@@ -3,6 +3,8 @@ export const findValueByKey = (list: {key:string, value:string}[], key: string) 
     return item ? item.value : '';
 }
 
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 /**
  * Utils class to work on string
  */
