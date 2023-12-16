@@ -1,6 +1,6 @@
 // Import necessary components and styles from React Native and external libraries
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { TouchableOpacity, View, Text, ScrollView } from "react-native";
+import React, {Dispatch, SetStateAction, useState} from "react";
+import { TouchableOpacity, View, Text, ScrollView, LayoutAnimation } from "react-native";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
 import tw from "@/lib/tailwind";
@@ -8,11 +8,11 @@ import { Entypo } from "@expo/vector-icons";
 
 // Import context and utility functions
 import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
-import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
+import { Cocktail } from "@/src/utils/interface/CocktailInterface";
 import CocktailService from "@/src/utils/services/cocktailService";
 import { StringUtils } from "@/src/utils/utils";
 import ListingOptions from "@/src/components/listingOptions";
-import { SearchBar, SearchClickableItem, SearchItem, SearchItemTitle } from "@/src/components/search/utils";
+import { SearchBar, SearchItem } from "@/src/components/search/utils";
 import { ApiCocktailResponse } from "@/src/utils/cocktail";
 import ModalComponent from "@/src/components/modal";
 
@@ -50,12 +50,6 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
 
     // State for toggling between search by name and search by ingredient
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
-
-    // Toggle between search modes and clear search input
-    const toggleSearchByIngredient = () => {
-        setLocalSearchValue('');
-        setSearchByIngredient(!searchByIngredient);
-    }
 
     // Clear inputs
     const onCancel = () => {
@@ -132,32 +126,39 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         setVisible(false);
     }
 
+
+    const toggleSearchByIngredient = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setSearchByIngredient(!searchByIngredient);
+    };
+
+
     return (
         <ModalComponent title={i18n.t('search.title')} visible={visible} setVisible={setVisible}>
             {/* Search mode */}
-            {searchByIngredient ? (
-                <View style={tw`flex-1 mx-5 gap-5`}>
-                    {/* Item to toggle the search by name */}
-                    <SearchClickableItem label={i18n.t('search.byNameTitle')} onPress={toggleSearchByIngredient} />
-                    {/* Item that allows to execute the search by ingredient */}
-                    <SearchItem style={tw`flex-1`}>
-                        <SearchItemTitle label={i18n.t('search.byIngredientTitle')} />
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
-                        </ScrollView>
-                    </SearchItem>
-                </View>
-            ) : (
-                <View style={tw`flex-1 mx-5 gap-5`}>
-                    {/* Item that allows to execute the search by name */}
-                    <SearchItem>
-                        <SearchItemTitle label={i18n.t('search.byNameTitle')} />
-                        <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
-                    </SearchItem>
-                    {/* Item to toggle the search by ingredient */}
-                    <SearchClickableItem label={i18n.t('search.byIngredientTitle')} onPress={toggleSearchByIngredient}/>
-                </View>
-            )}
+            <View style={tw`flex-1 px-5 gap-5`}>
+
+                <SearchItem
+                    isActive={searchByIngredient}
+                    title={i18n.t('search.byNameTitle')}
+                    onPress={toggleSearchByIngredient}
+                >
+                    <SearchBar searchedValue={localSearchValue} setSearchedValue={setLocalSearchValue} onCancel={onCancel}/>
+                </SearchItem>
+
+                <SearchItem
+                    isActive={!searchByIngredient}
+                    title={i18n.t('search.byIngredientTitle')}
+                    onPress={toggleSearchByIngredient}
+                    style={tw`flex-initial`}
+                >
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <ListingOptions list={ingredients} current={localSearchValue} change={setLocalSearchValue}/>
+                    </ScrollView>
+                </SearchItem>
+
+            </View>
+
             {/* Footer */}
             <View style={tw`p-5 flex-row justify-between items-center`}>
                 <TouchableOpacity onPress={onClear}>
