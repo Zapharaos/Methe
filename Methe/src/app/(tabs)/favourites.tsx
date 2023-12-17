@@ -1,13 +1,5 @@
-// Import React hooks
-import { useEffect, useState } from "react";
-import { useIsFocused } from "@react-navigation/core";
-
 // Import context for managing favorites
 import { useFavoritesContext } from "@/src/contexts/favorites";
-
-// Import interfaces and utility functions
-import { Cocktail } from "@/src/utils/interface/CocktailInterface";
-import { getCocktailInfoById } from "@/src/utils/cocktail";
 
 // Import custom components
 import CocktailsFlatlist from "@/src/components/cocktail/flatList";
