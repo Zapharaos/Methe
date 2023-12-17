@@ -8,7 +8,6 @@ import { Entypo } from "@expo/vector-icons";
 import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
 import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
 import ModalComponent from "@/src/components/modal";
-import ListingOptions from "@/src/components/listingOptions";
 import {FilterItem} from "@/src/components/search/utils";
 
 const categories = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
