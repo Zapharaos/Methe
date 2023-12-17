@@ -88,4 +88,4 @@ export function FavoritesContextProvider({ children }: { children: React.ReactNo
             {children}
         </FavoritesContext.Provider>
     );
-};
+}

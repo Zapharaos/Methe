@@ -1,6 +1,6 @@
 // Import necessary React and React Native components, libraries, and styles
 import React, { useEffect, useState } from 'react';
-import { Dimensions, I18nManager, Share, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Share, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from "react-native-reanimated";
 import { AntDesign, Entypo, Feather, FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";

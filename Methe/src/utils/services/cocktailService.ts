@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { StringUtils } from "@/src/utils/utils";
-import { CocktailDbImageSize } from "@/src/utils/enums/Cocktail";
+import {CocktailDbImageSize, CocktailInformationList} from "@/src/utils/enums/Cocktail";
 
 /**
  * Service class to get cocktails by the API
@@ -19,6 +19,12 @@ class CocktailService {
      * @private
      */
     private readonly baseImageAPIUrl: string = 'https://www.thecocktaildb.com/images/ingredients/{0}{1}.png';
+
+    /**
+     * The base URL use to get list of information from the cocktailAPI
+     * @private
+     */
+    private readonly baseListAPIUrl: string = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?{0}=list';
 
     /**
      * In the cocktailAPI, there are only 15 ingredient maximum
@@ -114,6 +120,66 @@ class CocktailService {
         } catch (error) {
             // Handle error
             console.error(`Error fetching cocktails with ingredient name ${name}:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Return all categories from cocktail API
+     */
+    getCategoriesList = async () => {
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Categories);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching categories:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Return all glasses type from cocktail API
+     */
+    getGlassList = async () => {
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Glass);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching glasses:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Return all ingredients from cocktail API
+     */
+    getIngredientList = async () => {
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Ingredient);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching ingredients:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * Return all alcoholic type from cocktail API
+     */
+    getAlcoholicList = async () => {
+        const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Alcoholic);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching alcoholic:`, error);
             throw error;
         }
     }

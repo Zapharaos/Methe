@@ -14,3 +14,13 @@ export enum CocktailAlcoholic {
     Alcoholic = 'Alcoholic',
     Non_Alcoholic = 'Non_Alcoholic'
 }
+
+/**
+ * Case possible of cocktail list information
+ */
+export enum CocktailInformationList {
+    Categories = 'c',
+    Glass = 'g',
+    Ingredient = 'i',
+    Alcoholic = 'a'
+}
