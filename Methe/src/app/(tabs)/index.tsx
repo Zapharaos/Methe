@@ -95,6 +95,14 @@ export default function HomeTab() {
         fetchData();
     };
 
+    const refreshRandomCocktails = () => {
+        setRandomCocktails([]);
+        const fetchData = async () => {
+            await fetchCocktails([...randomCocktails]);
+        };
+        fetchData();
+    }
+
     /**
      * The function use to execute the filter
      */
@@ -137,7 +145,7 @@ export default function HomeTab() {
                         <Text style={tw`text-base text-midLight dark:text-midDark`}>
                             {i18n.t('limitReached')}
                         </Text>
-                        <TouchableOpacity onPress={() => setRandomCocktails([])} style={tw`p-2 m-2 flex-row items-center rounded-lg bg-darkGrayBrown dark:bg-palePeach`}>
+                        <TouchableOpacity onPress={() => refreshRandomCocktails()} style={tw`p-2 m-2 flex-row items-center rounded-lg bg-darkGrayBrown dark:bg-palePeach`}>
                             <FontAwesome name="refresh" size={16} style={tw`text-palePeach dark:text-darkGrayBrown`}/>
                             <Text style={tw`text-base text-palePeach dark:text-darkGrayBrown`}>
                                 {' '}{i18n.t('refresh')}

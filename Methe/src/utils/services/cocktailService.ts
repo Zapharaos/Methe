@@ -1,4 +1,4 @@
-import { ajax } from 'rxjs/ajax';
+import axios from 'axios';
 
 import { StringUtils } from "@/src/utils/utils";
 import {CocktailDbImageSize, CocktailInformationList} from "@/src/utils/enums/Cocktail";
@@ -39,18 +39,32 @@ class CocktailService {
     /**
      * Get a random cocktail
      */
-    getRandomCocktail = () => {
+    getRandomCocktail = async () => {
         const url = `${this.baseAPIUrl}random.php`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error('Error fetching random cocktail:', error);
+            throw error;
+        }
     }
 
     /**
      * Get a cocktail by his identifier
      * @param cocktailId : string the cocktail identifier
      */
-    getCocktailById = (cocktailId : string) => {
+    getCocktailById = async (cocktailId : string) => {
         const url = `${this.baseAPIUrl}lookup.php?i=${cocktailId}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktail with id ${cocktailId}:`, error);
+            throw error;
+        }
     }
 
     /**
@@ -66,59 +80,108 @@ class CocktailService {
      * Return all cocktail which start with the letter in param
      * @param letter the letter use to find the cocktail
      */
-    getCocktailByFirstLetter = (letter : string) => {
+    getCocktailByFirstLetter = async (letter : string) => {
         const url = `${this.baseAPIUrl}search.php?f=${letter}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktails with letter ${letter}:`, error);
+            throw error;
+        }
     }
 
     /**
      * Return all cocktail which the name match
      * @param name the name use to find cocktails
      */
-    getCocktailByName = (name : string) => {
+    getCocktailByName = async (name : string) => {
         const url = `${this.baseAPIUrl}search.php?s=${name}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktails with name ${name}:`, error);
+            throw error;
+        }
     }
 
     /**
      * Return all cocktail which the ingredient name match
      * @param name the name use to find cocktails
      */
-    getCocktailByIngredientName = (name : string) => {
+    getCocktailByIngredientName = async (name : string) => {
         const url = `${this.baseAPIUrl}filter.php?i=${name}`;
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching cocktails with ingredient name ${name}:`, error);
+            throw error;
+        }
     }
 
     /**
      * Return all categories from cocktail API
      */
-    getCategoriesList = () => {
+    getCategoriesList = async () => {
         const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Categories);
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching categories:`, error);
+            throw error;
+        }
     }
 
     /**
-     * Return all glass type from cocktail API
+     * Return all glasses type from cocktail API
      */
-    getGlassList = () => {
+    getGlassList = async () => {
         const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Glass);
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching glasses:`, error);
+            throw error;
+        }
     }
 
     /**
-     * Return all ingredient from cocktail API
+     * Return all ingredients from cocktail API
      */
-    getIngredientList = () => {
+    getIngredientList = async () => {
         const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Ingredient);
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching ingredients:`, error);
+            throw error;
+        }
     }
 
     /**
      * Return all alcoholic type from cocktail API
      */
-    getAlcoholicList = () => {
+    getAlcoholicList = async () => {
         const url = StringUtils.format(this.baseListAPIUrl, CocktailInformationList.Alcoholic);
-        return ajax.getJSON(url);
+        try {
+            const response = await axios.get(url);
+            return response.data;
+        } catch (error) {
+            // Handle error
+            console.error(`Error fetching alcoholic:`, error);
+            throw error;
+        }
     }
 }
 
