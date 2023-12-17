@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "locale": {
+      "label": "Lingua",
+      "local": "Italiano",
+      "system": "Sistema"
+    },
+    "colorScheme": {
+      "label": "Tema",
+      "system": "Sistema",
+      "light": "Chiaro",
+      "dark": "Scuro"
+    }
+  },
+  "search": "Cerca",
+  "notFound": "Nessun risultato",
+  "welcome": "Ciao"
+}

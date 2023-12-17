@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "locale": {
+      "label": "भाषा",
+      "local": "हिन्दी",
+      "system": "प्रणाली"
+    },
+    "colorScheme": {
+      "label": "विषय",
+      "system": "प्रणाली",
+      "light": "प्रकाश",
+      "dark": "अंधेरा"
+    }
+  },
+  "search": "खोजें",
+  "notFound": "कोई परिणाम नहीं",
+  "welcome": "नमस्ते"
+}

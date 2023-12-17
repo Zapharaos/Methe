@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "locale": {
+      "label": "Langue",
+      "local": "Français",
+      "system": "Système"
+    },
+    "colorScheme": {
+      "label": "Thème",
+      "system": "Système",
+      "light": "Clair",
+      "dark": "Foncé"
+    }
+  },
+  "search": "Rechercher",
+  "notFound": "Aucun résultat",
+  "welcome": "Bonjour"
+}

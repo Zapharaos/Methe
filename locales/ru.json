@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "locale": {
+      "label": "Язык",
+      "local": "Русский",
+      "system": "Система"
+    },
+    "colorScheme": {
+      "label": "Тема",
+      "system": "Система",
+      "light": "Светлый",
+      "dark": "Темный"
+    }
+  },
+  "search": "Поиск",
+  "notFound": "Нет результатов",
+  "welcome": "Здравствуйте"
+}

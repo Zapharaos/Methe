@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "locale": {
+      "label": "Idioma",
+      "local": "Español",
+      "system": "Sistema"
+    },
+    "colorScheme": {
+      "label": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  },
+  "search": "Buscar",
+  "notFound": "Sin resultados",
+  "welcome": "Hola"
+}
