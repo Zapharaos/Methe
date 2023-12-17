@@ -17,6 +17,9 @@ export default function AppLayout() {
     // Apply device context from twrnc
     useDeviceContext(tw);
 
+    // TODO : load elements here
+    //  could be improved to load the first 10 random cocktails for example
+
     if (!animationOver) {
         return (
             <SplashScreenAnimated
