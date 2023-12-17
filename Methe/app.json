@@ -21,6 +21,9 @@
           "image": "./assets/splash/splash-dark.png",
           "resizeMode": "contain"
         }
+      },
+      "infoPlist": {
+        "ExpoLocalization_supportsRTL": true
       }
     },
     "android": {
