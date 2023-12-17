@@ -6,53 +6,37 @@ import { Entypo } from "@expo/vector-icons";
 
 // Import context and utility functions
 import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
-import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
 import ModalComponent from "@/src/components/modal";
-import ListingOptions from "@/src/components/listingOptions";
-import {FilterItem} from "@/src/components/search/utils";
-import CocktailService from "@/src/utils/services/cocktailService";
+import { FilterItem } from "@/src/components/search/utils";
 import { getCategoriesListData, getIngredientListData, getAlcoholicListData, getGlassListData } from "@/src/utils/cocktail"
-
-//let categories = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
-//const glasses = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
-//const ingredients = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
-//const alcoholic = ["Ordinary Drink", "Cocktail", "Shake", "Other \\/ Unknown", "Cocoa", "Shot", "Coffee \\/ Tea", "Homemade Liqueur", "Punch \\/ Party Drink", "Beer", "Soft Drink"]
+import { AlcoholicAPI, CategoriesAPI, GlassAPI, IngredientAPI } from "@/src/utils/interface/CocktailAPIInterface";
 
 // Interface for the props of the SearchModal component
 interface FilterModalProps {
     visible: boolean,
     setVisible: Dispatch<SetStateAction<boolean>>,
-}
-
-interface CategoriesAPI {
-    strCategory: string
-}
-
-interface  GlassAPI {
-    strGlass: string
-}
-
-interface  IngredientAPI {
-    strIngredient1: string
-}
-
-interface  AlcoholicAPI {
-    strAlcoholic: string
+    executeFilter: () => void,
+    filterCategory: string[],
+    setFilterCategory: Dispatch<SetStateAction<string[]>>,
+    filterGlasses: string[],
+    setFilterGlasses: Dispatch<SetStateAction<string[]>>,
+    filterIngredients: string[],
+    setFilterIngredients: Dispatch<SetStateAction<string[]>>,
+    filterAlcoholic: string[],
+    setFilterAlcoholic: Dispatch<SetStateAction<string[]>>
 }
 
 // Main component for the search modal
-export default function FilterModal({ visible, setVisible } : FilterModalProps) {
+export default function FilterModal({ visible, setVisible, executeFilter, filterCategory, setFilterCategory, filterGlasses,
+                                        setFilterGlasses, filterIngredients, setFilterIngredients, filterAlcoholic, setFilterAlcoholic } : FilterModalProps) {
 
     // Retrieve the app's preferences from context
     const {i18n} = usePreferencesContext();
 
-    const [filterCocktailList, setFilterCocktailList] = useState<Cocktail[]>();
-    const [filterList, setFilterList] = useState<FilterCocktail>();
-
-    const [categories, setCategories] = useState<string[]>([]);
-    const [glasses, setGlasses] = useState<string[]>([]);
-    const [ingredients, setIngredients] = useState<string[]>([]);
-    const [alcoholic, setAlcoholic] = useState<string[]>([]);
+    const [categories, setCategories] = useState<string[]>();
+    const [glasses, setGlasses] = useState<string[]>();
+    const [ingredients, setIngredients] = useState<string[]>();
+    const [alcoholic, setAlcoholic] = useState<string[]>();
 
     // Clear filters and filter mode
     const onClear = () => {
@@ -61,16 +45,6 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
         setFilterIngredients([]);
         setFilterAlcoholic([]);
     }
-
-    // Executes the filter and closes the modal
-    const onExecuteFilter = () => {
-        setVisible(false);
-    }
-
-    const [filterCategory, setFilterCategory] = useState<string[]>([]);
-    const [filterGlasses, setFilterGlasses] = useState<string[]>([]);
-    const [filterIngredients, setFilterIngredients] = useState<string[]>([]);
-    const [filterAlcoholic, setFilterAlcoholic] = useState<string[]>([]);
 
     const toggleFilter = (list:string[], item:string) => {
         const index = list.indexOf(item);
@@ -85,6 +59,7 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
             return [...list, item];
         }
     }
+
     const toggleCategoryFilter = (category: string) => {
         setFilterCategory(toggleFilter(filterCategory, category));
     }
@@ -101,51 +76,63 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
         setFilterAlcoholic(toggleFilter(filterAlcoholic, alcoholic));
     }
 
+    /**
+     * Call the props function to filter printed list
+     */
+    const onExecuteFilter = () => {
+        setVisible(false);
+        executeFilter();
+    }
+
+    /**
+     * One first load, call the API to fill all filter dropdown list
+     */
     useEffect(() => {
-        getCategoriesListData().then(( result ) => {
-            const resultList: string[] = [];
-            if(result && result.drinks){
-                result.drinks.map(( category: CategoriesAPI ) => {
-                    resultList.push(category.strCategory);
-                });
-            }
+        if(!categories || !glasses || !ingredients || !alcoholic) {
+            getCategoriesListData().then(( result ) => {
+                const resultList: string[] = [];
+                if(result && result.drinks){
+                    result.drinks.map(( category: CategoriesAPI ) => {
+                        resultList.push(category.strCategory);
+                    });
+                }
 
-            setCategories(resultList);
-        });
+                setCategories(resultList.sort());
+            });
 
-        getGlassListData().then(( result ) => {
-            const resultList: string[] = [];
-            if(result && result.drinks){
-                result.drinks.map(( glass: GlassAPI ) => {
-                    resultList.push(glass.strGlass);
-                });
-            }
+            getGlassListData().then(( result ) => {
+                const resultList: string[] = [];
+                if(result && result.drinks){
+                    result.drinks.map(( glass: GlassAPI ) => {
+                        resultList.push(glass.strGlass);
+                    });
+                }
 
-            setGlasses(resultList);
-        });
+                setGlasses(resultList.sort());
+            });
 
-        getIngredientListData().then(( result ) => {
-            const resultList: string[] = [];
-            if(result && result.drinks){
-                result.drinks.map(( ingredient: IngredientAPI ) => {
-                    resultList.push(ingredient.strIngredient1);
-                });
-            }
+            getIngredientListData().then(( result ) => {
+                const resultList: string[] = [];
+                if(result && result.drinks){
+                    result.drinks.map(( ingredient: IngredientAPI ) => {
+                        resultList.push(ingredient.strIngredient1);
+                    });
+                }
 
-            setIngredients(resultList);
-        });
+                setIngredients(resultList.sort());
+            });
 
-        getAlcoholicListData().then(( result ) => {
-            const resultList: string[] = [];
-            if(result && result.drinks){
-                result.drinks.map(( alcoholic: AlcoholicAPI ) => {
-                    resultList.push(alcoholic.strAlcoholic);
-                });
-            }
+            getAlcoholicListData().then(( result ) => {
+                const resultList: string[] = [];
+                if(result && result.drinks){
+                    result.drinks.map(( alcoholic: AlcoholicAPI ) => {
+                        resultList.push(alcoholic.strAlcoholic);
+                    });
+                }
 
-            setAlcoholic(resultList);
-        });
-
+                setAlcoholic(resultList);
+            });
+        }
     }, []);
 
     return (
@@ -153,41 +140,41 @@ export default function FilterModal({ visible, setVisible } : FilterModalProps) 
             {/* Filter */}
             <ScrollView style={tw`flex-1 px-5`}>
                 {/* Categories */}
-                <FilterItem
+                { categories && <FilterItem
                     label={'filter.categories.category'}
                     listingProps={{
                         list: categories,
                         current: filterCategory,
                         change: toggleCategoryFilter
                     }}
-                />
+                />}
                 {/* Glasses */}
-                <FilterItem
+                { glasses && <FilterItem
                     label={'filter.categories.glasses'}
                     listingProps={{
                         list: glasses,
                         current: filterGlasses,
                         change: toggleGlassesFilter
                     }}
-                />
+                />}
                 {/* Ingredients */}
-                <FilterItem
+                { ingredients && <FilterItem
                     label={'filter.categories.ingredients'}
                     listingProps={{
                         list: ingredients,
                         current: filterIngredients,
                         change: toggleIngredientsFilter
                     }}
-                />
+                />}
                 {/* Alcoholic */}
-                <FilterItem
+                { alcoholic && <FilterItem
                     label={'filter.categories.alcoholic'}
                     listingProps={{
                         list: alcoholic,
                         current: filterAlcoholic,
                         change: toggleAlcoholicFilter
                     }}
-                />
+                />}
             </ScrollView>
             {/* Footer */}
             <View style={tw`p-5 flex-row justify-between items-center`}>

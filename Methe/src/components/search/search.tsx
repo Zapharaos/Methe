@@ -1,5 +1,5 @@
 // Import necessary components and styles from React Native and external libraries
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import { TouchableOpacity, View, Text, ScrollView } from "react-native";
 import { lastValueFrom } from "rxjs";
 import { take } from "rxjs/operators";
@@ -8,39 +8,28 @@ import { Entypo } from "@expo/vector-icons";
 
 // Import context and utility functions
 import { usePreferencesContext } from "@/src/contexts/preferences/preferences";
-import { Cocktail, FilterCocktail } from "@/src/utils/interface/CocktailInterface";
+import { CocktailDetail } from "@/src/utils/interface/CocktailInterface";
 import CocktailService from "@/src/utils/services/cocktailService";
 import { StringUtils } from "@/src/utils/utils";
 import ListingOptions from "@/src/components/listingOptions";
 import { SearchBar, SearchClickableItem, SearchItem, SearchItemTitle } from "@/src/components/search/utils";
-import { ApiCocktailResponse } from "@/src/utils/cocktail";
+import { ApiCocktailResponse, getDetailsFromCocktail, getIngredientListData } from "@/src/utils/cocktail";
 import ModalComponent from "@/src/components/modal";
-
-// List of example ingredients for searching by ingredient
-const ingredients = [
-    "Light rum", "Applejack", "Gin", "Dark rum", "Sweet Vermouth", "Strawberry schnapps",
-    "Light rum", "Applejack", "Gin", "Dark rum", "Sweet Vermouth", "Strawberry schnapps",
-    "Light rum", "Applejack", "Gin", "Dark rum", "Sweet Vermouth", "Strawberry schnapps"
-]
-
-// Interface for API response representing a cocktail
-interface CocktailAPI {
-    idDrink: string,
-    strDrink: string,
-    strDrinkThumb: string,
-}
+import { CocktailAPI, IngredientAPI } from "@/src/utils/interface/CocktailAPIInterface";
 
 // Interface for the props of the SearchModal component
 interface SearchModalProps {
     searchValue: string,
     setSearchValue: Dispatch<SetStateAction<string>>,
-    setSearchResult: Dispatch<SetStateAction<Cocktail[]>>,
+    setSearchResult: Dispatch<SetStateAction<CocktailDetail[]>>,
     visible: boolean,
     setVisible: Dispatch<SetStateAction<boolean>>,
+    searchByIngredient: boolean,
+    setSearchByIngredient: Dispatch<SetStateAction<boolean>>,
 }
 
 // Main component for the search modal
-export default function SearchModal({ searchValue, setSearchValue, setSearchResult, visible, setVisible } : SearchModalProps) {
+export default function SearchModal({ searchValue, setSearchValue, setSearchResult, visible, setVisible, searchByIngredient, setSearchByIngredient } : SearchModalProps) {
 
     // Retrieve the app's preferences from context
     const {i18n} = usePreferencesContext();
@@ -48,8 +37,7 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     // State for saving the local searched value
     const [localSearchValue, setLocalSearchValue] = useState(searchValue);
 
-    // State for toggling between search by name and search by ingredient
-    const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
+    const [ingredients, setIngredients] = useState<string[]>();
 
     // Toggle between search modes and clear search input
     const toggleSearchByIngredient = () => {
@@ -106,22 +94,16 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     // Function to fetch search results and update state
     const fetchSearch = () => {
         callSearch().then((result: ApiCocktailResponse) => {
+            const cocktailDetails: CocktailDetail[] = [];
+
             if(result && result.drinks){
-                const tempResult: Cocktail[] = [];
-                result.drinks.map((cocktail: CocktailAPI) => {
-                    const newCocktail: Cocktail = {
-                        cocktailId: cocktail.idDrink,
-                        cocktailName: cocktail.strDrink,
-                        cocktailImage: cocktail.strDrinkThumb,
-                    };
-                    tempResult.push(newCocktail);
-                });
-                setSearchResult(tempResult);
+                result.drinks.map( (cocktail: CocktailAPI) => {
+                    const cocktailDetail = getDetailsFromCocktail(cocktail);
+                    cocktailDetail && cocktailDetails.push(cocktailDetail);
+                })
             }
-            else
-            {
-                console.log('Erreur : aucun retour API')
-            }
+
+            setSearchResult(cocktailDetails);
         });
     }
 
@@ -132,10 +114,25 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
         setVisible(false);
     }
 
+    useEffect(() => {
+        if(!ingredients){
+            getIngredientListData().then(( result ) => {
+                const resultList: string[] = [];
+                if(result && result.drinks){
+                    result.drinks.map(( ingredient: IngredientAPI ) => {
+                        resultList.push(ingredient.strIngredient1);
+                    });
+                }
+
+                setIngredients(resultList.sort());
+            });
+        }
+    }, []);
+
     return (
         <ModalComponent title={i18n.t('search.title')} visible={visible} setVisible={setVisible}>
             {/* Search mode */}
-            {searchByIngredient ? (
+            {searchByIngredient && ingredients ? (
                 <View style={tw`flex-1 mx-5 gap-5`}>
                     {/* Item to toggle the search by name */}
                     <SearchClickableItem label={i18n.t('search.byNameTitle')} onPress={toggleSearchByIngredient} />

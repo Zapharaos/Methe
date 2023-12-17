@@ -5,6 +5,7 @@ import {Cocktail, CocktailDetail} from "@/src/utils/interface/CocktailInterface"
 import {CocktailDbImageSize} from "@/src/utils/enums/Cocktail";
 import {BASE_URL, URL_SEPARATOR} from "@/src/constants/config";
 import {MathUtils, StringUtils} from "@/src/utils/utils";
+import {CocktailAPI} from "@/src/utils/interface/CocktailAPIInterface";
 
 /**
  * Return type of the Api call
@@ -31,10 +32,13 @@ const getCocktailDataById = async (id: string): Promise<ApiCocktailResponse | an
     }
 };
 
+/**
+ * Call the API to get a random cocktail and store information into a CocktailDetail class
+ */
 export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | any> => {
     try {
         const result = await getRandomCocktailData();
-        return getInfosFromCocktail(result);
+        return getDetailsFromDrinks(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -45,7 +49,7 @@ export const getRandomCocktailObject = async (): Promise<ApiCocktailResponse | a
 export const getCocktailInfoById = async (id: string): Promise<ApiCocktailResponse | any> => {
     try {
         const result = await getCocktailDataById(id);
-        return getInfosFromCocktail(result);
+        return getDetailsFromDrinks(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -56,7 +60,7 @@ export const getCocktailInfoById = async (id: string): Promise<ApiCocktailRespon
 export const getCocktailDetailsById = async (id: string): Promise<any> => {
     try {
         const result = await getCocktailDataById(id);
-        return getDetailsFromCocktail(result);
+        return getDetailsFromDrinks(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -67,7 +71,7 @@ export const getCocktailDetailsById = async (id: string): Promise<any> => {
 export const getRandomCocktailDetails = async (): Promise<any> => {
     try {
         const result = await getRandomCocktailData();
-        return getDetailsFromCocktail(result);
+        return getDetailsFromDrinks(result);
     } catch (err) {
         console.error(err);
         // Handle the error or return a default value if needed
@@ -86,7 +90,7 @@ type Fraction = {
 };
 
 /**
- * Extract the measure if it represent a fraction (number/number)
+ * Extract the measure if it represents a fraction (number/number)
  * @param measure the measure to extract
  * @param units the units to add
  */
@@ -117,7 +121,7 @@ const extractFactionMeasure = (measure: string, units: number) => {
 }
 
 /**
- * Extract the measure if it represent a range value (number - number)
+ * Extract the measure if it represents a range value (number - number)
  * @param measure the measure to extract
  * @param units the units to add
  */
@@ -137,13 +141,13 @@ const extractRangeMeasure = (measure: string, units: number) =>{
 }
 
 /**
- * Extract the number from the measure if it exist
+ * Extract the number from the measure if it exists
  * @param measure the measure to extract
  * @param units the units to add
  * @param setMeasure if the measure must be set if it isn't a number
  */
 const extractNumberMeasure = (measure: string, units: number, setMeasure: boolean) =>{
-    let result = '';
+    let result;
     const patternNumber = /^(\d+)$/;
     let match = measure.match(patternNumber);
 
@@ -204,7 +208,11 @@ export const getIngredientMeasure = (ingredientMeasure : string[], units: number
     return result;
 }
 
-const getInfosFromCocktail = (input: { drinks: string | any[]; }) => {
+/**
+ * Store information from a drinks list with only one object inside
+ * @param input a object with a drinks list attributes
+ */
+export const getDetailsFromDrinks = (input: { drinks: string | any[]; }) => {
     // Check if 'drinks' array exists and has at least one item
     if (!input || !input.drinks || input.drinks.length <= 0) {
         console.warn('Invalid or empty response:', input);
@@ -212,32 +220,23 @@ const getInfosFromCocktail = (input: { drinks: string | any[]; }) => {
         return null;
     }
 
-    const cocktail: Cocktail = {
-        cocktailId: input.drinks[0].idDrink,
-        cocktailName: input.drinks[0].strDrink,
-        cocktailImage: input.drinks[0].strDrinkThumb,
-    };
-
-    return cocktail;
+    return getDetailsFromCocktail(input.drinks[0]);
 }
 
-const getDetailsFromCocktail = (input: { drinks: string | any[]; }) => {
-    // Check if 'drinks' array exists and has at least one item
-    if (!input || !input.drinks || input.drinks.length <= 0) {
-        console.warn('Invalid or empty response:', input);
-        // Return null or handle the situation as appropriate
-        return null;
-    }
-
+/**
+ * Store information from a cocktail API object
+ * @param input a object like the API return object
+ */
+export const getDetailsFromCocktail = (input: CocktailAPI) =>{
     const cocktail: CocktailDetail = {
-        cocktailId: input.drinks[0].idDrink,
-        cocktailName: input.drinks[0].strDrink,
-        cocktailImage: input.drinks[0].strDrinkThumb,
-        strAlcoholic: input.drinks[0].strAlcoholic,
-        strCategory: input.drinks[0].strCategory,
-        strGlass: input.drinks[0].strGlass,
-        strIBA: input.drinks[0].strIBA,
-        strInstructions: input.drinks[0].strInstructions,
+        cocktailId: input.idDrink,
+        cocktailName: input.strDrink,
+        cocktailImage: input.strDrinkThumb,
+        strAlcoholic: input.strAlcoholic,
+        strCategory: input.strCategory,
+        strGlass: input.strGlass,
+        strIBA: input.strIBA,
+        strInstructions: input.strInstructions,
         ingredientList: [],
         instructionsByLanguageList: [],
     }
@@ -248,8 +247,8 @@ const getDetailsFromCocktail = (input: { drinks: string | any[]; }) => {
     const size : number = CocktailService.maxNumberOfIngredient;
     for(let counter: number = 1; hasOtherIngredient && counter <= size; counter++){
 
-        const ingredient: string = input.drinks[0][`strIngredient${counter}`];
-        const measure: string = input.drinks[0][`strMeasure${counter}`];
+        const ingredient: string = (input as any)[`strIngredient${counter}`];
+        const measure: string = (input as any)[`strMeasure${counter}`];
 
         if(ingredient){
             const ingredientMeasure: string[] = measure ? measure.split(' ') : [];
