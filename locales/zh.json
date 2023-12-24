@@ -1,18 +1,57 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "收藏"
+  },
   "settings": {
+    "title": "设置",
     "locale": {
       "label": "语言",
       "local": "中文",
-      "system": "系统"
+      "system": "系统",
+      "alert": {
+        "title": "需要重新启动",
+        "message": "更改所选语言需要重新启动。您要继续吗？",
+        "cancel": "取消",
+        "confirm": "重新启动"
+      }
     },
     "colorScheme": {
       "label": "主题",
       "system": "系统",
-      "light": "亮",
-      "dark": "暗"
+      "light": "明亮",
+      "dark": "暗黑"
     }
   },
-  "search": "搜索",
+  "cocktail": {
+    "instructions": "说明",
+    "ingredients": "成分",
+    "units": "单位"
+  },
+  "search": {
+    "title": "搜索",
+    "barTitle": "口渴了吗？",
+    "barSubTitle": "任何饮料 · 任何成分",
+    "buttonClear": "清除所有",
+    "buttonSearch": "搜索",
+    "byNameTitle": "寻找特定饮料？",
+    "byIngredientTitle": "寻找特定成分？"
+  },
+  "filter": {
+    "title": "筛选",
+    "buttonClear": "清除所有",
+    "buttonSearch": "筛选",
+    "categories": {
+      "category": "类别",
+      "glasses": "玻璃类型",
+      "ingredients": "成分",
+      "alcoholic": "酒精状态"
+    }
+  },
   "notFound": "没有结果",
-  "welcome": "你好"
+  "share": "嘿！看看这个饮料！",
+  "noCocktail": "未找到鸡尾酒。",
+  "noCocktails": "没有要显示的鸡尾酒。",
+  "limitReached": "已达到限制。",
+  "refresh": "刷新"
 }

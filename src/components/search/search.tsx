@@ -112,6 +112,14 @@ export default function SearchModal({ searchValue, setSearchValue, setSearchResu
     };
 
     useEffect(() => {
+        // Resetting searchByIngredient when modal exit event with no selected value
+        if (!visible && searchByIngredient && localSearchValue.length === 0)
+        {
+            setSearchByIngredient(false);
+        }
+    }, [visible]);
+
+    useEffect(() => {
         if(!ingredients){
             getIngredientListData().then(( result ) => {
                 const resultList: string[] = [];

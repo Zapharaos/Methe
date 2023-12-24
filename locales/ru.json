@@ -1,18 +1,57 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "Избранное"
+  },
   "settings": {
+    "title": "Настройки",
     "locale": {
       "label": "Язык",
       "local": "Русский",
-      "system": "Система"
+      "system": "Система",
+      "alert": {
+        "title": "Требуется перезапуск",
+        "message": "Для изменения выбранного языка требуется перезапуск. Желаете продолжить?",
+        "cancel": "Отмена",
+        "confirm": "Перезапустить"
+      }
     },
     "colorScheme": {
       "label": "Тема",
       "system": "Система",
-      "light": "Светлый",
-      "dark": "Темный"
+      "light": "Светлая",
+      "dark": "Темная"
     }
   },
-  "search": "Поиск",
+  "cocktail": {
+    "instructions": "Инструкции",
+    "ingredients": "Ингредиенты",
+    "units": "единицы"
+  },
+  "search": {
+    "title": "Поиск",
+    "barTitle": "Жажда?",
+    "barSubTitle": "Любой напиток · Любой ингредиент",
+    "buttonClear": "Очистить все",
+    "buttonSearch": "Поиск",
+    "byNameTitle": "Ищете конкретный напиток?",
+    "byIngredientTitle": "Ищете конкретный ингредиент?"
+  },
+  "filter": {
+    "title": "Фильтр",
+    "buttonClear": "Очистить все",
+    "buttonSearch": "Фильтр",
+    "categories": {
+      "category": "Категория",
+      "glasses": "Тип стакана",
+      "ingredients": "Ингредиент",
+      "alcoholic": "Статус алкоголя"
+    }
+  },
   "notFound": "Нет результатов",
-  "welcome": "Здравствуйте"
+  "share": "Привет! Посмотрите этот напиток!",
+  "noCocktail": "Коктейль не найден.",
+  "noCocktails": "Нет коктейлей для отображения.",
+  "limitReached": "Достигнут лимит.",
+  "refresh": "Обновить"
 }

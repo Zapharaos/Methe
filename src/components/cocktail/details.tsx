@@ -42,7 +42,7 @@ const CocktailDetailsContent = ({ cocktail }: { cocktail: CocktailDetail; }) => 
     return (
         <View style={tw`p-5 bg-palePeach dark:bg-darkGrayBrown`}>
             {/* Title */}
-            <Text style={tw`text-3xl font-semibold text-black dark:text-white`}>
+            <Text style={tw`font-semibold text-left text-3xl text-black dark:text-white`}>
                 {cocktail.cocktailName}
             </Text>
 
@@ -70,7 +70,7 @@ const CocktailDetailsContent = ({ cocktail }: { cocktail: CocktailDetail; }) => 
 
             {/* Instructions */}
             <View style={tw`mt-5`}>
-                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                <Text style={tw`font-bold text-left text-xl text-black dark:text-white`}>
                     {i18n.t('cocktail.instructions')}
                 </Text>
                 <Text style={tw`mt-2 text-justify text-base text-black dark:text-white`}>
@@ -81,7 +81,7 @@ const CocktailDetailsContent = ({ cocktail }: { cocktail: CocktailDetail; }) => 
             {/* Ingredients */}
             <View style={tw`mt-5`}>
 
-                <Text style={tw`font-bold text-xl text-black dark:text-white`}>
+                <Text style={tw`font-bold text-left text-xl text-black dark:text-white`}>
                     {i18n.t('cocktail.ingredients')}
                 </Text>
 

@@ -20,7 +20,7 @@ const IngredientsList: React.FC<IngredientsListProps> = ({ ingredients, units}) 
         // Container for the grid of ingredients
         <View style={tw`mt-5`}>
             {ingredients.map((ingredient, index) => (
-                <IngredientListItem key={index} ingredient={ingredient} units={units}></IngredientListItem>
+                <IngredientListItem key={index} ingredient={ingredient} units={units}/>
             ))}
         </View>
     )

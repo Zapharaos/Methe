@@ -1,9 +1,20 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "Favoritos"
+  },
   "settings": {
+    "title": "Configuración",
     "locale": {
       "label": "Idioma",
       "local": "Español",
-      "system": "Sistema"
+      "system": "Sistema",
+      "alert": {
+        "title": "Reinicio requerido",
+        "message": "Cambiar al idioma seleccionado requiere un reinicio. ¿Desea continuar?",
+        "cancel": "Cancelar",
+        "confirm": "Reiniciar"
+      }
     },
     "colorScheme": {
       "label": "Tema",
@@ -12,7 +23,35 @@
       "dark": "Oscuro"
     }
   },
-  "search": "Buscar",
+  "cocktail": {
+    "instructions": "Instrucciones",
+    "ingredients": "Ingredientes",
+    "units": "unidades"
+  },
+  "search": {
+    "title": "Buscar",
+    "barTitle": "¿Tienes sed?",
+    "barSubTitle": "Cualquier bebida · Cualquier ingrediente",
+    "buttonClear": "Limpiar todo",
+    "buttonSearch": "Buscar",
+    "byNameTitle": "¿Buscas una bebida específica?",
+    "byIngredientTitle": "¿Buscas un ingrediente específico?"
+  },
+  "filter": {
+    "title": "Filtrar",
+    "buttonClear": "Limpiar todo",
+    "buttonSearch": "Filtrar",
+    "categories": {
+      "category": "Categoría",
+      "glasses": "Tipo de vaso",
+      "ingredients": "Ingrediente",
+      "alcoholic": "Estado alcohólico"
+    }
+  },
   "notFound": "Sin resultados",
-  "welcome": "Hola"
+  "share": "¡Hola! ¡Mira esta bebida!",
+  "noCocktail": "No se encontró el cóctel.",
+  "noCocktails": "No hay cócteles para mostrar.",
+  "limitReached": "Se ha alcanzado el límite.",
+  "refresh": "Actualizar"
 }

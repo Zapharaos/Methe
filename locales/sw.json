@@ -1,9 +1,20 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "Vipendwa"
+  },
   "settings": {
+    "title": "Mipangilio",
     "locale": {
-      "label": "Lugha",
+      "label": " Lugha",
       "local": "Kiswahili",
-      "system": "Mfumo"
+      "system": "Mfumo",
+      "alert": {
+        "title": "Inahitajika kuanzisha upya",
+        "message": "Kubadilisha lugha inayotakiwa inahitaji kuanzisha upya. Unataka kuendelea?",
+        "cancel": "Ghairi",
+        "confirm": "Anzisha upya"
+      }
     },
     "colorScheme": {
       "label": "Mandhari",
@@ -12,7 +23,35 @@
       "dark": "Giza"
     }
   },
-  "search": "Tafuta",
+  "cocktail": {
+    "instructions": "Maelekezo",
+    "ingredients": "Viungo",
+    "units": "vitengo"
+  },
+  "search": {
+    "title": "Tafuta",
+    "barTitle": "Una kiu?",
+    "barSubTitle": "Kinywaji chochote · Kitu chochote",
+    "buttonClear": "Ondoa vyote",
+    "buttonSearch": "Tafuta",
+    "byNameTitle": "Unatafuta kinywaji fulani?",
+    "byIngredientTitle": "Unatafuta kipande fulani?"
+  },
+  "filter": {
+    "title": "Chuja",
+    "buttonClear": "Ondoa vyote",
+    "buttonSearch": "Chuja",
+    "categories": {
+      "category": "Jamii",
+      "glasses": "Aina ya glasi",
+      "ingredients": "Kipande",
+      "alcoholic": "Hali ya pombe"
+    }
+  },
   "notFound": "Hakuna matokeo",
-  "welcome": "Habari"
+  "share": "Hey! Angalia kinywaji hiki!",
+  "noCocktail": "Kokteli haikupatikana.",
+  "noCocktails": "Hakuna kokteli za kuonyesha.",
+  "limitReached": "Kiwango kimefikiwa.",
+  "refresh": "Sasisha"
 }

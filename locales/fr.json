@@ -1,18 +1,57 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "Favoris"
+  },
   "settings": {
+    "title": "Paramètres",
     "locale": {
       "label": "Langue",
       "local": "Français",
-      "system": "Système"
+      "system": "Système",
+      "alert": {
+        "title": "Redémarrage requis",
+        "message": "Le changement de langue nécessite un redémarrage. Voulez-vous continuer?",
+        "cancel": "Annuler",
+        "confirm": "Redémarrer"
+      }
     },
     "colorScheme": {
       "label": "Thème",
       "system": "Système",
       "light": "Clair",
-      "dark": "Foncé"
+      "dark": "Sombre"
     }
   },
-  "search": "Rechercher",
+  "cocktail": {
+    "instructions": "Instructions",
+    "ingredients": "Ingrédients",
+    "units": "unités"
+  },
+  "search": {
+    "title": "Rechercher",
+    "barTitle": "Vous avez soif?",
+    "barSubTitle": "N'importe quelle boisson · N'importe quel ingrédient",
+    "buttonClear": "Effacer tout",
+    "buttonSearch": "Rechercher",
+    "byNameTitle": "Cherchez-vous une boisson spécifique?",
+    "byIngredientTitle": "Cherchez-vous un ingrédient spécifique?"
+  },
+  "filter": {
+    "title": "Filtrer",
+    "buttonClear": "Effacer tout",
+    "buttonSearch": "Filtrer",
+    "categories": {
+      "category": "Catégorie",
+      "glasses": "Type de verre",
+      "ingredients": "Ingrédient",
+      "alcoholic": "Statut alcoolique"
+    }
+  },
   "notFound": "Aucun résultat",
-  "welcome": "Bonjour"
+  "share": "Hé ! Regardez cette boisson !",
+  "noCocktail": "Le cocktail n'a pas été trouvé.",
+  "noCocktails": "Aucun cocktail à afficher.",
+  "limitReached": "La limite a été atteinte.",
+  "refresh": "Actualiser"
 }

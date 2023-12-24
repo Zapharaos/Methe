@@ -1,18 +1,57 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "المفضلة"
+  },
   "settings": {
+    "title": "الإعدادات",
     "locale": {
-      "label": "لغة",
+      "label": "اللغة",
       "local": "العربية",
-      "system": "نظام"
+      "system": "النظام",
+      "alert": {
+        "title": "إعادة التشغيل مطلوبة",
+        "message": "تغيير اللغة يتطلب إعادة التشغيل. هل تريد المتابعة؟",
+        "cancel": "إلغاء",
+        "confirm": "إعادة التشغيل"
+      }
     },
     "colorScheme": {
-      "label": "موضوع",
-      "system": "نظام",
-      "light": "ضوء",
-      "dark": "ظلام"
+      "label": "المظهر",
+      "system": "النظام",
+      "light": "فاتح",
+      "dark": "داكن"
     }
   },
-  "search": "بحث",
+  "cocktail": {
+    "instructions": "التعليمات",
+    "ingredients": "المكونات",
+    "units": "وحدات"
+  },
+  "search": {
+    "title": "البحث",
+    "barTitle": "عطشان؟",
+    "barSubTitle": "أي مشروب · أي مكون",
+    "buttonClear": "مسح الكل",
+    "buttonSearch": "بحث",
+    "byNameTitle": "تبحث عن مشروب معين؟",
+    "byIngredientTitle": "تبحث عن مكون معين؟"
+  },
+  "filter": {
+    "title": "التصفية",
+    "buttonClear": "مسح الكل",
+    "buttonSearch": "تصفية",
+    "categories": {
+      "category": "الفئة",
+      "glasses": "نوع الكوب",
+      "ingredients": "المكون",
+      "alcoholic": "الحالة الكحولية"
+    }
+  },
   "notFound": "لا توجد نتائج",
-  "welcome": "مرحباً"
+  "share": "مرحبًا! تحقق من هذا المشروب!",
+  "noCocktail": "لم يتم العثور على المشروب.",
+  "noCocktails": "لا يوجد مشروب لعرضه.",
+  "limitReached": "تم الوصول إلى الحد الأقصى.",
+  "refresh": "تحديث"
 }
