@@ -1,9 +1,20 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "Preferiti"
+  },
   "settings": {
+    "title": "Impostazioni",
     "locale": {
       "label": "Lingua",
       "local": "Italiano",
-      "system": "Sistema"
+      "system": "Sistema",
+      "alert": {
+        "title": "Richiesto riavvio",
+        "message": "Il cambio della lingua richiede un riavvio. Vuoi procedere?",
+        "cancel": "Annulla",
+        "confirm": "Riavvia"
+      }
     },
     "colorScheme": {
       "label": "Tema",
@@ -12,7 +23,35 @@
       "dark": "Scuro"
     }
   },
-  "search": "Cerca",
+  "cocktail": {
+    "instructions": "Istruzioni",
+    "ingredients": "Ingredienti",
+    "units": "unità"
+  },
+  "search": {
+    "title": "Ricerca",
+    "barTitle": "Hai sete?",
+    "barSubTitle": "Qualsiasi bevanda · Qualsiasi ingrediente",
+    "buttonClear": "Cancella tutto",
+    "buttonSearch": "Ricerca",
+    "byNameTitle": "Cerchi una bevanda specifica?",
+    "byIngredientTitle": "Cerchi un ingrediente specifico?"
+  },
+  "filter": {
+    "title": "Filtro",
+    "buttonClear": "Cancella tutto",
+    "buttonSearch": "Filtra",
+    "categories": {
+      "category": "Categoria",
+      "glasses": "Tipo di bicchiere",
+      "ingredients": "Ingrediente",
+      "alcoholic": "Stato alcolico"
+    }
+  },
   "notFound": "Nessun risultato",
-  "welcome": "Ciao"
+  "share": "Ehi! Dai un'occhiata a questa bevanda!",
+  "noCocktail": "Il cocktail non è stato trovato.",
+  "noCocktails": "Nessun cocktail da mostrare.",
+  "limitReached": "Limite raggiunto.",
+  "refresh": "Aggiorna"
 }

@@ -1,18 +1,57 @@
 {
+  "appName": "Methe",
+  "pages": {
+    "favourites": "पसंदीदा"
+  },
   "settings": {
+    "title": "सेटिंग्स",
     "locale": {
       "label": "भाषा",
       "local": "हिन्दी",
-      "system": "प्रणाली"
+      "system": "सिस्टम",
+      "alert": {
+        "title": "पुनरारंभ की आवश्यकता है",
+        "message": "चयनित भाषा में परिवर्तन के लिए पुनरारंभ की आवश्यकता है। क्या आप आगे बढ़ना चाहते हैं?",
+        "cancel": "रद्द करें",
+        "confirm": "पुनरारंभ करें"
+      }
     },
     "colorScheme": {
-      "label": "विषय",
-      "system": "प्रणाली",
-      "light": "प्रकाश",
+      "label": "थीम",
+      "system": "सिस्टम",
+      "light": "साफ",
       "dark": "अंधेरा"
     }
   },
-  "search": "खोजें",
+  "cocktail": {
+    "instructions": "निर्देश",
+    "ingredients": "सामग्री",
+    "units": "इकाइयाँ"
+  },
+  "search": {
+    "title": "खोजें",
+    "barTitle": "प्यासे हैं?",
+    "barSubTitle": "कोई भी पेय · कोई भी सामग्री",
+    "buttonClear": "सभी को साफ़ करें",
+    "buttonSearch": "खोजें",
+    "byNameTitle": "क्या आप किसी विशिष्ट पेय की तलाश में हैं?",
+    "byIngredientTitle": "क्या आप किसी विशिष्ट सामग्री की तलाश में हैं?"
+  },
+  "filter": {
+    "title": "फ़िल्टर",
+    "buttonClear": "सभी को साफ़ करें",
+    "buttonSearch": "फ़िल्टर",
+    "categories": {
+      "category": "श्रेणी",
+      "glasses": "ग्लास का प्रकार",
+      "ingredients": "सामग्री",
+      "alcoholic": "शराबी स्थिति"
+    }
+  },
   "notFound": "कोई परिणाम नहीं",
-  "welcome": "नमस्ते"
+  "share": "हेय! इस पेय को देखें!",
+  "noCocktail": "कॉकटेल नहीं मिला।",
+  "noCocktails": "प्रदर्शित करने के लिए कोई कॉकटेल नहीं हैं।",
+  "limitReached": "सीमा पहुंच गई है।",
+  "refresh": "ताजगी देना"
 }
