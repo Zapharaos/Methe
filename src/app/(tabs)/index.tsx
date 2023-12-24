@@ -172,11 +172,11 @@ export default function HomeTab() {
                                     {searchValue}
                                 </Text>
                                 ) : (
-                                <View>
-                                    <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
+                                <View style={tw`flex-auto`}>
+                                    <Text style={tw`text-left text-darkGrayBrown dark:text-palePeach`}>
                                         {i18n.t('search.barTitle')}
                                     </Text>
-                                    <Text style={tw`text-midGray`}>
+                                    <Text style={tw`text-left text-midGray`}>
                                         {i18n.t('search.barSubTitle')}
                                     </Text>
                                 </View>
