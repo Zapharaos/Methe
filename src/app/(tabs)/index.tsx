@@ -165,7 +165,7 @@ export default function HomeTab() {
             <Header style={tw`p-3 h-28 bg-palePeachSecond dark:bg-darkGrayBrownSecond`}>
                 <View style={tw`flex-1 flex-row items-center justify-between gap-5`}>
                     <TouchableOpacity onPress={() => setSearchVisible(true)} style={tw`flex-1`}>
-                        <View style={[styles.searchBtn, tw`p-2 gap-2.5 max-w-xs flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
+                        <View style={[styles.searchBtn, tw`p-2 gap-2.5 w-full flex-row items-center rounded-full shadow-palePeach dark:shadow-darkGrayBrown border-palePeachSecond dark:border-darkGrayBrown bg-palePeach dark:bg-darkGrayBrown`]}>
                             <Ionicons name="search" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`} />
                             {searchActive ? (
                                 <Text style={tw`text-darkGrayBrown dark:text-palePeach`}>
