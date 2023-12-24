@@ -176,7 +176,7 @@ export default function HomeTab() {
                                     <Text style={tw`text-left text-darkGrayBrown dark:text-palePeach`}>
                                         {i18n.t('search.barTitle')}
                                     </Text>
-                                    <Text style={tw`text-left text-midGray`}>
+                                    <Text style={tw`text-left text-midGray`} numberOfLines={1} ellipsizeMode="tail">
                                         {i18n.t('search.barSubTitle')}
                                     </Text>
                                 </View>
