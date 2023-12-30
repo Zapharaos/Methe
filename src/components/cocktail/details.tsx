@@ -68,6 +68,16 @@ const CocktailDetailsContent = ({ cocktail }: { cocktail: CocktailDetail; }) => 
                 </View>
             </View>
 
+            {/* Alcohol Warning */}
+            { cocktail.strAlcoholic === 'Alcoholic' &&
+                <View style={tw`mt-5 p-2 flex-col justify-between items-center gap-1 rounded border border-midGray`}>
+                    <Ionicons name="warning-outline" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`}/>
+                    <Text style={tw`font-medium text-center text-black dark:text-white`}>
+                        {i18n.t('alcoholWarning')}
+                    </Text>
+                </View>
+            }
+
             {/* Instructions */}
             <View style={tw`mt-5`}>
                 <Text style={tw`font-bold text-left text-xl text-black dark:text-white`}>
@@ -244,6 +254,7 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                     contentContainerStyle={contentContainerStyle}
                     scrollEventThrottle={16}
                     showsVerticalScrollIndicator={false}
+                    horizontal={false}
                 >
                     {children}
                 </Animated.ScrollView>

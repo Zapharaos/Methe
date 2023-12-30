@@ -53,5 +53,6 @@
   "noCocktail": "未找到鸡尾酒。",
   "noCocktails": "没有要显示的鸡尾酒。",
   "limitReached": "已达到限制。",
-  "refresh": "刷新"
+  "refresh": "刷新",
+  "alcoholWarning": "滥用酒精对健康有害。请适度消费。"
 }
