@@ -11,6 +11,7 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.methe.methe",
       "supportsTablet": true,
       "splash": {
         "backgroundColor": "#FEECCA",
@@ -27,6 +28,7 @@
       }
     },
     "android": {
+      "publishBundlePath": "com.methe.methe",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon/adaptive-icon-dark.png",
         "backgroundColor": "#4D3E3E"
