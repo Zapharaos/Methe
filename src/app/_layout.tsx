@@ -20,7 +20,8 @@ export default function AppLayout() {
     // TODO : load elements here
     //  could be improved to load the first 10 random cocktails for example
 
-    if (!animationOver) {
+    // TODO : fix animation on android
+    /*if (!animationOver) {
         return (
             <SplashScreenAnimated
                 onAnimationFinish={(isCancelled) => {
@@ -30,8 +31,7 @@ export default function AppLayout() {
                 }}
             />
         );
-    }
-
+    }*/
 
     return (
         <PreferencesContextProvider>
