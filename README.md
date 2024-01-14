@@ -10,7 +10,7 @@
 
 ## Overview
 
-![Our PacMan as GIF](documents/methe.gif)
+![Our Methe application as GIF](documents/methe.gif)
 
 Normal speed video accessible here : https://youtu.be/uvrZtxnpsi8
 
