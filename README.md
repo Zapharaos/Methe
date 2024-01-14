@@ -10,7 +10,8 @@
 
 ## Overview
 
-![Our Methe application as GIF](documents/methe.gif)
+<img src="documents/methe.gif" alt="Our Methe application as GIF" width="200"/>
+
 
 Normal speed video accessible here : https://youtu.be/uvrZtxnpsi8
 
