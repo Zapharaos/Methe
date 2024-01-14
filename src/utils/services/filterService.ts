@@ -1,5 +1,6 @@
 import {CocktailDetail} from "@/src/utils/interface/CocktailInterface";
 import {Dispatch, SetStateAction} from "react";
+import {filter} from "rxjs";
 
 /**
  * Return a boolean to filter the cocktail, true for a valid cocktail
@@ -26,17 +27,31 @@ const filterInformation = (cocktail: CocktailDetail, filterGlasses: string[], fi
  * Filter cocktails and store the result into the filter list
  */
 export const executeFilter = (searchActive: boolean, searchByIngredient: boolean, searchResult: CocktailDetail[], setFilterResult: Dispatch<SetStateAction<CocktailDetail[]>>,
-                       randomCocktails: CocktailDetail[], setFilterRandomCocktails: Dispatch<SetStateAction<CocktailDetail[]>>,
+                       setFilterActive: Dispatch<SetStateAction<boolean>>, randomCocktails: CocktailDetail[],
                        filterGlasses: string[], filterCategory: string[], filterAlcoholic: string[], filterIngredients: string[]) => {
 
-    if(searchActive && !searchByIngredient){
-        let filteredCocktails: CocktailDetail[] = searchResult.filter((cocktail: CocktailDetail) =>
-            filterInformation(cocktail, filterGlasses, filterCategory, filterAlcoholic, filterIngredients));
-        setFilterResult(filteredCocktails);
+    const filterActive = filterGlasses.length !== 0 || filterCategory.length !== 0 ||
+        filterAlcoholic.length !== 0 || filterIngredients.length !== 0
+    setFilterActive(filterActive);
+
+    // no filter to apply here
+    if(!filterActive)
+    {
+        return;
     }
-    else{
-        let filteredCocktails: CocktailDetail[] = randomCocktails.filter((cocktail: CocktailDetail) =>
-            filterInformation(cocktail, filterGlasses, filterCategory, filterAlcoholic, filterIngredients));
-        setFilterRandomCocktails(filteredCocktails);
+
+    let initialCocktails: CocktailDetail[];
+    if(searchActive && !searchByIngredient)
+    {
+        // apply filter to research
+        initialCocktails = searchResult;
     }
+    else
+    {
+        // apply filter to random cocktails
+        initialCocktails = randomCocktails;
+    }
+
+    setFilterResult(initialCocktails.filter((cocktail: CocktailDetail) =>
+        filterInformation(cocktail, filterGlasses, filterCategory, filterAlcoholic, filterIngredients)));
 }

@@ -20,6 +20,7 @@ import CocktailsFlatlist from "@/src/components/cocktail/flatList";
 import SearchModal from "@/src/components/search/search";
 import FilterModal from "@/src/components/search/filter";
 import { executeFilter } from "@/src/utils/services/filterService";
+import {set} from "i18n-js/typings/lodash";
 
 // Import color constants
 const Colors = require('@/src/constants/colors');
@@ -32,19 +33,19 @@ export default function HomeTab() {
 
     // State for storing fetched cocktails and loading status
     const [randomCocktails, setRandomCocktails] = useState<CocktailDetail[]>([]);
-    const [filterRandomCocktails, setFilterRandomCocktails] = useState<CocktailDetail[]>([]);
     const [loading, setLoading] = useState(true);
 
     // State for the search
     const [searchActive, setSearchActive] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState<CocktailDetail[]>([]);
-    const [filterResult, setFilterResult] = useState<CocktailDetail[]>([]);
     const [searchVisible, setSearchVisible] = useState(false);
     // State for toggling between search by name and search by ingredient
     const [searchByIngredient, setSearchByIngredient] = useState<boolean>(false);
 
     // State for the filter
+    const [filterActive, setFilterActive] = useState(false);
+    const [filterResult, setFilterResult] = useState<CocktailDetail[]>([]);
     const [filterVisible, setFilterVisible] = useState(false);
     const [filterCategory, setFilterCategory] = useState<string[]>([]);
     const [filterGlasses, setFilterGlasses] = useState<string[]>([]);
@@ -107,17 +108,9 @@ export default function HomeTab() {
      * The function use to execute the filter
      */
     const toggleExecuteFilter = () => {
-        executeFilter(searchActive, searchByIngredient, searchResult, setFilterResult, randomCocktails,
-            setFilterRandomCocktails, filterGlasses, filterCategory, filterAlcoholic, filterIngredients);
+        executeFilter(searchActive, searchByIngredient, searchResult, setFilterResult, setFilterActive,
+            randomCocktails, filterGlasses, filterCategory, filterAlcoholic, filterIngredients);
     }
-
-    /**
-     * When the search list or the random list are updated, filter the changed list
-     */
-    useEffect(() => {
-        toggleExecuteFilter();
-
-    }, [searchResult, randomCocktails]);
 
     // useEffect to fetch cocktails on component mount
     useEffect(() => {
@@ -135,6 +128,13 @@ export default function HomeTab() {
             setSearchActive(false);
         }
     }, [searchValue]);
+
+    /**
+     * When the search list or the random list are updated, filter the changed list
+     */
+    useEffect(() => {
+        toggleExecuteFilter();
+    }, [searchResult, randomCocktails]);
 
     // Footer component for Flatlist
     const FlatListFooter = () => {
@@ -204,19 +204,35 @@ export default function HomeTab() {
                     header: () => <ExtendedHeader/>,
                 }}
             />
-            {/* Display the cocktails : search results or randoms */}
-            {searchActive && filterResult ? (
+            {/* Display the cocktails by filters applied to search */}
+            {searchActive && filterActive &&
                 <CocktailsFlatlist
                     cocktails={searchByIngredient ? searchResult : filterResult}
                     endReached={() => {}}
                 />
-            ) : (
-                filterRandomCocktails && <CocktailsFlatlist
-                    cocktails={filterRandomCocktails}
+            }
+            {/* Display the cocktails by search */}
+            {searchActive && !filterActive &&
+                <CocktailsFlatlist
+                    cocktails={searchResult}
+                    endReached={() => {}}
+                />
+            }
+            {/* Display the cocktails by filter */}
+            {filterActive && !searchActive &&
+                <CocktailsFlatlist
+                    cocktails={filterResult}
+                    endReached={() => {}}
+                />
+            }
+            {/* Display the random cocktails */}
+            {!filterActive && !searchActive &&
+                <CocktailsFlatlist
+                    cocktails={randomCocktails}
                     endReached={handleFlatlistEndReached}
                     Footer={FlatListFooter}
                 />
-            )}
+            }
             {/* Search modal */}
             <SearchModal
                 searchValue={searchValue}
@@ -227,10 +243,11 @@ export default function HomeTab() {
                 searchByIngredient={searchByIngredient}
                 setSearchByIngredient={setSearchByIngredient}
             />
-            {/* Search modal */}
+            {/* Filter modal */}
             <FilterModal
                 visible={filterVisible}
                 setVisible={setFilterVisible}
+                setFilterActive={setFilterActive}
                 executeFilter={toggleExecuteFilter}
                 filterCategory={filterCategory}
                 setFilterCategory={setFilterCategory}
