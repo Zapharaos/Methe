@@ -1,42 +1,20 @@
-## How to set up and run this application
+# Methe
 
-Install the Expo Go application and create an account : \
-https://expo.dev/client
+## Table of Contents
 
-Install the Expo package : \
-`npm install expo`
+1. [Overview](#overview)
+    1. [What exactly does this app?](#what-exaclty-does-this-app)
+2. [Working with Methe](#working-with-methe)
+   1. [How to set up and run this application](#how-to-set-up-and-run-this-application)
+   2. [How to build and use the APK](#how-to-build-and-use-the-apk)
 
-Login to your Expo account : \
-`npx expo login`
+## Overview
 
-Run the application : \
-`npx run start`
+![Our PacMan as GIF](documents/methe.gif)
 
-Might encounter some issues related to your router, then run this command instead : \
-`npx expo start --tunnel`
+Normal speed video accessible here : https://youtu.be/uvrZtxnpsi8
 
-You can now scan the QR code using you mobile device or directly open the Expo Go app where your application should already be waiting for you.
-
-## How to build and use the APK
-
-To set up for the builds : \
-`npm install -g eas-cli`
-
-By now, you should already be connected to your account : \
-`eas whoami`
-
-If you are not connected yet, connect to your Expo account : \
-`eas login`
-
-Ready to go!
-
-Build for android : \
-`eas build -p android --profile androidApk`
-
-Run the latest build : \
-`eas build:run -p android --latest`
-
-## What exaclty does this app?
+### What exaclty does this app?
 
 This app was given to us within the framework of a project in the last year of our master's degree.
 
@@ -64,3 +42,43 @@ In the end, our application provides :
 - a favorite page which lists all the favorites cocktails. When a cocktail is added to the favorites, its id, name and image are added to the local storage.
 - a search functionality which allows the users to search by ingredient name (the names are gotten through the API) or by name (or by first letter if it contains only one character).
 - a filter functionality which allows to filter by category, glass type, ingredient or alcoholic status.
+
+## Working with Methe
+
+### How to set up and run this application
+
+Install the Expo Go application and create an account : \
+https://expo.dev/client
+
+Install the Expo package : \
+`npm install expo`
+
+Login to your Expo account : \
+`npx expo login`
+
+Run the application : \
+`npx run start`
+
+Might encounter some issues related to your router, then run this command instead : \
+`npx expo start --tunnel`
+
+You can now scan the QR code using you mobile device or directly open the Expo Go app where your application should already be waiting for you.
+
+### How to build and use the APK
+
+To set up for the builds : \
+`npm install -g eas-cli`
+
+By now, you should already be connected to your account : \
+`eas whoami`
+
+If you are not connected yet, connect to your Expo account : \
+`eas login`
+
+Ready to go!
+
+Build for android : \
+`eas build -p android --profile androidApk`
+
+Run the latest build : \
+`eas build:run -p android --latest`
