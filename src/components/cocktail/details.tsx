@@ -21,6 +21,7 @@ import HeaderButton from "@/src/components/header/button";
 import IngredientsGrid from "@/src/components/ingredients/grid";
 import IngredientsList from "@/src/components/ingredients/list";
 import BaseComponent from "@/src/components/base";
+import HeaderFavoriteButton from "@/src/components/header/favoriteButton";
 
 // Get window width
 const { width } = Dimensions.get('window');
@@ -145,9 +146,6 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
     // Retrieve the app's preferences from context
     const { i18n } = usePreferencesContext();
 
-    // Retrieve favorites-related functions and state from context
-    const { isFavorite, toggleFavorite } = useFavoritesContext();
-
     // State variables for cocktail details, units, ingredients display, and loading state
     const [cocktail, setCocktail] = useState<CocktailDetail>();
     const [loading, setLoading] = useState(true);
@@ -229,9 +227,7 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                         {/* Share */}
                         <HeaderButton onPress={share} iconComponent1={<Feather/>} iconName1={"share"}/>
                         {/* Favorite */}
-                        <HeaderButton onPress={() => toggleFavorite(cocktail)} iconComponent1={<MaterialIcons/>} iconName1={"favorite-outline"}
-                            iconComponent2={<MaterialIcons/>} iconName2={"favorite"} useSecondIcon={isFavorite(cocktail)}
-                        />
+                        <HeaderFavoriteButton cocktail={cocktail}/>
                     </View>
                 )}
             </Header>
