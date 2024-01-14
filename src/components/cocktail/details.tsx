@@ -21,6 +21,7 @@ import HeaderButton from "@/src/components/header/button";
 import IngredientsGrid from "@/src/components/ingredients/grid";
 import IngredientsList from "@/src/components/ingredients/list";
 import BaseComponent from "@/src/components/base";
+import HeaderFavoriteButton from "@/src/components/header/favoriteButton";
 
 // Get window width
 const { width } = Dimensions.get('window');
@@ -67,6 +68,16 @@ const CocktailDetailsContent = ({ cocktail }: { cocktail: CocktailDetail; }) => 
                     </Text>
                 </View>
             </View>
+
+            {/* Alcohol Warning */}
+            { cocktail.strAlcoholic === 'Alcoholic' &&
+                <View style={tw`mt-5 p-2 flex-col justify-between items-center gap-1 rounded border border-midGray`}>
+                    <Ionicons name="warning-outline" size={24} style={tw`text-darkGrayBrown dark:text-palePeach`}/>
+                    <Text style={tw`font-medium text-center text-black dark:text-white`}>
+                        {i18n.t('alcoholWarning')}
+                    </Text>
+                </View>
+            }
 
             {/* Instructions */}
             <View style={tw`mt-5`}>
@@ -134,9 +145,6 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
 
     // Retrieve the app's preferences from context
     const { i18n } = usePreferencesContext();
-
-    // Retrieve favorites-related functions and state from context
-    const { isFavorite, toggleFavorite } = useFavoritesContext();
 
     // State variables for cocktail details, units, ingredients display, and loading state
     const [cocktail, setCocktail] = useState<CocktailDetail>();
@@ -219,9 +227,7 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                         {/* Share */}
                         <HeaderButton onPress={share} iconComponent1={<Feather/>} iconName1={"share"}/>
                         {/* Favorite */}
-                        <HeaderButton onPress={() => toggleFavorite(cocktail)} iconComponent1={<MaterialIcons/>} iconName1={"favorite-outline"}
-                            iconComponent2={<MaterialIcons/>} iconName2={"favorite"} useSecondIcon={isFavorite(cocktail)}
-                        />
+                        <HeaderFavoriteButton cocktail={cocktail}/>
                     </View>
                 )}
             </Header>
@@ -244,6 +250,7 @@ export default function CocktailDetails({ id, headerPushBack = false}: CocktailD
                     contentContainerStyle={contentContainerStyle}
                     scrollEventThrottle={16}
                     showsVerticalScrollIndicator={false}
+                    horizontal={false}
                 >
                     {children}
                 </Animated.ScrollView>

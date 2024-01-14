@@ -53,5 +53,6 @@
   "noCocktail": "The cocktail was not found.",
   "noCocktails": "No cocktails to display.",
   "limitReached": "The limit has been reached.",
-  "refresh": "Refresh"
+  "refresh": "Refresh",
+  "alcoholWarning": "Excessive alcohol consumption is dangerous to health. Consume in moderation."
 }

@@ -53,5 +53,6 @@
   "noCocktail": "Le cocktail n'a pas été trouvé.",
   "noCocktails": "Aucun cocktail à afficher.",
   "limitReached": "La limite a été atteinte.",
-  "refresh": "Actualiser"
+  "refresh": "Actualiser",
+  "alcoholWarning": "L’abus d’alcool est dangereux pour la santé. À consommer avec modération."
 }

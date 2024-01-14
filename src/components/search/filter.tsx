@@ -15,6 +15,7 @@ import { AlcoholicAPI, CategoriesAPI, GlassAPI, IngredientAPI } from "@/src/util
 interface FilterModalProps {
     visible: boolean,
     setVisible: Dispatch<SetStateAction<boolean>>,
+    setFilterActive: Dispatch<SetStateAction<boolean>>,
     executeFilter: () => void,
     filterCategory: string[],
     setFilterCategory: Dispatch<SetStateAction<string[]>>,
@@ -27,7 +28,7 @@ interface FilterModalProps {
 }
 
 // Main component for the search modal
-export default function FilterModal({ visible, setVisible, executeFilter, filterCategory, setFilterCategory, filterGlasses,
+export default function FilterModal({ visible, setVisible, setFilterActive, executeFilter, filterCategory, setFilterCategory, filterGlasses,
                                         setFilterGlasses, filterIngredients, setFilterIngredients, filterAlcoholic, setFilterAlcoholic } : FilterModalProps) {
 
     // Retrieve the app's preferences from context
@@ -44,6 +45,7 @@ export default function FilterModal({ visible, setVisible, executeFilter, filter
         setFilterGlasses([]);
         setFilterIngredients([]);
         setFilterAlcoholic([]);
+        setFilterActive(false);
     }
 
     const toggleFilter = (list:string[], item:string) => {
